@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1a1a1a?style=flat-square&labelColor=fafaf5" alt="MIT License"></a>
-  <a href="ROADMAP.md"><img src="https://img.shields.io/badge/lessons-453-3553ff?style=flat-square&labelColor=fafaf5" alt="453 lessons"></a>
+  <a href="ROADMAP.md"><img src="https://img.shields.io/badge/lessons-473-3553ff?style=flat-square&labelColor=fafaf5" alt="473 lessons"></a>
   <a href="#contents"><img src="https://img.shields.io/badge/phases-20-3553ff?style=flat-square&labelColor=fafaf5" alt="20 phases"></a>
   <a href="https://github.com/rohitg00/ai-engineering-from-scratch/stargazers"><img src="https://img.shields.io/github/stars/rohitg00/ai-engineering-from-scratch?style=flat-square&labelColor=fafaf5&color=3553ff" alt="GitHub stars"></a>
   <a href="https://aiengineeringfromscratch.com"><img src="https://img.shields.io/badge/web-aiengineeringfromscratch.com-3553ff?style=flat-square&labelColor=fafaf5" alt="Website"></a>
@@ -17,7 +17,7 @@
 > **84% of students already use AI tools. Only 18% feel prepared to use them
 > professionally.** This curriculum closes that gap.
 >
-> 453 lessons. 20 phases. ~320 hours. Python, TypeScript, Rust, Julia. Every lesson ships
+> 473 lessons. 20 phases. ~320 hours. Python, TypeScript, Rust, Julia. Every lesson ships
 > a reusable artifact: a prompt, a skill, an agent, an MCP server. Free, open source, MIT.
 >
 > You don't just learn AI. You build it. End-to-end. By hand.
@@ -29,7 +29,7 @@ flashy agent demo somewhere else. The pieces rarely line up. You ship a chatbot 
 explain its loss curve. You hook a function to an agent but can't say what attention does
 inside the model that's calling it.
 
-This curriculum is the spine. 20 phases, 453 lessons, four languages: Python, TypeScript,
+This curriculum is the spine. 20 phases, 473 lessons, four languages: Python, TypeScript,
 Rust, Julia. Linear algebra at one end, autonomous swarms at the other. Every algorithm
 gets built from raw math first. Backprop. Tokenizer. Attention. Agent loop. By the time
 PyTorch shows up, you already know what it's doing under the hood.
@@ -173,7 +173,7 @@ Other curricula end with *"congratulations, you learned X."* Each lesson here en
 </table>
 
 > Install the lot with `python3 scripts/install_skills.py`. Real tools, not homework.
-> By the end of the curriculum, you have a portfolio of 453 artifacts you actually
+> By the end of the curriculum, you have a portfolio of 473 artifacts you actually
 > understand because you built them.
 
 ### FIG_002 · A worked sample
@@ -823,7 +823,7 @@ Each Phase 14 workbench lesson (31-42) ships a `mission.md` briefing the agent b
 </details>
 
 <details id="phase-19">
-<summary><b>Phase 19 — Capstone Projects</b> &nbsp;<code>17 projects</code>&nbsp; <em>2026 end-to-end shippable products, 20-40 hours each.</em></summary>
+<summary><b>Phase 19 — Capstone Projects</b> &nbsp;<code>55 lessons</code>&nbsp; <em>17 end-to-end products + 4 deep-build tracks. 20-40 hours per project; 4-12 lessons per track.</em></summary>
 <br/>
 
 | # | Project | Combines | Lang |
@@ -845,6 +845,49 @@ Each Phase 14 workbench lesson (31-42) ships a `mission.md` briefing the agent b
 | 15 | [Constitutional Safety Harness + Red-Team Range](phases/19-capstone-projects/15-constitutional-safety-harness/) | P10 P11 P13 P14 P18 | Python |
 | 16 | [GitHub Issue-to-PR Autonomous Agent](phases/19-capstone-projects/16-github-issue-to-pr-agent/) | P11 P13 P14 P15 P17 | Python |
 | 17 | [Personal AI Tutor (Adaptive, Multimodal)](phases/19-capstone-projects/17-personal-ai-tutor/) | P5 P6 P11 P12 P14 P17 P18 | Python |
+
+**Deep-build tracks** — multi-lesson series that build a complete subsystem from scratch.
+
+| # | Project | Combines | Lang |
+|:---:|---------|----------|------|
+| 20 | [Agent Harness Loop Contract](phases/19-capstone-projects/20-agent-harness-loop-contract/) | A. Agent harness | Python |
+| 21 | [Tool Registry with Schema Validation](phases/19-capstone-projects/21-tool-registry-schema-validation/) | A. Agent harness | Python |
+| 22 | [JSON-RPC 2.0 Over Newline-Delimited Stdio](phases/19-capstone-projects/22-jsonrpc-stdio-transport/) | A. Agent harness | Python |
+| 23 | [Function Call Dispatcher](phases/19-capstone-projects/23-function-call-dispatcher/) | A. Agent harness | Python |
+| 24 | [Plan-Execute Control Flow](phases/19-capstone-projects/24-plan-execute-control-flow/) | A. Agent harness | Python |
+| 25 | [Verification Gates and Observation Budget](phases/19-capstone-projects/25-verification-gates-observation-budget/) | A. Agent harness | Python |
+| 26 | [Sandbox Runner with Denylist and Path Jail](phases/19-capstone-projects/26-sandbox-runner-denylist/) | A. Agent harness | Python |
+| 27 | [Eval Harness with Fixture Tasks](phases/19-capstone-projects/27-eval-harness-fixture-tasks/) | A. Agent harness | Python |
+| 28 | [Observability with OTel GenAI Spans and Prometheus Metrics](phases/19-capstone-projects/28-observability-otel-traces/) | A. Agent harness | Python |
+| 29 | [End-to-End Coding Agent on the Harness](phases/19-capstone-projects/29-end-to-end-coding-task-demo/) | A. Agent harness | Python |
+| 30 | [BPE Tokenizer From Scratch](phases/19-capstone-projects/30-bpe-tokenizer-from-scratch/) | B. NLP LLM | Python |
+| 31 | [Tokenized Dataset with Sliding Window](phases/19-capstone-projects/31-tokenized-dataset-sliding-window/) | B. NLP LLM | Python |
+| 32 | [Token and Positional Embeddings](phases/19-capstone-projects/32-token-positional-embeddings/) | B. NLP LLM | Python |
+| 33 | [Multi-Head Self-Attention](phases/19-capstone-projects/33-multihead-self-attention/) | B. NLP LLM | Python |
+| 34 | [Transformer Block from Scratch](phases/19-capstone-projects/34-transformer-block/) | B. NLP LLM | Python |
+| 35 | [GPT Model Assembly](phases/19-capstone-projects/35-gpt-model-assembly/) | B. NLP LLM | Python |
+| 36 | [Training Loop and Evaluation](phases/19-capstone-projects/36-training-loop-eval/) | B. NLP LLM | Python |
+| 37 | [Loading Pretrained Weights](phases/19-capstone-projects/37-loading-pretrained-weights/) | B. NLP LLM | Python |
+| 38 | [Classifier Fine-Tuning by Head Swap](phases/19-capstone-projects/38-classifier-finetuning/) | B. NLP LLM | Python |
+| 39 | [Instruction Tuning by Supervised Fine-Tuning](phases/19-capstone-projects/39-instruction-tuning-sft/) | B. NLP LLM | Python |
+| 40 | [Direct Preference Optimization from Scratch](phases/19-capstone-projects/40-dpo-from-scratch/) | B. NLP LLM | Python |
+| 41 | [Full Evaluation Pipeline](phases/19-capstone-projects/41-eval-pipeline/) | B. NLP LLM | Python |
+| 42 | [Large Corpus Downloader](phases/19-capstone-projects/42-large-corpus-downloader/) | C. Train end-to-end | Python |
+| 43 | [HDF5 Tokenized Corpus](phases/19-capstone-projects/43-hdf5-tokenized-corpus/) | C. Train end-to-end | Python |
+| 44 | [Cosine LR with Linear Warmup](phases/19-capstone-projects/44-cosine-lr-warmup/) | C. Train end-to-end | Python |
+| 45 | [Gradient Clipping and Mixed Precision](phases/19-capstone-projects/45-gradient-clipping-amp/) | C. Train end-to-end | Python |
+| 46 | [Gradient Accumulation](phases/19-capstone-projects/46-gradient-accumulation/) | C. Train end-to-end | Python |
+| 47 | [Checkpoint Save and Resume](phases/19-capstone-projects/47-checkpoint-save-resume/) | C. Train end-to-end | Python |
+| 48 | [Distributed Data Parallel and FSDP from Scratch](phases/19-capstone-projects/48-distributed-fsdp-ddp/) | C. Train end-to-end | Python |
+| 49 | [Language Model Evaluation Harness](phases/19-capstone-projects/49-lm-eval-harness/) | C. Train end-to-end | Python |
+| 50 | [Hypothesis Generator](phases/19-capstone-projects/50-hypothesis-generator/) | D. Auto research | Python |
+| 51 | [Literature Retrieval](phases/19-capstone-projects/51-literature-retrieval/) | D. Auto research | Python |
+| 52 | [Experiment Runner](phases/19-capstone-projects/52-experiment-runner/) | D. Auto research | Python |
+| 53 | [Result Evaluator](phases/19-capstone-projects/53-result-evaluator/) | D. Auto research | Python |
+| 54 | [Paper Writer](phases/19-capstone-projects/54-paper-writer/) | D. Auto research | Python |
+| 55 | [Critic Loop](phases/19-capstone-projects/55-critic-loop/) | D. Auto research | Python |
+| 56 | [Iteration Scheduler](phases/19-capstone-projects/56-iteration-scheduler/) | D. Auto research | Python |
+| 57 | [End-to-End Research Demo](phases/19-capstone-projects/57-end-to-end-research-demo/) | D. Auto research | Python |
 
 </details>
 
@@ -868,7 +911,7 @@ Real tools, not homework.
 
 ### Install every course skill into your agent
 
-The repo ships 378 skills and 99 prompts under `phases/**/outputs/`.
+The repo ships 382 skills and 99 prompts under `phases/**/outputs/`.
 
 **Recommended: install via [skills.sh](https://skills.sh).** No clone, no Python,
 detects your agent's skills directory automatically:
@@ -1062,7 +1105,7 @@ relative links inside lesson docs.
 
 ## Sponsor the work
 
-Free, MIT-licensed, 453 lessons. The curriculum is maintained on sponsorship alone. Cash only.
+Free, MIT-licensed, 473 lessons. The curriculum is maintained on sponsorship alone. Cash only.
 
 **Reach (verified 2026-05-14):** 55,593 monthly visitors · 90,709 page views · 7.5K stars ·
 Twitter/X is the #1 acquisition channel.
