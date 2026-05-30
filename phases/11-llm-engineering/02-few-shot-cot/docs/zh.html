@@ -1,0 +1,1239 @@
+<!doctype html>
+<html lang="en" data-ha-style="teaching">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Few-Shot, Chain-of-Thought &amp; Tree-of-Thought — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0f766e;
+  --primary-container: #115e59;
+  --primary-fixed: #ccfbf1;
+  --secondary-container: #f59e0b;
+  --bg: #f6fbfb;
+  --surface: #f6fbfb;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #edf7f5;
+  --surface-container: #e5f1ee;
+  --surface-container-high: #d8e8e4;
+  --fg-1: #10201f;
+  --fg-2: #304c49;
+  --fg-muted: #647b78;
+  --border: rgba(15, 118, 110, 0.14);
+  --border-strong: rgba(15, 118, 110, 0.28);
+  --outline-variant: #99cfc7;
+  --green: #10b981;
+  --blue: #3b82f6;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --accent-glow: rgba(15, 118, 110, 0.2);
+  --font-headline: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Menlo', ui-monospace, monospace;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 48px;
+  --space-5xl: 64px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-pill: 9999px;
+  --shadow-sm: 0 1px 2px rgba(16, 32, 31, 0.04);
+  --shadow-md: 0 4px 12px rgba(16, 32, 31, 0.08);
+  --shadow-lg: 0 8px 24px rgba(16, 32, 31, 0.12);
+  --shadow-accent: 0 8px 24px rgba(15, 118, 110, 0.15);
+  --gradient-primary: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+  --gradient-hero: linear-gradient(135deg, #0f766e 0%, #f59e0b 100%);
+  --gradient-text: linear-gradient(135deg, #0f766e 0%, #f59e0b 100%);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  color: var(--fg-1);
+  background:
+    radial-gradient(circle at 7% 12%, rgba(15, 118, 110, 0.08), transparent 30%),
+    radial-gradient(circle at 90% 16%, rgba(245, 158, 11, 0.07), transparent 32%),
+    linear-gradient(135deg, #f6fbfb 0%, #edf7f5 55%, #e5f1ee 100%);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+button, select { font: inherit; }
+button { cursor: pointer; }
+
+.studio {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(260px, 300px) minmax(0, 1fr) minmax(280px, 360px);
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.panel {
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(18px) saturate(1.2);
+}
+
+.left-panel, .right-panel {
+  min-height: calc(100vh - 32px);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-sm);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+
+h1 {
+  margin-bottom: var(--space-md);
+  font-family: var(--font-headline);
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  margin-bottom: var(--space-sm);
+  font-family: var(--font-headline);
+  font-size: clamp(20px, 2.5vw, 28px);
+  letter-spacing: -0.02em;
+}
+
+.gradient-text {
+  color: transparent;
+  background: var(--gradient-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.intro {
+  margin: 0;
+  color: var(--fg-2);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.step-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.step-button {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  min-height: 52px;
+  padding: var(--space-md) var(--space-lg);
+  color: var(--fg-2);
+  text-align: left;
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  font-size: 13px;
+  font-weight: 600;
+  transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.18s, box-shadow 0.18s;
+}
+
+.step-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.step-button.active {
+  color: var(--fg-1);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-accent);
+  background: var(--primary-fixed);
+}
+
+.step-button .step-num {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-container);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.step-button.active .step-num {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.step-button small {
+  color: var(--fg-muted);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.stage-wrap {
+  position: relative;
+  min-height: calc(100vh - 32px);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(400px, 1fr) auto;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(246, 251, 251, 0.92)),
+    radial-gradient(circle at 50% 48%, rgba(15, 118, 110, 0.04), transparent 48%);
+}
+
+.stage-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-xl);
+  padding: var(--space-xl) var(--space-xl) 0;
+}
+
+.stage-header p {
+  max-width: 520px;
+  margin: var(--space-sm) 0 0;
+  color: var(--fg-muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.stage-content {
+  position: relative;
+  margin: var(--space-md);
+  padding: var(--space-2xl);
+  overflow: auto;
+  border-radius: var(--radius-2xl);
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.diagram-box {
+  padding: var(--space-xl);
+  background: var(--surface-container-low);
+  border-radius: var(--radius-xl);
+  border-left: 4px solid var(--primary);
+  margin-bottom: var(--space-lg);
+}
+
+.diagram-box h3 {
+  font-family: var(--font-headline);
+  font-size: 16px;
+  margin-bottom: var(--space-md);
+  color: var(--primary);
+}
+
+.flow-diagram {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.flow-node {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--primary-fixed);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.flow-arrow {
+  color: var(--fg-muted);
+  font-size: 16px;
+}
+
+.code-block {
+  background: #1e1b19;
+  color: #e8e6e3;
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  overflow-x: auto;
+  margin: var(--space-md) 0;
+}
+
+.code-block .kw { color: #c792ea; }
+.code-block .str { color: #c3e88d; }
+.code-block .cm { color: #697c17; font-style: italic; }
+.code-block .fn { color: #82aaff; }
+.code-block .nb { color: #f78c6c; }
+
+.metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.metrics-table th, .metrics-table td {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.metrics-table th {
+  color: var(--fg-muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metrics-table tr:hover td {
+  background: var(--surface-container-low);
+}
+
+.badge {
+  display: inline-flex;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.badge-green { background: #d1fae5; color: #065f46; }
+.badge-amber { background: #fef3c7; color: #92400e; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-blue { background: #dbeafe; color: #1e40af; }
+
+.stage-footer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  padding: 0 var(--space-xl) var(--space-xl);
+}
+
+.mini-stat {
+  padding: var(--space-lg);
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.mini-stat span {
+  display: block;
+  margin-bottom: var(--space-xs);
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mini-stat strong {
+  display: block;
+  font-family: var(--font-headline);
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.right-panel {
+  gap: var(--space-lg);
+}
+
+.concept-card {
+  padding: var(--space-lg);
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.concept-card h3 {
+  font-family: var(--font-headline);
+  font-size: 15px;
+  margin-bottom: var(--space-sm);
+  color: var(--primary);
+}
+
+.concept-card p {
+  color: var(--fg-2);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.try-control {
+  padding: var(--space-lg);
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.try-control h3 {
+  font-family: var(--font-headline);
+  font-size: 14px;
+  margin-bottom: var(--space-md);
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  background: var(--surface-container);
+  border-radius: var(--radius-pill);
+}
+
+.segmented button {
+  min-height: 40px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--fg-2);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+
+.segmented button.active {
+  color: white;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-accent);
+}
+
+.check-yourself {
+  padding: var(--space-lg);
+  background: linear-gradient(135deg, var(--surface-container-lowest), var(--surface-container-low));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+}
+
+.check-yourself h3 {
+  font-family: var(--font-headline);
+  font-size: 15px;
+  margin-bottom: var(--space-md);
+  color: var(--primary);
+}
+
+.quiz-q {
+  margin-bottom: var(--space-md);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--fg-2);
+}
+
+.quiz-options {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.quiz-option {
+  padding: var(--space-md);
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.quiz-option:hover {
+  border-color: var(--primary);
+  background: var(--primary-fixed);
+}
+
+.quiz-option.correct {
+  border-color: var(--green);
+  background: #d1fae5;
+}
+
+.quiz-option.incorrect {
+  border-color: var(--red);
+  background: #fee2e2;
+}
+
+.recap-strip {
+  padding: var(--space-lg);
+  background: var(--primary-fixed);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(15, 118, 110, 0.2);
+}
+
+.recap-strip h3 {
+  font-family: var(--font-headline);
+  font-size: 14px;
+  margin-bottom: var(--space-md);
+  color: var(--primary-container);
+}
+
+.recap-strip ul {
+  margin: 0;
+  padding-left: var(--space-lg);
+  font-size: 13px;
+  color: var(--fg-2);
+  line-height: 1.7;
+}
+
+@media (max-width: 1160px) {
+  .studio {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+  .right-panel {
+    grid-column: 1 / -1;
+    min-height: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 820px) {
+  .studio {
+    display: block;
+    padding: var(--space-md);
+  }
+  .left-panel, .stage-wrap, .right-panel {
+    min-height: auto;
+    margin-bottom: var(--space-md);
+  }
+  .right-panel {
+    display: flex;
+  }
+  .stage-footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .studio { padding: var(--space-sm); }
+  h1 { font-size: 24px; }
+  .step-button { min-height: 48px; font-size: 12px; }
+  .stage-content { padding: var(--space-lg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<main class="studio lesson-shell">
+  <aside class="panel left-panel step-rail concept-drawer" aria-label="Lesson steps">
+    <section>
+      <p class="eyebrow">Interactive Lesson Lab</p>
+      <h1>Few-Shot, <span class="gradient-text">CoT</span> &amp; ToT</h1>
+      <p class="intro">Same model, same API cost — from 78% to 91% accuracy. The difference isn't a better model, it's a better reasoning strategy.</p>
+    </section>
+
+    <nav class="step-rail" aria-label="Technique steps">
+      <button class="step-button active" type="button" data-step="zeroshot">
+        <span class="step-num">0</span>
+        <span>Zero-shot</span>
+        <small>Baseline</small>
+      </button>
+      <button class="step-button" type="button" data-step="fewshot">
+        <span class="step-num">1</span>
+        <span>Few-shot</span>
+        <small>Examples</small>
+      </button>
+      <button class="step-button" type="button" data-step="cot">
+        <span class="step-num">2</span>
+        <span>Chain-of-Thought</span>
+        <small>Show reasoning</small>
+      </button>
+      <button class="step-button" type="button" data-step="selfconsistency">
+        <span class="step-num">3</span>
+        <span>Self-consistency</span>
+        <small>Vote</small>
+      </button>
+      <button class="step-button" type="button" data-step="tot">
+        <span class="step-num">4</span>
+        <span>Tree-of-Thought</span>
+        <small>Branch</small>
+      </button>
+      <button class="step-button" type="button" data-step="react">
+        <span class="step-num">5</span>
+        <span>ReAct</span>
+        <small>Tools</small>
+      </button>
+    </nav>
+
+    <section class="try-control">
+      <h3>Show</h3>
+      <div class="segmented" aria-label="Content view">
+        <button class="active" type="button" data-view="concept">Concept</button>
+        <button type="button" data-view="code">Code</button>
+      </div>
+    </section>
+  </aside>
+
+  <section class="panel stage-wrap lesson-stage" aria-label="Lesson stage">
+    <header class="stage-header">
+      <div>
+        <p class="eyebrow">Technique</p>
+        <h2 id="stageTitle">Zero-shot Prompting</h2>
+        <p id="stageDesc">Give the model a task with no examples. Fast, but limited on complex tasks.</p>
+      </div>
+      <div class="mini-stat" style="align-self: flex-start;">
+        <span>GSM8K Accuracy</span>
+        <strong id="accuracyMetric">78%</strong>
+      </div>
+    </header>
+
+    <div class="stage-content" id="stageContent">
+      <!-- Dynamic content injected here -->
+    </div>
+
+    <footer class="stage-footer" aria-label="Key metrics">
+      <div class="mini-stat">
+        <span>Token Cost</span>
+        <strong>1×</strong>
+      </div>
+      <div class="mini-stat">
+        <span>Best For</span>
+        <strong>Simple Tasks</strong>
+      </div>
+      <div class="mini-stat">
+        <span>Complexity</span>
+        <strong>Minimal</strong>
+      </div>
+    </footer>
+  </section>
+
+  <aside class="panel right-panel check-yourself recap-strip" aria-label="Concept cards and quiz">
+    <section class="concept-card" id="keyInsight">
+      <h3>Key Insight</h3>
+      <p>Zero-shot works for simple tasks like fact recall. For multi-step problems, the model must compress all reasoning into hidden states — and that limits accuracy.</p>
+    </section>
+
+    <section class="concept-card" id="whenToUse">
+      <h3>When to Use</h3>
+      <p>Simple factual questions, one-step classification, or when you can't provide good examples. Not for math or multi-step reasoning.</p>
+    </section>
+
+    <section class="check-yourself" id="quizSection">
+      <h3>Check Yourself</h3>
+      <p class="quiz-q" id="quizQ">Which prompting technique adds "let's think step by step" to boost accuracy?</p>
+      <div class="quiz-options" id="quizOptions">
+        <button class="quiz-option" type="button" data-idx="0">Zero-shot</button>
+        <button class="quiz-option" type="button" data-idx="1">Few-shot</button>
+        <button class="quiz-option" type="button" data-idx="2">CoT (Zero-shot)</button>
+        <button class="quiz-option" type="button" data-idx="3">Self-consistency</button>
+      </div>
+    </section>
+
+    <section class="recap-strip" id="glossarySection">
+      <h3>关键术语 / Key Terms</h3>
+      <dl style="margin:0;font-size:12.5px;line-height:1.8;color:var(--fg-2);">
+        <dt style="font-weight:700;color:var(--primary);">Few-shot Prompting / 少量样本提示词</dt>
+        <dd style="margin-left:0;margin-bottom:8px;">在提示词中包含输入-输出演示，以锚定模型的输出格式和行为</dd>
+        <dt style="font-weight:700;color:var(--primary);">Chain-of-Thought (CoT) / 链式思维</dt>
+        <dd style="margin-left:0;margin-bottom:8px;">引出中间推理token，延伸模型的有效计算深度</dd>
+        <dt style="font-weight:700;color:var(--primary);">Self-Consistency / 自洽性</dt>
+        <dd style="margin-left:0;margin-bottom:8px;">采样N条推理路径，通过多数票选择最常见答案</dd>
+        <dt style="font-weight:700;color:var(--primary);">Tree-of-Thought (ToT) / 树状思维</dt>
+        <dd style="margin-left:0;margin-bottom:8px;">对推理分支进行结构化搜索，评估并剪枝低分路径</dd>
+        <dt style="font-weight:700;color:var(--primary);">ReAct / 推理+行动</dt>
+        <dd style="margin-left:0;margin-bottom:8px;">在思考-行动-观察循环中将推理与外部工具交错</dd>
+        <dt style="font-weight:700;color:var(--primary);">Zero-shot CoT / 零样本链式思维</dt>
+        <dd style="margin-left:0;margin-bottom:8px;">附加"让我们逐步思考"触发短语，无需示例</dd>
+      </dl>
+    </section>
+
+    <section class="recap-strip" id="recapSection">
+      <h3>Key Takeaways</h3>
+      <ul id="recapList">
+        <li>Examples anchor format better than instructions</li>
+        <li>CoT extends effective computation depth</li>
+        <li>Self-consistency trades cost for reliability</li>
+      </ul>
+    </section>
+  </aside>
+</main>
+
+<script>
+const TECHNIQUES = {
+  zeroshot: {
+    title: "Zero-shot Prompting",
+    desc: "Give the model a task with no examples. Fast, but limited on complex tasks.",
+    accuracy: "78%",
+    tokenCost: "1×",
+    bestFor: "Simple Tasks",
+    complexity: "Minimal",
+    keyInsight: "Zero-shot works for simple tasks like fact recall. For multi-step problems, the model must compress all reasoning into hidden states — and that limits accuracy.",
+    whenToUse: "Simple factual questions, one-step classification, or when you can't provide good examples. Not for math or multi-step reasoning.",
+    quizCorrect: 0,
+    quizQ: "Which prompting technique adds \"let's think step by step\" to boost accuracy?",
+    quizOptions: ["Zero-shot", "Few-shot", "CoT (Zero-shot)", "Self-consistency"],
+    recap: [
+      "Examples anchor format better than instructions",
+      "CoT extends effective computation depth",
+      "Self-consistency trades cost for reliability"
+    ],
+    content: `
+      <div class="diagram-box">
+        <h3>Zero-shot Flow</h3>
+        <div class="flow-diagram">
+          <span class="flow-node">Task: "Classify this review"</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node">Model guesses format</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node" style="background:#fee2e2;color:#991b1b;">78% accuracy</span>
+        </div>
+      </div>
+      <h2>What is Zero-shot?</h2>
+      <p>Zero-shot prompting gives the model a task description with no examples. The model relies entirely on its pre-training to infer what output format and reasoning approach to use.</p>
+      <div class="code-block">
+<span class="cm"># Zero-shot example</span>
+<span class="kw">prompt</span> = <span class="str">"Janet的鸭子每天下16个蛋。她每天早上吃3个，\n她每天在农贸市场赚多少钱？"</span>
+<span class="fn">call_llm</span>(prompt)  <span class="cm"># Returns: "18美元"</span>
+      </div>
+      <h3>When Zero-shot Wins</h3>
+      <ul style="font-size:13.5px;line-height:1.7;color:var(--fg-2);margin:0;padding-left:18px;">
+        <li>Simple factual recall ("法国的首都是什么？")</li>
+        <li>Single-step classification</li>
+        <li>Creative tasks where examples limit diversity</li>
+        <li>Speed-critical applications</li>
+      </ul>
+    `,
+    codeContent: `
+      <h2>Zero-shot Code</h2>
+      <div class="code-block">
+<span class="kw">def</span> <span class="fn">build_zero_shot_prompt</span>(question):
+    system = (
+        <span class="str">"You are a precise math problem solver. "</span>
+        <span class="str">"Give only the final numerical answer. "</span>
+        <span class="str">"End with: 'The answer is [number]'."</span>
+    )
+    user = <span class="str">f"Q: {question}\\nA:"</span>
+    <span class="kw">return</span> system, user
+
+
+<span class="kw">def</span> <span class="fn">zero_shot_solve</span>(question, client, model):
+    system, user = <span class="fn">build_zero_shot_prompt</span>(question)
+    text = <span class="fn">call_llm</span>(client, model, system, user, temperature=<span class="nb">0.0</span>)
+    <span class="kw">return</span> <span class="fn">extract_answer</span>(text), text
+      </div>
+    `
+  },
+  fewshot: {
+    title: "Few-shot Prompting",
+    desc: "Include 3-5 examples that demonstrate the expected format and reasoning pattern.",
+    accuracy: "85%",
+    tokenCost: "~1.5×",
+    bestFor: "Format Matching",
+    complexity: "Low",
+    keyInsight: "Examples are compressed instructions. Instead of describing the output format, you show it. The model pattern-matches on examples more reliably than interpreting abstract instructions.",
+    whenToUse: "Format-sensitive tasks, classification, structured extraction, domain-specific terminology, any task where the model needs to match a specific output pattern.",
+    quizCorrect: 1,
+    quizQ: "How many examples are typically optimal for few-shot prompting?",
+    quizOptions: ["1 example", "2 examples", "3-5 examples", "10+ examples"],
+    recap: [
+      "Examples anchor format better than instructions",
+      "CoT extends effective computation depth",
+      "Self-consistency trades cost for reliability"
+    ],
+    content: `
+      <div class="diagram-box">
+        <h3>Few-shot Flow</h3>
+        <div class="flow-diagram">
+          <span class="flow-node">Example 1: Q→A</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node">Example 2: Q→A</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node">Example 3: Q→A</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node">New Question</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node" style="background:#d1fae5;color:#065f46;">85% accuracy</span>
+        </div>
+      </div>
+      <h2>Example Selection Principles</h2>
+      <p>Not all examples are equal. Choose examples that match your target input:</p>
+      <ul style="font-size:13.5px;line-height:1.8;color:var(--fg-2);margin:0 0 var(--space-lg);padding-left:18px;">
+        <li><strong>Semantic similarity:</strong> Choose examples closest to the input in embedding space</li>
+        <li><strong>Label diversity:</strong> Cover all output classes in your examples</li>
+        <li><strong>Difficulty matching:</strong> Match the complexity of target problems</li>
+      </ul>
+    `,
+    codeContent: `
+      <h2>Few-shot Code</h2>
+      <div class="code-block">
+<span class="kw">GSM8K_EXAMPLES</span> = [
+    {
+        <span class="str">"question"</span>: <span class="str">"Janet's ducks lay 16 eggs per day..."</span>,
+        <span class="str">"reasoning"</span>: <span class="str">"Janet's ducks lay 16 eggs per day. She eats 3..."</span>,
+        <span class="str">"answer"</span>: <span class="str">"18"</span>
+    },
+    {
+        <span class="str">"question"</span>: <span class="str">"A robe takes 2 bolts of blue fiber..."</span>,
+        <span class="str">"reasoning"</span>: <span class="str">"It takes 2 bolts of blue fiber..."</span>,
+        <span class="str">"answer"</span>: <span class="str">"3"</span>
+    },
+    <span class="cm"># ... more examples</span>
+]
+
+
+<span class="kw">def</span> <span class="fn">build_cot_prompt</span>(question, examples, num_examples=<span class="nb">3</span>):
+    system = (
+        <span class="str">"You are a precise math problem solver. "</span>
+        <span class="str">"For each problem, show your step-by-step reasoning clearly. "</span>
+        <span class="str">"After your reasoning, state your final answer on the last line "</span>
+        <span class="str">"in exactly this format: 'The answer is [number]'."</span>
+    )
+
+    example_text = <span class="str">""</span>
+    <span class="kw">for</span> ex <span class="kw">in</span> examples[:num_examples]:
+        example_text += <span class="str">f"Q: {ex['question']}\\n"</span>
+        example_text += <span class="str">f"A: {ex['reasoning']} The answer is {ex['answer']}.\\n\\n"</span>
+
+    user = <span class="str">f"{example_text}Q: {question}\\nA:"</span>
+    <span class="kw">return</span> system, user
+      </div>
+    `
+  },
+  cot: {
+    title: "Chain-of-Thought (CoT)",
+    desc: "Let the model show intermediate reasoning steps before giving the final answer.",
+    accuracy: "91%",
+    tokenCost: "~1.2×",
+    bestFor: "Multi-step Problems",
+    complexity: "Low",
+    keyInsight: "When forced to generate intermediate tokens, each token becomes context for the next. Each reasoning step feeds the next step. The model is essentially 'computing' the answer.",
+    whenToUse: "Multi-step arithmetic, word problems, logical reasoning, any task requiring more than one step of inference.",
+    quizCorrect: 2,
+    quizQ: "Why does CoT improve accuracy mechanistically?",
+    quizOptions: ["It uses a larger model", "It reduces API calls", "Each reasoning token extends the effective computation", "It changes the temperature"],
+    recap: [
+      "Examples anchor format better than instructions",
+      "CoT extends effective computation depth",
+      "Self-consistency trades cost for reliability"
+    ],
+    content: `
+      <div class="diagram-box">
+        <h3>CoT vs Standard Prompting</h3>
+        <div class="flow-diagram" style="flex-direction:column;align-items:flex-start;gap:var(--space-md);">
+          <div>
+            <strong style="color:var(--fg-muted);font-size:11px;">STANDARD:</strong>
+            <div class="flow-diagram" style="margin-top:6px;">
+              <span class="flow-node">Q: Roger有5个球...</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-node" style="background:#fee2e2;color:#991b1b;">Answer: 11</span>
+            </div>
+          </div>
+          <div>
+            <strong style="color:var(--fg-muted);font-size:11px;">CoT:</strong>
+            <div class="flow-diagram" style="margin-top:6px;">
+              <span class="flow-node">Q: Roger有5个球...</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-node" style="background:#ccfbf1;color:#065f46;">5+6=11</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-node" style="background:#d1fae5;color:#065f46;">Answer: 11</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2>GSM8K Benchmark Results</h2>
+      <table class="metrics-table">
+        <thead><tr><th>Model</th><th>Zero-shot</th><th>Zero-shot CoT</th><th>Few-shot CoT</th></tr></thead>
+        <tbody>
+          <tr><td>GPT-4o</td><td><span class="badge badge-red">78%</span></td><td><span class="badge badge-amber">91%</span></td><td><span class="badge badge-green">95%</span></td></tr>
+          <tr><td>GPT-5</td><td><span class="badge badge-amber">94%</span></td><td><span class="badge badge-green">97%</span></td><td><span class="badge badge-green">98%</span></td></tr>
+          <tr><td>o4-mini (reasoning)</td><td><span class="badge badge-green">97%</span></td><td>—</td><td>—</td></tr>
+          <tr><td>Claude Opus 4.7</td><td><span class="badge badge-amber">93%</span></td><td><span class="badge badge-green">97%</span></td><td><span class="badge badge-green">98%</span></td></tr>
+          <tr><td>Llama 4 70B</td><td><span class="badge badge-red">80%</span></td><td><span class="badge badge-amber">89%</span></td><td><span class="badge badge-green">94%</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:var(--space-md);font-size:12px;color:var(--fg-muted);">Note: Reasoning models (o-series, R1) already run internal CoT — adding "let's think step by step" is redundant.</p>
+    `,
+    codeContent: `
+      <h2>Zero-shot CoT Code</h2>
+      <div class="code-block">
+<span class="kw">def</span> <span class="fn">build_zero_shot_cot_prompt</span>(question):
+    system = (
+        <span class="str">"You are a precise math problem solver. "</span>
+        <span class="str">"Show your step-by-step reasoning. "</span>
+        <span class="str">"End with: 'The answer is [number]'."</span>
+    )
+    user = <span class="str">f"Q: {question}\\nA: Let's think step by step."</span>
+    <span class="kw">return</span> system, user
+
+
+<span class="kw">def</span> <span class="fn">zero_shot_cot_solve</span>(question, client, model):
+    system, user = <span class="fn">build_zero_shot_cot_prompt</span>(question)
+    text = <span class="fn">call_llm</span>(client, model, system, user, temperature=<span class="nb">0.0</span>)
+    <span class="kw">return</span> <span class="fn">extract_answer</span>(text), text
+      </div>
+    `
+  },
+  selfconsistency: {
+    title: "Self-Consistency",
+    desc: "Sample N reasoning paths and vote on the most common answer.",
+    accuracy: "98.5%",
+    tokenCost: "N×",
+    bestFor: "High-stakes Reasoning",
+    complexity: "Medium",
+    keyInsight: "A single CoT path may contain a reasoning error. Sampling N diverse paths (temperature > 0) and taking a majority vote causes errors to cancel out.",
+    whenToUse: "When accuracy is critical and you can afford 3-10× cost. Best when base CoT accuracy is 60-85%.",
+    quizCorrect: 3,
+    quizQ: "What temperature setting is critical for self-consistency to work?",
+    quizOptions: ["temperature = 0.0", "temperature = 0.7 (or similar > 0)", "temperature = 1.0", "temperature doesn't matter"],
+    recap: [
+      "Examples anchor format better than instructions",
+      "CoT extends effective computation depth",
+      "Self-consistency trades cost for reliability"
+    ],
+    content: `
+      <div class="diagram-box">
+        <h3>Self-Consistency Voting</h3>
+        <div class="flow-diagram" style="flex-direction:column;align-items:flex-start;gap:var(--space-md);">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:#fef3c7;color:#92400e;">Problem</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node">Path 1: 24 ✓</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node">Path 2: 24 ✓</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node">Path 3: 24 ✓</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node">Path 4: 27 ✗</span>
+          </div>
+          <div style="padding:var(--space-md);background:var(--surface-container-low);border-radius:var(--radius-md);font-size:13px;">
+            <strong>Vote:</strong> 24 → 3票 | 27 → 1票 | <strong style="color:var(--green);">Final: 24</strong>
+          </div>
+        </div>
+      </div>
+      <h2>Key Parameters</h2>
+      <div style="display:grid;gap:var(--space-md);font-size:13px;">
+        <div style="padding:var(--space-md);background:var(--surface-container-low);border-radius:var(--radius-md);">
+          <strong>Temperature:</strong> <span class="badge badge-amber">0.7</span> — must be > 0 for diverse paths
+        </div>
+        <div style="padding:var(--space-md);background:var(--surface-container-low);border-radius:var(--radius-md);">
+          <strong>N samples:</strong> N=5 captures most benefit; N=3 minimum for valid voting
+        </div>
+        <div style="padding:var(--space-md);background:var(--surface-container-low);border-radius:var(--radius-md);">
+          <strong>N > 10:</strong> Diminishing returns for most tasks
+        </div>
+      </div>
+    `,
+    codeContent: `
+      <h2>Self-Consistency Code</h2>
+      <div class="code-block">
+<span class="kw">def</span> <span class="fn">self_consistency_solve</span>(question, examples, client, model, n_samples=<span class="nb">5</span>):
+    system, user = <span class="fn">build_cot_prompt</span>(question, examples)
+
+    answers = []
+    reasonings = []
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n_samples):
+        text = <span class="fn">call_llm</span>(client, model, system, user, temperature=<span class="nb">0.7</span>)
+        reasonings.append(text)
+        answer = <span class="fn">extract_answer</span>(text)
+        <span class="kw">if</span> answer <span class="kw">is not None</span>:
+            answers.append(answer)
+
+    <span class="kw">if not</span> answers:
+        <span class="kw">return None</span>, <span class="nb">0.0</span>, reasonings, <span class="fn">Counter</span>()
+
+    vote_counts = <span class="fn">Counter</span>(answers)
+    best_answer = vote_counts.most_common(<span class="nb">1</span>)[<span class="nb">0</span>][<span class="nb">0</span>]
+    confidence = vote_counts[best_answer] / <span class="fn">len</span>(answers)
+
+    <span class="kw">return</span> best_answer, confidence, reasonings, vote_counts
+      </div>
+    `
+  },
+  tot: {
+    title: "Tree-of-Thought (ToT)",
+    desc: "Explore multiple reasoning branches, evaluate each, prune the weak ones.",
+    accuracy: "74% (24点游戏)",
+    tokenCost: "10-40×",
+    bestFor: "Search/Planning",
+    complexity: "High",
+    keyInsight: "ToT explores multiple branches and evaluates which are most promising before continuing. It's a structured search over reasoning space.",
+    whenToUse: "Large search space with evaluable sub-solutions — planning puzzles, creative constraint problems, games like 24-point.",
+    quizCorrect: 3,
+    quizQ: "Why is ToT expensive?",
+    quizOptions: ["It uses multiple models", "Each tree node needs an LLM call", "It requires more memory", "It runs longer"],
+    recap: [
+      "Examples anchor format better than instructions",
+      "CoT extends effective computation depth",
+      "Self-consistency trades cost for reliability"
+    ],
+    content: `
+      <div class="diagram-box">
+        <h3>ToT Branch Exploration</h3>
+        <div style="font-family:var(--font-mono);font-size:12px;line-height:1.8;padding:var(--space-md);background:#1e1b19;color:#e8e6e3;border-radius:var(--radius-lg);">
+          Root: "24点游戏"<br>
+          ├─ Think 1a → Evaluate: 0.8 → extend<br>
+          │  ├─ Think 2a → Evaluate: 0.7<br>
+          │  └─ Think 2b → Evaluate: 0.6<br>
+          ├─ Think 1b → Evaluate: 0.3 → <span style="color:#ef4444;">PRUNED</span><br>
+          └─ Think 1c → Evaluate: 0.9 → extend<br>
+             ├─ Think 2a → Evaluate: <span style="color:#10b981;">0.95</span><br>
+             └─ Think 2b → Evaluate: 0.8<br>
+        </div>
+      </div>
+      <h2>ToT Components</h2>
+      <ul style="font-size:13.5px;line-height:1.8;color:var(--fg-2);margin:0;padding-left:18px;">
+        <li><strong>Thought generation:</strong> Produce multiple candidate next steps</li>
+        <li><strong>State evaluation:</strong> Score each candidate (LLM as evaluator)</li>
+        <li><strong>Search algorithm:</strong> BFS/DFS through tree, prune low-scoring branches</li>
+      </ul>
+      <h3 style="margin-top:var(--space-lg);font-size:14px;">24 Game Results</h3>
+      <table class="metrics-table">
+        <thead><tr><th>Method</th><th>Accuracy</th></tr></thead>
+        <tbody>
+          <tr><td>Standard prompting</td><td><span class="badge badge-red">7.3%</span></td></tr>
+          <tr><td>CoT</td><td><span class="badge badge-red">4.0%</span></td></tr>
+          <tr><td>ToT</td><td><span class="badge badge-green">74%</span></td></tr>
+        </tbody>
+      </table>
+    `,
+    codeContent: `
+      <h2>Tree-of-Thought Code</h2>
+      <div class="code-block">
+<span class="kw">def</span> <span class="fn">generate_initial_thoughts</span>(question, client, model, breadth=<span class="nb">3</span>):
+    system = (
+        <span class="str">"You are a math problem solver exploring different approaches. "</span>
+        <span class="str">"Generate one distinct approach. Show partial reasoning."</span>
+    )
+    thoughts = []
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(breadth):
+        user = <span class="str">f"Problem: {question}\\n\\nGenerate approach #{i+1}..."</span>
+        text = <span class="fn">call_llm</span>(client, model, system, user, temperature=<span class="nb">0.9</span>)
+        thoughts.append(text)
+    <span class="kw">return</span> thoughts
+
+
+<span class="kw">def</span> <span class="fn">evaluate_thought</span>(thought, question, client, model):
+    system = <span class="str">"Score from 0.0 to 1.0. Respond with ONLY a number."</span>
+    user = <span class="str">f"Problem: {question}\\n\\nReasoning:\\n{thought}\\n\\nScore:"</span>
+    text = <span class="fn">call_llm</span>(client, model, system, user, temperature=<span class="nb">0.0</span>)
+    <span class="kw">try</span>:
+        score = <span class="fn">float</span>(<span class="fn">re.search</span>(<span class="str">r"([\d.]+)"</span>, text).group(<span class="nb">1</span>))
+        <span class="kw">return</span> <span class="fn">min</span>(<span class="fn">max</span>(score, <span class="nb">0.0</span>), <span class="nb">1.0</span>)
+    <span class="kw">except</span>:
+        <span class="kw">return</span> <span class="nb">0.5</span>
+
+
+<span class="kw">def</span> <span class="fn">tree_of_thought_solve</span>(question, client, model, breadth=<span class="nb">3</span>, depth=<span class="nb">3</span>):
+    thoughts = <span class="fn">generate_initial_thoughts</span>(question, client, model, breadth)
+    scored = [(t, <span class="fn">evaluate_thought</span>(t, question, client, model)) <span class="kw">for</span> t <span class="kw">in</span> thoughts]
+    scored.<span class="fn">sort</span>(key=<span class="kw">lambda</span> x: x[<span class="nb">1</span>], reverse=<span class="kw">True</span>)
+
+    <span class="kw">for</span> current_depth <span class="kw">in</span> <span class="fn">range</span>(<span class="nb">1</span>, depth):
+        next_thoughts = []
+        <span class="kw">for</span> thought, score <span class="kw">in</span> scored[:<span class="nb">2</span>]:
+            extensions = <span class="fn">extend_thought</span>(thought, question, client, model, breadth)
+            <span class="kw">for</span> ext <span class="kw">in</span> extensions:
+                ext_score = <span class="fn">evaluate_thought</span>(ext, question, client, model)
+                next_thoughts.append((ext, ext_score))
+        <span class="kw">if</span> next_thoughts:
+            scored = <span class="fn">sorted</span>(next_thoughts, key=<span class="kw">lambda</span> x: x[<span class="nb">1</span>], reverse=<span class="kw">True</span>)
+
+    best_thought = scored[<span class="nb">0</span>][<span class="nb">0</span>] <span class="kw">if</span> scored <span class="kw">else</span> <span class="str">""</span>
+    <span class="kw">return</span> <span class="fn">extract_answer</span>(best_thought), best_thought
+      </div>
+    `
+  },
+  react: {
+    title: "ReAct: Think + Act",
+    desc: "Interleave reasoning traces with external actions (search, calculate, API calls).",
+    accuracy: "35.1% (HotpotQA)",
+    tokenCost: "Variable",
+    bestFor: "Knowledge-grounded Reasoning",
+    complexity: "High",
+    keyInsight: "ReAct combines reasoning and acting. The model thinks, takes an action (search, calculate), observes the result, and continues. Errors in reasoning get corrected by real data.",
+    whenToUse: "Knowledge-intensive tasks where the model needs to ground its reasoning in real data. Multi-hop question answering, research tasks.",
+    quizCorrect: 0,
+    quizQ: "What makes ReAct different from CoT?",
+    quizOptions: ["It uses external tools and observations", "It works only with reasoning models", "It requires fewer examples", "It only works on math problems"],
+    recap: [
+      "Examples anchor format better than instructions",
+      "CoT extends effective computation depth",
+      "Self-consistency trades cost for reliability"
+    ],
+    content: `
+      <div class="diagram-box">
+        <h3>ReAct Loop</h3>
+        <div class="flow-diagram" style="flex-direction:column;align-items:flex-start;gap:var(--space-md);">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:#ccfbf1;color:#065f46;">Question</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:#d1fae5;color:#065f46;">Think</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:#fee2e2;color:#991b1b;">Action: Search</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:#dbeafe;color:#1e40af;">Observation</span>
+            <span class="flow-arrow">↻</span>
+          </div>
+          <p style="font-size:12px;color:var(--fg-muted);margin:0;">Cycle continues until the model reaches a final answer.</p>
+        </div>
+      </div>
+      <h2>HotpotQA Results</h2>
+      <table class="metrics-table">
+        <thead><tr><th>Method</th><th>Exact Match</th></tr></thead>
+        <tbody>
+          <tr><td>CoT (GPT-4)</td><td><span class="badge badge-amber">29.4%</span></td></tr>
+          <tr><td>ReAct (GPT-4)</td><td><span class="badge badge-green">35.1%</span></td></tr>
+        </tbody>
+      </table>
+      <h3 style="margin-top:var(--space-lg);font-size:14px;">ReAct in Modern Agents</h3>
+      <p style="font-size:13px;color:var(--fg-2);line-height:1.6;">Every agent framework (LangChain, CrewAI, AutoGen) implements some form of Think-Act-Observe loop. This is the foundation of AI agents.</p>
+    `,
+    codeContent: `
+      <h2>ReAct Code</h2>
+      <div class="code-block">
+<span class="kw">def</span> <span class="fn">react_solve</span>(question, client, model, max_steps=<span class="nb">5</span>):
+    system = (
+        <span class="str">"You are a math solver that can use a calculator. "</span>
+        <span class="str">"For each step, output exactly one of:\\n"</span>
+        <span class="str">"Thought: [your reasoning]\\n"</span>
+        <span class="str">"Action: calculate [expression]\\n"</span>
+        <span class="str">"Answer: [final number]\\n\\n"</span>
+        <span class="str">"When you need to compute, use Action: calculate. "</span>
+        <span class="str">"You will receive the result as an Observation."</span>
+    )
+
+    conversation = <span class="str">f"Q: {question}\\n"</span>
+    messages = [
+        {<span class="str">"role"</span>: <span class="str">"system"</span>, <span class="str">"content"</span>: system},
+        {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: conversation},
+    ]
+
+    <span class="kw">for</span> step <span class="kw">in</span> <span class="fn">range</span>(max_steps):
+        response = client.chat.completions.create(
+            model=model, messages=messages, temperature=<span class="nb">0.0</span>, max_tokens=<span class="nb">512</span>,
+        )
+        text = response.choices[<span class="nb">0</span>].message.content.strip()
+        messages.append({<span class="str">"role"</span>: <span class="str">"assistant"</span>, <span class="str">"content"</span>: text})
+
+        answer_match = <span class="fn">re.search</span>(<span class="str">r"Answer:\s*\$?([\d,]+\.?\d*)"</span>, text)
+        <span class="kw">if</span> answer_match:
+            <span class="kw">return</span> answer_match.group(<span class="nb">1</span>).replace(<span class="str">","</span>, <span class="str">""</span>), text
+
+        calc_match = <span class="fn">re.search</span>(<span class="str">r"Action:\s*calculate\s+(.+)"</span>, text)
+        <span class="kw">if</span> calc_match:
+            expression = calc_match.group(<span class="nb">1</span>).strip()
+            <span class="kw">try</span>:
+                result = <span class="fn">eval</span>(expression, {<span class="str">"__builtins__"</span>: {}}, {})
+                observation = <span class="str">f"Observation: {result}"</span>
+            <span class="kw">except</span> Exception as e:
+                observation = <span class="str">f"Observation: Error - {e}"</span>
+            messages.append({<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: observation})
+
+    <span class="kw">return</span> <span class="fn">extract_answer</span>(<span class="str">"\\n"</span>.join(m[<span class="str">"content"</span>] <span class="kw">for</span> m <span class="kw">in</span> messages <span class="kw">if</span> m[<span class="str">"role"</span>] == <span class="str">"assistant"</span>)), <span class="str">""</span>
+      </div>
+    `
+  }
+};
+
+const state = {
+  currentStep: "zeroshot",
+  viewMode: "concept",
+  quizAnswered: false
+};
+
+const els = {
+  stageTitle: document.getElementById("stageTitle"),
+  stageDesc: document.getElementById("stageDesc"),
+  accuracyMetric: document.getElementById("accuracyMetric"),
+  stageContent: document.getElementById("stageContent"),
+  keyInsight: document.getElementById("keyInsight"),
+  whenToUse: document.getElementById("whenToUse"),
+  quizQ: document.getElementById("quizQ"),
+  quizOptions: document.getElementById("quizOptions"),
+  recapList: document.getElementById("recapList")
+};
+
+function renderStep() {
+  const t = TECHNIQUES[state.currentStep];
+  const showCode = state.viewMode === "code";
+  
+  els.stageTitle.textContent = t.title;
+  els.stageDesc.textContent = t.desc;
+  els.accuracyMetric.textContent = t.accuracy;
+  els.stageContent.innerHTML = showCode && t.codeContent ? t.codeContent : t.content;
+  
+  els.keyInsight.querySelector("p").textContent = t.keyInsight;
+  els.whenToUse.querySelector("p").textContent = t.whenToUse;
+  els.quizQ.textContent = t.quizQ;
+  els.quizOptions.innerHTML = t.quizOptions.map((opt, i) => 
+    `<button class="quiz-option" type="button" data-idx="${i}">${opt}</button>`
+  ).join("");
+  els.recapList.innerHTML = t.recap.map(r => `<li>${r}</li>`).join("");
+  
+  state.quizAnswered = false;
+  attachQuizHandlers();
+}
+
+function attachQuizHandlers() {
+  els.quizOptions.querySelectorAll(".quiz-option").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (state.quizAnswered) return;
+      const idx = parseInt(btn.dataset.idx);
+      const correct = TECHNIQUES[state.currentStep].quizCorrect;
+      state.quizAnswered = true;
+      
+      els.quizOptions.querySelectorAll(".quiz-option").forEach((b, i) => {
+        if (i === correct) b.classList.add("correct");
+        else if (i === idx && idx !== correct) b.classList.add("incorrect");
+      });
+    });
+  });
+}
+
+document.querySelectorAll(".step-button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".step-button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    state.currentStep = btn.dataset.step;
+    renderStep();
+  });
+});
+
+document.querySelectorAll("[data-view]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-view]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    state.viewMode = btn.dataset.view;
+    renderStep();
+  });
+});
+
+renderStep();
+</script>
+</body>
+</html>
