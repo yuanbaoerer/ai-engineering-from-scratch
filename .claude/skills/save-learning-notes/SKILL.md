@@ -3,7 +3,8 @@ name: save-learning-notes
 version: 1.0.0
 description: >
   Organize multi-round Q&A learning sessions into structured Chinese learning
-  notes, saved to the current lesson's learning-notes directory.
+  notes, saved to the current lesson's learning-notes directory, then update
+  the root LEARNING_PATH.md with the latest learning position and study log.
   Trigger phrases: "整理笔记", "保存笔记", "生成学习笔记", "save notes",
   "organize notes", or `/save-learning-notes`.
 tags: [learning, notes, ai-engineering, study]
@@ -126,12 +127,122 @@ mkdir -p phases/<phase>/<lesson>/learning-notes
 
 使用 Write 工具将笔记内容写入文件。
 
-### Step 8: 反馈
+### Step 8: 更新学习路径
+
+笔记文件成功写入后，维护项目根目录的 `LEARNING_PATH.md`，用于记录当前学习位置、已学习 lesson、待复习内容和学习日志。
+
+**重要**：只有 Step 7 成功写入笔记文件后才执行本步骤，避免学习路径指向不存在的笔记。如果本步骤失败，不能回滚或删除已保存的学习笔记；在最终反馈中如实说明学习路径未更新。
+
+#### Step 8a: 读取或创建学习路径文件
+
+目标文件固定为项目根目录：`LEARNING_PATH.md`。
+
+- 如果文件不存在，创建标准模板（见 Step 8b）。
+- 如果文件存在且包含标准标记区块，按 Step 8c 更新。
+- 如果文件存在但缺少标准标记区块，保留原有内容，并在文件底部追加标准学习进度区块；不要覆盖用户已有内容。
+
+标准标记区块包括：
+
+```markdown
+<!-- learning-path:current:start -->
+<!-- learning-path:current:end -->
+<!-- learning-path:completed:start -->
+<!-- learning-path:completed:end -->
+<!-- learning-path:review:start -->
+<!-- learning-path:review:end -->
+<!-- learning-path:log:start -->
+<!-- learning-path:log:end -->
+```
+
+#### Step 8b: 标准学习路径模板
+
+新建文件或追加标准区块时，使用以下结构。将示例值替换为当前 lesson、当前日期和实际笔记路径。
+
+```markdown
+# AI Engineering 学习路径
+
+## 当前位置
+
+<!-- learning-path:current:start -->
+- 当前 Phase: <phase-slug>
+- 当前 Lesson: <lesson-slug>
+- 最近笔记: [<note-file-name>](<note-path>)
+- 更新时间: <YYYY-MM-DD>
+<!-- learning-path:current:end -->
+
+## 已学习 Lessons
+
+<!-- learning-path:completed:start -->
+| 日期 | Phase | Lesson | 笔记 |
+|------|-------|--------|------|
+| <YYYY-MM-DD> | <phase-slug> | <lesson-slug> | [笔记](<note-path>) |
+<!-- learning-path:completed:end -->
+
+## 待复习 / 待消化
+
+<!-- learning-path:review:start -->
+<!-- learning-path:review:end -->
+
+## 学习日志
+
+<!-- learning-path:log:start -->
+- <YYYY-MM-DD> 保存 `phases/<phase-slug>/<lesson-slug>` 学习笔记：[笔记](<note-path>)
+<!-- learning-path:log:end -->
+```
+
+#### Step 8c: 更新规则
+
+根据当前 lesson 路径 `phases/<phase-slug>/<lesson-slug>/` 和本次笔记路径更新 `LEARNING_PATH.md`：
+
+1. **当前位置**：更新 `learning-path:current` 标记区块中的当前 phase、当前 lesson、最近笔记链接和当前日期。
+2. **已学习 Lessons**：
+   - 如果表格中已有相同 `phase + lesson` 的行，替换该行的日期和笔记链接。
+   - 如果不存在相同 lesson，新增一行。
+3. **待复习 / 待消化**：
+   - 从本次生成的笔记内容中查找 `待消化的问题`、`开放问题`、`待复习` 等小节。
+   - 如果能提取到简短摘要，追加一条如下格式的记录：
+
+```markdown
+- <YYYY-MM-DD> `phases/<phase-slug>/<lesson-slug>`: <摘要>
+```
+
+   - 如果没有相关内容，跳过本项，不要制造空泛复习项。
+4. **学习日志**：每次保存都追加一条日志，即使同一个 lesson 已在“已学习 Lessons”中存在。
+
+#### Step 8d: 已有非标准 `LEARNING_PATH.md` 的处理
+
+如果 `LEARNING_PATH.md` 已存在但没有上述标准标记，说明它可能是用户手写或由其他 skill 生成的学习路径。此时：
+
+1. 保留原文件全部内容不变。
+2. 在文件底部追加分隔线和标准区块：
+
+```markdown
+---
+
+## 当前学习进度
+
+<使用 Step 8b 中从“## 当前位置”开始的标准结构>
+```
+
+3. 后续执行再按标准标记区块更新。
+
+### Step 9: 反馈
 
 告知用户：
 - 笔记文件的完整路径
 - 笔记包含多少个小节
 - 简单概括笔记涵盖的核心主题（一两句话）
+- `LEARNING_PATH.md` 是否已更新
+- 当前记录的学习位置
+
+反馈示例：
+
+```text
+已保存学习笔记：phases/13-tools-and-protocols/03-example/learning-notes/2026-06-12-example.md
+共整理 7 个小节，涵盖本次对话中的核心概念、机制和实践注意事项。
+已更新学习路径：LEARNING_PATH.md
+当前位置：phases/13-tools-and-protocols/03-example
+```
 
 ## 笔记格式参考
 
