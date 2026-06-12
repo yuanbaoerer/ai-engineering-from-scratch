@@ -2,7 +2,7 @@
 
 > 一个词由它所处的环境决定。在这一思想基础上训练一个浅层网络，几何关系自然涌现。
 
-**类型：** 实战项目
+**类型：** 构建
 **语言：** Python
 **前置知识：** 第五阶段 · 02（BoW + TF-IDF）、第三阶段 · 03（从零实现反向传播）
 **预计时间：** 约 75 分钟
@@ -11,7 +11,7 @@
 
 TF-IDF 知道 `dog` 和 `puppy` 是不同的单词。它不知道它们的意思几乎相同。在 `dog` 上训练的分类器无法泛化到关于 `puppy` 的评论。你可以通过列出同义词来弥补这一点，但这在罕见词、领域术语以及每一种你未预料到的语言面前都会失效。
 
-你需要一个表示方式，让 `dog` 和 `puppy` 在向量空间中位置相近。 让 `king - man + woman` 接近 `queen`。让在 `dog` 上训练的模型能够将部分信号免费迁移到 `puppy`。
+你需要一个表示方式，让 `dog` 和 `puppy` 在向量空间中位置相近。让 `king - man + woman` 接近 `queen`。让在 `dog` 上训练的模型能够将部分信号免费迁移到 `puppy`。
 
 Word2Vec 给了我们这个向量空间。两层神经网络，万亿 token 的训练规模，2013 年发表。架构简单得近乎尴尬。但它彻底改变了 NLP 十年。
 
@@ -35,6 +35,10 @@ one-hot(中心词) ── W ──▶ 隐藏层 (d维) ── W' ──▶ softm
 ```
 
 关键技巧：对 10 万个词做 softmax 开销大得离谱。Word2Vec 使用**负采样**将其转化为二分类任务。预测"这个上下文词是否出现在这个中心词附近，是或否"。每个训练样本采样几个负样本（非共现词），而不是对整个词汇表计算 softmax。
+
+```figure
+word-vector-arithmetic
+```
 
 ## 从零构建
 
@@ -202,10 +206,10 @@ print(model.wv.most_similar("cat", topn=3))
 
 ### 2026 年 Word2Vec 仍有优势的领域
 
-- **轻量级领域专用检索。** 在笔记本电脑上用一小时训练医学摘要，就能获得通用模型无法捕捉的专业向量。
-- **类比风格特征工程。** `gender_vector = mean(man - woman pairs)`。从中减去其他词以获得性别中立轴。这仍在公平性研究中使用。
-- **可解释性。** 100 维足够小，可以通过 PCA 或 t-SNE 可视化并真正看到聚类的形成。
-- **任何需要在设备上运行且没有 GPU 的推理场景。** Word2Vec 查找只是一个单行获取操作。
+- 轻量级领域专用检索。在笔记本电脑上用一小时训练医学摘要，就能获得通用模型无法捕捉的专业向量。
+- 类比风格特征工程。`gender_vector = mean(man - woman pairs)`。从中减去其他词以获得性别中立轴。这仍在公平性研究中使用。
+- 可解释性。100 维足够小，可以通过 PCA 或 t-SNE 可视化并真正看到聚类的形成。
+- 任何需要在设备上运行且没有 GPU 的推理场景。Word2Vec 查找只是一个单行获取操作。
 
 ### Word2Vec 的局限性
 
@@ -222,21 +226,21 @@ print(model.wv.most_similar("cat", topn=3))
 ```markdown
 ---
 name: embedding-probe
-description: 检查 word2vec 模型。运行类比、查找近邻、诊断质量。
+description: Inspect a word2vec model. Run analogies, find neighbors, diagnose quality.
 version: 1.0.0
 phase: 5
 lesson: 03
 tags: [nlp, embeddings, debugging]
 ---
 
-你探测训练好的词嵌入来验证它们是否正常工作。给定一个 `gensim.models.KeyedVectors` 对象和词汇表，你运行：
+You probe trained word embeddings to verify they are working. Given a `gensim.models.KeyedVectors` object and a vocabulary, you run:
 
-1. 三个经典类比测试。`king : man :: queen : woman`。`paris : france :: tokyo : japan`。`walking : walked :: swimming : ?`。报告 top-1 结果及其余弦相似度。
-2. 五个领域专用词的最近邻测试。打印 top-5 近邻及其余弦相似度。
-3. 一个对称性检查。`similarity(a, b) == similarity(b, a)` 在浮点精度范围内。
-4. 一个退化检查。如果任何嵌入的范数低于 0.01 或高于 100，则模型存在训练 bug。标记它。
+1. Three canonical analogy tests. `king : man :: queen : woman`. `paris : france :: tokyo : japan`. `walking : walked :: swimming : ?`. Report the top-1 result and its cosine.
+2. Five nearest-neighbor tests on domain-specific words the user supplies. Print top-5 neighbors with cosines.
+3. One symmetry check. `similarity(a, b) == similarity(b, a)` to within float precision.
+4. One degenerate check. If any embedding has a norm below 0.01 or above 100, the model has a training bug. Flag it.
 
-不要仅凭类比准确率就宣称模型是好的。类比基准测试可以被"刷分"，且不能迁移到下游任务。建议结合内在评估和下游评估一起使用。
+Refuse to declare a model good on analogy accuracy alone. Analogy benchmarks are gameable and do not transfer to downstream tasks. Recommend intrinsic + downstream evaluation together.
 ```
 
 ## 练习
