@@ -53,6 +53,12 @@ That 10 GB is why Llama 3 70B at 128K context needs most of a 40 GB A100 just fo
 
 **GQA is the KV-cache win.** MHA with 64 heads would be 32 GB. MLA compresses even further.
 
+Drag the dimensions and watch the cache size move. Push the sequence length or batch up and see how fast it blows past a single GPU:
+
+```figure
+kv-cache-sizer
+```
+
 ### Flash Attention — the tiling trick
 
 Standard attention:
@@ -111,6 +117,10 @@ Continuous batching (first shipped in Orca, now in vLLM, TensorRT-LLM, SGLang): 
 ### PagedAttention — KV cache as virtual memory
 
 vLLM's headline feature. KV cache is allocated in 16-token blocks; a page table maps logical positions to physical blocks. Lets you share KV across parallel samples (beam search, parallel sampling), hot-swap prefixes for prompt caching, and defragment memory. 4× throughput improvement over naive contiguous allocation.
+
+```figure
+flash-attention-memory
+```
 
 ## Build It
 

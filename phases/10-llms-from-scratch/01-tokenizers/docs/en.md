@@ -56,6 +56,10 @@ BPE is a greedy compression algorithm repurposed for tokenization. The idea is s
 
 Start with individual characters. Count every adjacent pair in the training corpus. Merge the most frequent pair into a new token. Repeat until you reach your target vocabulary size.
 
+```figure
+tokenizer-bpe
+```
+
 Here is BPE running on a tiny corpus with the words "lower", "lowest", and "newest":
 
 ```
@@ -197,6 +201,10 @@ The trend is clear: vocabulary sizes are growing. GPT-2 used 50,257. GPT-4 uses 
 Tokenizers trained primarily on English are brutal to other languages. Korean text in GPT-2's tokenizer averages 2-3 tokens per word. Chinese can be worse. This means a Korean user effectively has a context window that is half the size of an English user's -- paying the same price for less information density.
 
 This is why Llama 3 quadrupled its vocabulary from 32K to 128K. More tokens dedicated to non-English scripts means fairer compression across languages.
+
+```figure
+tokenizer-tradeoff
+```
 
 ## Build It
 
