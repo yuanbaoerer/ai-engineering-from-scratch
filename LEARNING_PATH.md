@@ -114,3 +114,37 @@ Phase 17/18 → Phase 19
 ### 学习建议
 
 从 **Phase 11（LLM 工程）** 开始 — 凭借你在 NLP 和应用 AI 方面的扎实基础，提示词工程、RAG 和微调将是你最快上手的领域。正式开始前，建议花几个小时回顾 Phase 3 中关于残差连接和梯度流的内容。
+
+---
+
+## 当前学习进度
+
+<!-- learning-path:current:start -->
+- 当前 Phase: 17-infrastructure-and-production
+- 当前 Lesson: 04-vllm-serving-internals
+- 最近笔记: [2026-06-12-vllm-serving-internals.md](phases/17-infrastructure-and-production/04-vllm-serving-internals/learning-notes/2026-06-12-vllm-serving-internals.md)
+- 更新时间: 2026-06-12
+<!-- learning-path:current:end -->
+
+## 已学习 Lessons
+
+<!-- learning-path:completed:start -->
+| 日期 | Phase | Lesson | 笔记 |
+|------|-------|--------|------|
+| 2026-06-12 | 17-infrastructure-and-production | 01-managed-llm-platforms | [笔记](phases/17-infrastructure-and-production/01-managed-llm-platforms/learning-notes/2026-06-12-managed-platforms.md) |
+| 2026-06-12 | 17-infrastructure-and-production | 04-vllm-serving-internals | [笔记](phases/17-infrastructure-and-production/04-vllm-serving-internals/learning-notes/2026-06-12-vllm-serving-internals.md) |
+<!-- learning-path:completed:end -->
+
+## 待复习 / 待消化
+
+<!-- learning-path:review:start -->
+- 2026-06-12 `phases/17-infrastructure-and-production/01-managed-llm-platforms`: PTU 盈亏平衡点计算、双提供商策略的成本与收益权衡
+- 2026-06-12 `phases/17-infrastructure-and-production/04-vllm-serving-internals`: 投机解码与 chunked prefill 的互斥权衡、Mamba 架构替代 Transformer 的前景
+<!-- learning-path:review:end -->
+
+## 学习日志
+
+<!-- learning-path:log:start -->
+- 2026-06-12 保存 `phases/17-infrastructure-and-production/01-managed-llm-platforms` 学习笔记：[笔记](phases/17-infrastructure-and-production/01-managed-llm-platforms/learning-notes/2026-06-12-managed-platforms.md)
+- 2026-06-12 保存 `phases/17-infrastructure-and-production/04-vllm-serving-internals` 学习笔记：[笔记](phases/17-infrastructure-and-production/04-vllm-serving-internals/learning-notes/2026-06-12-vllm-serving-internals.md)
+<!-- learning-path:log:end -->
