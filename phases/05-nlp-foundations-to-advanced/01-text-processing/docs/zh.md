@@ -15,7 +15,7 @@
 
 分词错误，模型学到的就是垃圾。如果你的分词器把 `don't` 作为一个 token，但把 `do n't` 作为两个 token，训练分布就会分裂。如果你的词干提取器把 `organization` 和 `organ` 压缩到同一个词干，主题建模就会失效。如果你的词形还原器需要词性上下文，但你没有传入，动词就会被当作名词处理。
 
-本节课从头构建三个预处理原语，然后展示 NLTK 和 spaCy 如何完成相同的工作，让你看到其中的权衡。
+本节课从头构建三个预处理步骤，然后展示 NLTK 和 spaCy 如何完成相同的工作，让你看到其中的权衡。
 
 ## 核心概念
 
@@ -28,6 +28,10 @@
 **词形还原（Lemmatization）** 利用语法知识将单词还原为词典形式。更慢、准确、需要查表或形态分析器。`ran -> run`（需要知道 "ran" 是 "run" 的过去式）。`better -> good`（需要知道比较级形式）。
 
 经验法则。当速度很重要且可以容忍噪声时用词干提取（搜索索引、粗略分类）。当意义很重要时用词形还原（问答、语义搜索、用户会阅读的任何内容）。
+
+```figure
+edit-distance
+```
 
 ## 构建
 
@@ -51,7 +55,7 @@ def tokenize(text):
 
 需要注意的失败模式。`3pm` 会分割成 `['3', 'pm']`，因为我们在字母序列和数字序列之间切换。对大多数任务来说够用了。URL、电子邮件、话题标签都会出问题。生产环境需要在通用模式之前添加特定模式。
 
-### 步骤 2：Porter 词干提取器（第 1a 步仅此而已）
+### 步骤 2：Porter 词干提取器（第 1a 步）
 
 完整的 Porter 算法有五个阶段的规则。仅第 1a 步就涵盖了最常见的英语后缀，并教会你模式。
 
@@ -204,7 +208,7 @@ spaCy 将整个管道隐藏在 `nlp(text)` 后面。分词、POS 标注和词形
 
 **可复现性漂移。** NLTK 和 spaCy 在不同版本之间会改变分词和词形还原行为。spaCy 2.x 中产生 `['do', "n't"]` 的结果可能在 3.x 中产生 `["don't"]`。你的模型是用一种分布训练的。现在推理运行在不同的分布上。准确率悄悄下降，没人知道为什么。在 `requirements.txt` 中固定库版本。编写一个预处理回归测试，冻结 20 个样本句子的预期分词结果。每次升级时运行它。
 
-**训练/推理不匹配。** 用激进的预处理（ lowercase、停用词去除、词干提取）训练，部署在原始用户输入上，看着性能崩溃。这是生产级 NLP 最常见的失败案例。如果你在训练时进行了预处理，推理时必须运行完全相同的函数。将预处理作为函数放在模型包内，而不是作为笔记本单元格让服务团队重写。
+**训练/推理不匹配。** 用激进的预处理（lowercase、停用词去除、词干提取）训练，部署在原始用户输入上，看着性能崩溃。这是生产级 NLP 最常见的失败案例。如果你在训练时进行了预处理，推理时必须运行完全相同的函数。将预处理作为函数放在模型包内，而不是作为笔记本单元格让服务团队重写。
 
 ## 发布
 
@@ -215,19 +219,19 @@ spaCy 将整个管道隐藏在 `nlp(text)` 后面。分词、POS 标注和词形
 ```markdown
 ---
 name: preprocessing-advisor
-description: 为 NLP 任务推荐分词、词干提取和词形还原设置。
+description: Recommends a tokenization, stemming, and lemmatization setup for an NLP task.
 phase: 5
 lesson: 01
 ---
 
-你提供经典 NLP 预处理的建议。给定任务描述后，你输出：
+You advise on classical NLP preprocessing. Given a task description, you output:
 
-1. 分词选择（正则表达式、NLTK word_tokenize、spaCy 或 transformer tokenizer）。解释原因。
-2. 是否词干提取、词形还原、两者都做或都不做。解释原因。
-3. 具体的库调用。说出函数名称。如果涉及 NLTK，引用 POS 标签翻译。
-4. 用户应该测试的一个失败模式。
+1. Tokenization choice (regex, NLTK word_tokenize, spaCy, or transformer tokenizer). Explain why.
+2. Whether to stem, lemmatize, both, or neither. Explain why.
+3. Specific library calls. Name the functions. Quote the POS-tag translation if NLTK is involved.
+4. One failure mode the user should test for.
 
-拒绝为用户可见的文本推荐词干提取。拒绝在没有 POS 标签的情况下推荐词形还原。将非英语输入标记为需要不同的管道。
+Refuse to recommend stemming for user-visible text. Refuse to recommend lemmatization without POS tags. Flag non-English input as needing a different pipeline.
 ```
 
 ## 练习
