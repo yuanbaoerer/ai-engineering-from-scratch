@@ -53,7 +53,7 @@ graph LR
     end
 ```
 
-查询 → 检索 → 增强提示词 → 生成。每个 RAG 系统都遵循这一模式。生产级 RAG 系统之间的差异在于每个步骤的细节：如何分块、如何嵌入、如何搜索、如何构建提示词。
+查询 -> 检索 -> 增强提示词 -> 生成。每个 RAG 系统都遵循这一模式。生产级 RAG 系统之间的差异在于每个步骤的细节：如何分块、如何嵌入、如何搜索、如何构建提示词。
 
 ### 为什么 RAG 优于微调
 
@@ -63,7 +63,7 @@ graph LR
 | 新鲜度 | 需重新训练才会更新 | 通过重新索引文档几分钟内更新 |
 | 可审计性 | 无法追溯答案来源 | 可以展示精确检索到的段落 |
 | 幻觉 | 仍会自由产生幻觉 | 基于检索文档进行回答 |
-| 数据隐私 | 训练数据 baked into weights | 文档保留在自有向量存储中 |
+| 数据隐私 | 训练数据融入了权重 | 文档保留在自有向量存储中 |
 
 微调永久改变模型权重。RAG 临时改变模型上下文。对于大多数应用，临时上下文正是你需要的。
 
@@ -178,6 +178,10 @@ graph TD
 - **嵌入维度**：384-3072，取决于模型
 - **索引吞吐量**：使用 API 嵌入每秒 100-1,000 份文档
 - **查询延迟**：检索 50-200ms，生成 500-3000ms
+
+```figure
+rag-chunking
+```
 
 ## 构建
 
@@ -427,6 +431,6 @@ Chroma 内部处理嵌入（默认使用 all-MiniLM-L6-v2）并将向量存储�
 - Anthropic's RAG documentation (docs.anthropic.com) -- 关于块大小、提示词构建和评估的实用指南
 - Pinecone Learning Center, "What is RAG?" -- RAG 管道的清晰可视化解释，包含生产注意事项
 - Sentence-BERT: Reimers & Gurevych (2019) -- all-MiniLM 嵌入模型背后的论文，展示了如何训练双编码器进行语义相似度
-- [Karpukhin et al., "Dense Passage Retrieval for Open-Domain Question Answering" (EMNLP 2020)](https://arxiv.org/abs/2004.04906) -- DPR 论文，证明密集双编码器检索在开放域 QA 上优于 BM25，并确立了现代 RAG 检索器的模式
-- [LlamaIndex High-Level Concepts](https://docs.llamaindex.ai/en/stable/getting_started/concepts.html) -- 构建 RAG 管道时需要了解的主要概念：数据加载器、节点解析器、索引、检索器、响应合成器
-- [LangChain RAG tutorial](https://python.langchain.com/docs/tutorials/rag/) -- 另一个风格的编排器；同一先检索后生成模式的可运行链视图
+- [Karpukhin et al., "Dense Passage Retrieval for Open-Domain Question Answering" (EMNLP 2020)](https://arxiv.org/abs/2004.04906) -- DPR 论文，证明密集双编码器检索在开放域 QA 上优于 BM25，并确立了现代 RAG 检索器的模式。
+- [LlamaIndex High-Level Concepts](https://docs.llamaindex.ai/en/stable/getting_started/concepts.html) -- 构建 RAG 管道时需要了解的主要概念：数据加载器、节点解析器、索引、检索器、响应合成器。
+- [LangChain RAG tutorial](https://python.langchain.com/docs/tutorials/rag/) -- 另一个风格的编排器；同一先检索后生成模式的可运行链视图。
