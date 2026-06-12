@@ -84,6 +84,10 @@ Schaeffer et al. (2023) 认为这是测量伪影：涌现指标使用不连续�
 
 Muon 优化器（Kimi Moonlight，2024）在匹配数据下显示约 2 倍有效计算增益超过 AdamW。一些 2026 年训练运行默认使用 Muon。改变扩展定律中的绝对常数，不改变其形状。
 
+```figure
+scaling-laws
+```
+
 ## 动手实现
 
 参见 `code/main.py`。我们实现 Chinchilla 损失方程，并在多个计算预算下求解计算最优 `(N, D)`。
