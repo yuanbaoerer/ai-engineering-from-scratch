@@ -95,7 +95,7 @@ GPT-2 使用**多头注意力 (Multi-Head Attention, MHA)**：每个头有自己
 **多头潜在注意力 (Multi-Head Latent Attention, MLA, DeepSeek 2024)** 将 K 和 V 压缩到一个共享的低秩潜在空间中，然后在每个头中投影回来。进一步减少 KV 缓存，同时保留每个头的表达能力。DeepSeek-V2 和 V3 依赖这一点来实现其长上下文性能。
 
 | 方案 | KV 头数 | KV 缓存 | 精度 |
-|------|----------|----------|----------|
+|------|----------|----------|------|
 | MHA | num_heads | 完整 | 最佳 |
 | GQA | num_groups (G < num_heads) | 缩减为 num_heads / G | 接近 MHA |
 | MQA | 1 | 缩减为 num_heads 分之一 | 轻微下降 |
@@ -219,6 +219,10 @@ Llama 3 8B 在128k上下文下，BF16，head_dim = hidden / num_heads = 128：
 - **最大的开源能力，接受 MoE 复杂性**：DeepSeek V3、Mixtral 8x22B。每激活 FLOP 的最佳能力。
 - **长上下文需求**：Llama 3（128k 配合 RoPE 缩放）、DeepSeek（MLA 优势）。
 - **低延迟 serving**：Gemma 2 9B（滑动窗口削减长上下文计算量）。
+
+```figure
+rmsnorm-vs-layernorm
+```
 
 ## 动手构建
 
