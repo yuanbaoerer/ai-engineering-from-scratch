@@ -464,6 +464,10 @@ def generate(model, prompt_tokens, max_new_tokens=100, temperature=0.8):
 
 `tokens[-seq_len:]` 窗口是必要的，因为模型有最大上下文长度（GPT-2 为 1024）。一旦超过，就必须丢弃最旧的词元。这就是大家都在谈论的"上下文窗口"。
 
+```figure
+sampling-decoder
+```
+
 ## 使用它
 
 ### 完整训练与生成演示
