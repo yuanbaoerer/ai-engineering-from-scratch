@@ -52,6 +52,10 @@ REINFORCE 定理（Williams 1992）告诉你这个梯度是可计算的：`∇J(
 
 **连续动作的高斯策略（Gaussian policy）。** `π_θ(a | s) = N(μ_θ(s), σ_θ(s))`。`∇ log N(a; μ, σ)` 有闭式形式。这就是 Phase 9 · 07 的 SAC 所需要的全部。
 
+```figure
+policy-gradient-landscape
+```
+
 ## 构建它
 
 ### 步骤 1：softmax 策略网络
@@ -152,22 +156,22 @@ def reinforce_step(theta, trajectory, gamma, lr, baseline=0.0):
 ```markdown
 ---
 name: policy-gradient-trainer
-description: Produce a REINFORCE / actor-critic / PPO training config for a given task and diagnose variance issues.
+description: 为给定任务生成 REINFORCE / actor-critic / PPO 训练配置，并诊断方差问题。
 version: 1.0.0
 phase: 9
 lesson: 6
 tags: [rl, policy-gradient, reinforce]
 ---
 
-Given an environment (discrete / continuous actions, horizon, reward stats), output:
+给定一个环境（离散 / 连续动作、视野、奖励统计），输出：
 
-1. Policy head. Softmax (discrete) or Gaussian (continuous) with parameter counts.
-2. Baseline. None (vanilla), running mean, learned `V̂(s)`, or A2C critic.
-3. Variance controls. Reward-to-go on by default, return normalization, gradient clip value.
-4. Entropy bonus. Coefficient β and decay schedule.
-5. Batch size. Episodes per update; on-policy data freshness contract.
+1. 策略头。Softmax（离散）或 Gaussian（连续）及参数数量。
+2. 基线。无（vanilla）、运行均值、学习得到的 `V̂(s)`、或 A2C critic。
+3. 方差控制。默认开启 reward-to-go，回报归一化，梯度裁剪值。
+4. 熵奖励。系数 β 及衰减调度。
+5. 批大小。每次更新的 episode 数；on-policy 数据新鲜度契约。
 
-Refuse REINFORCE-no-baseline on horizons > 500 steps. Refuse continuous-action control with a softmax head. Flag any run with `β = 0` and observed policy entropy < 0.1 as entropy-collapsed.
+拒绝在视野 > 500 步的任务上使用无基线的 REINFORCE。拒绝用 softmax 头做连续动作控制。将任何 `β = 0` 且观测到策略熵 < 0.1 的运行标记为熵坍缩。
 ```
 
 ## 练习
@@ -180,14 +184,14 @@ Refuse REINFORCE-no-baseline on horizons > 500 steps. Refuse continuous-action c
 
 | 术语 | 人们通常怎么说 | 它实际是什么意思 |
 |------|-----------------|-----------------------|
-| 策略梯度（Policy gradient） | “直接训练策略” | `∇J(θ) = E[G · ∇ log π_θ(a\|s)]`；由对数导数技巧推导而来。 |
-| REINFORCE | “最早的 PG 算法” | Williams（1992）；蒙特卡洛回报乘以对数策略梯度。 |
-| 对数导数技巧（Log-derivative trick） | “得分函数估计器” | `∇P(τ;θ) = P(τ;θ) · ∇ log P(τ;θ)`；让期望的梯度变得可处理。 |
-| 基线（Baseline） | “方差降低” | 从 `G` 中减去的任意 `b(s)`；无偏，因为 `E[b · ∇ log π] = 0`。 |
-| 从当前步开始的回报（Reward-to-go） | “只有未来回报算数” | 使用 `G_t^{from t}` 而不是完整的 `G_0`；正确且方差更低。 |
-| 熵奖励（Entropy bonus） | “鼓励探索” | `+β · H(π(·\|s))` 项让策略避免坍缩。 |
-| On-policy | “用你刚刚看到的数据训练” | 梯度期望是相对于当前策略的——不能直接复用旧数据。 |
-| 优势（Advantage） | “比平均好多少” | `A(s, a) = G(s, a) - V(s)`；带基线 REINFORCE 所乘的有符号量。 |
+| 策略梯度（Policy gradient） | "直接训练策略" | `∇J(θ) = E[G · ∇ log π_θ(a\|s)]`；由对数导数技巧推导而来。 |
+| REINFORCE | "最早的 PG 算法" | Williams（1992）；蒙特卡洛回报乘以对数策略梯度。 |
+| 对数导数技巧（Log-derivative trick） | "得分函数估计器" | `∇P(τ;θ) = P(τ;θ) · ∇ log P(τ;θ)`；让期望的梯度变得可处理。 |
+| 基线（Baseline） | "方差降低" | 从 `G` 中减去的任意 `b(s)`；无偏，因为 `E[b · ∇ log π] = 0`。 |
+| 从当前步开始的回报（Reward-to-go） | "只有未来回报算数" | 使用 `G_t^{from t}` 而不是完整的 `G_0`；正确且方差更低。 |
+| 熵奖励（Entropy bonus） | "鼓励探索" | `+β · H(π(·\|s))` 项让策略避免坍缩。 |
+| On-policy | "用你刚刚看到的数据训练" | 梯度期望是相对于当前策略的——不能直接复用旧数据。 |
+| 优势（Advantage） | "比平均好多少" | `A(s, a) = G(s, a) - V(s)`；带基线 REINFORCE 所乘的有符号量。 |
 
 ## 延伸阅读
 
