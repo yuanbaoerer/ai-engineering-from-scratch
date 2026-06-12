@@ -49,6 +49,10 @@
 
 **n 步 TD 与 TD(λ)。** 通过在自举前等待 `n` 步，在 TD(0) 和 MC 之间插值。`n=1` 是 TD，`n=∞` 是 MC。TD(λ) 用几何权重 `(1-λ)λ^{n-1}` 对所有 `n` 进行平均。大多数深度 RL 使用 3 到 20 之间的 `n`。
 
+```figure
+qlearning-gridworld
+```
+
 ## 构建它
 
 ### 步骤 1：基于 ε-greedy 策略的 SARSA
@@ -128,7 +132,7 @@ def q_learning(env, episodes, alpha=0.1, gamma=0.99, epsilon=0.1):
 | LLM RL（基于奖励模型） | PPO / GRPO（第 9 阶段 · 08、12） | Actor-critic，通过 GAE 获得 TD 风格优势。 |
 | 离线 RL | CQL / IQL（第 9 阶段 · 08） | 带保守正则化的 Q-learning。 |
 
-你在 2026 年论文中读到的 90% 的“RL”，都是 Q-learning 或 SARSA 的某种扩展。在深入阅读之前，先让自己的手指真正理解表格型更新。
+你在 2026 年论文中读到的 90% 的"RL"，都是 Q-learning 或 SARSA 的某种扩展。在深入阅读之前，先让自己的手指真正理解表格型更新。
 
 ## 交付它
 
@@ -137,22 +141,22 @@ def q_learning(env, episodes, alpha=0.1, gamma=0.99, epsilon=0.1):
 ```markdown
 ---
 name: td-agent
-description: Pick between Q-learning, SARSA, Expected SARSA for a tabular or small-feature RL task.
+description: 为表格型或小特征 RL 任务在 Q-learning、SARSA、Expected SARSA 之间做出选择。
 version: 1.0.0
 phase: 9
 lesson: 4
 tags: [rl, td-learning, q-learning, sarsa]
 ---
 
-Given a tabular or small-feature environment, output:
+给定一个表格型或小特征环境，输出：
 
-1. Algorithm. Q-learning / SARSA / Expected SARSA / n-step variant. One-sentence reason tied to on-policy vs off-policy and variance.
-2. Hyperparameters. α, γ, ε, decay schedule.
-3. Initialization. Q_0 value (optimistic vs zero) and justification.
-4. Convergence diagnostic. Target learning curve, `|Q - Q*|` check if DP is possible.
-5. Deployment caveat. How will exploration behave at inference? Is SARSA's conservatism needed?
+1. 算法。Q-learning / SARSA / Expected SARSA / n 步变体。一句话理由，关联到同策略 vs 离策略和方差。
+2. 超参数。α、γ、ε、衰减调度。
+3. 初始化。Q_0 值（乐观 vs 零）及理由。
+4. 收敛诊断。目标学习曲线，如果可能做 DP 时的 `|Q - Q*|` 检查。
+5. 部署注意事项。推理时探索会如何表现？是否需要 SARSA 的保守性？
 
-Refuse to apply tabular TD to state spaces > 10⁶. Refuse to ship a Q-learning agent without a max-bias caveat. Flag any agent trained with ε held at 1.0 throughout (no exploitation phase).
+拒绝将表格型 TD 应用于 > 10⁶ 的状态空间。拒绝交付没有最大化偏差注意事项的 Q-learning 智能体。将整个训练过程中 ε 始终保持为 1.0 的智能体（没有利用阶段）标记为问题。
 ```
 
 ## 练习
@@ -165,14 +169,14 @@ Refuse to apply tabular TD to state spaces > 10⁶. Refuse to ship a Q-learning 
 
 | 术语 | 人们常说 | 实际含义 |
 |------|-----------------|-----------------------|
-| TD error | “更新信号” | `δ = r + γ V(s') - V(s)`，自举残差。 |
-| TD(0) | “一步 TD” | 每次转移后只使用下一状态的估计进行更新。 |
-| Q-learning | “离策略 RL 入门” | 对下一状态动作取 `max` 的 TD 更新；无论行为策略如何，都学习 `Q*`。 |
-| SARSA | “同策略 Q-learning” | 使用实际下一动作的 TD 更新；为当前 ε-greedy π 学习 `Q^π`。 |
-| Expected SARSA | “低方差 SARSA” | 将采样到的 `a'` 替换为其在 π 下的期望。 |
-| GLIE | “正确的探索调度” | Greedy in the Limit with Infinite Exploration；Q-learning 收敛所需条件。 |
-| Bootstrapping | “在目标中使用当前估计” | 区分 TD 与 MC 的关键。它是偏差来源，但能大幅降低方差。 |
-| Maximization bias | “Q-learning 会过估计” | 对有噪声估计取 `max` 会向上偏置；由 Double Q-learning 修复。 |
+| TD error | "更新信号" | `δ = r + γ V(s') - V(s)`，自举残差。 |
+| TD(0) | "一步 TD" | 每次转移后只使用下一状态的估计进行更新。 |
+| Q-learning | "离策略 RL 入门" | 对下一状态动作取 `max` 的 TD 更新；无论行为策略如何，都学习 `Q*`。 |
+| SARSA | "同策略 Q-learning" | 使用实际下一动作的 TD 更新；为当前 ε-greedy π 学习 `Q^π`。 |
+| Expected SARSA | "低方差 SARSA" | 将采样到的 `a'` 替换为其在 π 下的期望。 |
+| GLIE | "正确的探索调度" | Greedy in the Limit with Infinite Exploration；Q-learning 收敛所需条件。 |
+| Bootstrapping | "在目标中使用当前估计" | 区分 TD 与 MC 的关键。它是偏差来源，但能大幅降低方差。 |
+| Maximization bias | "Q-learning 会过估计" | 对有噪声估计取 `max` 会向上偏置；由 Double Q-learning 修复。 |
 
 ## 延伸阅读
 
@@ -180,5 +184,5 @@ Refuse to apply tabular TD to state spaces > 10⁶. Refuse to ship a Q-learning 
 - [Sutton & Barto (2018). Ch. 6 — Temporal-Difference Learning](http://incompleteideas.net/book/RLbook2020.pdf) — TD(0)、SARSA、Q-learning、Expected SARSA。
 - [Hasselt (2010). Double Q-learning](https://papers.nips.cc/paper_files/paper/2010/hash/091d584fced301b442654dd8c23b3fc9-Abstract.html) — 最大化偏差的修复方法。
 - [Seijen, Hasselt, Whiteson, Wiering (2009). A Theoretical and Empirical Analysis of Expected SARSA](https://ieeexplore.ieee.org/document/4927542) — Expected SARSA 的动机。
-- [Rummery & Niranjan (1994). On-line Q-learning using connectionist systems](https://www.researchgate.net/publication/2500611_On-Line_Q-Learning_Using_Connectionist_Systems) — 创造 SARSA 这一名称的论文（当时称为“modified connectionist Q-learning”）。
+- [Rummery & Niranjan (1994). On-line Q-learning using connectionist systems](https://www.researchgate.net/publication/2500611_On-Line_Q-Learning_Using_Connectionist_Systems) — 创造 SARSA 这一名称的论文（当时称为"modified connectionist Q-learning"）。
 - [Sutton & Barto (2018). Ch. 7 — n-step Bootstrapping](http://incompleteideas.net/book/RLbook2020.pdf) — 将 TD(0) 泛化为 TD(n)，这是从 Q-learning 通往资格迹，以及后来 PPO 中 GAE 的路径。
