@@ -108,6 +108,10 @@ DeepSeek-V3 的预训练在 2,048 块 H800 GPU 上消耗了约 14.8T 词元，�
 - 兼容 **ZeRO-3** 梯度分片。双副本复制的簿记工作需要与 ZeRO 的分片梯度配合。
 - 需要针对特定集群拓扑调优的**自定义 all-to-all 内核**。DeepSeek 的开源内核是参考实现。
 
+```figure
+expert-capacity
+```
+
 ## 使用它
 
 `code/main.py` 是一个流水线调度模拟器。它接受 `(P, n_micro_batches, schedule)` 参数，并打印 1F1B、Zero Bubble、DualPipe 和 DualPipeV 在稳定阶段的利用率。它是一个教学工具 —— 数字与论文中的定性声明一致，不代表生产环境中实测的加速比。
