@@ -11,7 +11,7 @@
 ## 学习目标
 
 - 通过向预训练模型的注意力层注入低秩适配矩阵（A 和 B）来实现 LoRA
-- 计算 LoRA 与全量微调的参数量节省：rank r 与 d_model 维度训练 2*r*d 个参数，而非 d²
+- 计算 LoRA 与全量微调的参数量节省：rank r 与 d_model 维度训练 2*r*d 个参数，而非 d^2
 - 使用 QLoRA（4 位量化基础模型 + LoRA 适配器）在消费级 GPU 显存中微调模型
 - 将 LoRA 权重合并回基础模型用于部署，并比较带适配器与不带适配器的推理速度
 
@@ -33,7 +33,7 @@ A100 80GB 勉强能装下。两个 A100 在云服务商处每小时费用为 3-4
 
 ### LoRA：低秩适配
 
-Edward Hu 和微软的同事于 2021 年 6 月发表了 LoRA。论文的洞察：微调期间的权重更新具有低内在秩。你不需要更新 4096×4096 权重矩阵中的全部 1670 万个参数。更新中的有用信息可以被秩为 16 或 32 的矩阵捕获。
+Edward Hu 和微软的同事于 2021 年 6 月发表了 LoRA。论文的洞察：微调期间的权重更新具有低内在秩。你不需要更新 4096x4096 权重矩阵中的全部 1670 万个参数。更新中的有用信息可以被秩为 16 或 32 的矩阵捕获。
 
 数学原理如下。标准线性层计算：
 
@@ -41,7 +41,7 @@ Edward Hu 和微软的同事于 2021 年 6 月发表了 LoRA。论文的洞察�
 y = Wx
 ```
 
-其中 W 是 d_out × d_in 的矩阵。对于 4096×4096 的注意力投影，这包含 16,777,216 个参数。
+其中 W 是 d_out x d_in 的矩阵。对于 4096x4096 的注意力投影，这包含 16,777,216 个参数。
 
 LoRA 冻结 W 并添加低秩分解：
 
@@ -49,11 +49,11 @@ LoRA 冻结 W 并添加低秩分解：
 y = Wx + BAx
 ```
 
-其中 B 是 (d_out × r)，A 是 (r × d_in)。秩 r 远小于 d——通常为 8、16 或 32。
+其中 B 是 (d_out x r)，A 是 (r x d_in)。秩 r 远小于 d——通常为 8、16 或 32。
 
-对于 r=16 的 4096×4096 层：
-- 原始参数：4096 × 4096 = 16,777,216
-- LoRA 参数：(4096 × 16) + (16 × 4096) = 65,536 + 65,536 = 131,072
+对于 r=16 的 4096x4096 层：
+- 原始参数：4096 x 4096 = 16,777,216
+- LoRA 参数：(4096 x 16) + (16 x 4096) = 65,536 + 65,536 = 131,072
 - 缩减比例：131,072 / 16,777,216 = 0.78%
 
 你只需训练 0.78% 的参数，就能获得 95-100% 的质量。
@@ -175,7 +175,7 @@ LoRA r=16 在大多数基准测试中与全量微调的差距在 1% 以内。QLo
 | **LLaMA-Factory** | PEFT + TRL 之上的 GUI/CLI/API | 你想要零代码微调；支持 100+ 模型家族 |
 | **torchtune** | 原生 PyTorch 方案，无 `transformers` 依赖 | 你想要最小依赖，且你的组织已标准化在 PyTorch 上 |
 
-经验法则：研究用途或一次性实验 → PEFT。可复现的生产流水线 → 启用 Unsloth 内核的 Axolotl。一次性原型 → LLaMA-Factory。
+经验法则：研究用途或一次性实验 -> PEFT。可复现的生产流水线 -> 启用 Unsloth 内核的 Axolotl。一次性原型 -> LLaMA-Factory。
 
 ### 合并适配器
 
@@ -216,6 +216,10 @@ graph TD
 
     style Start fill:#1a1a2e,stroke:#e94560,color:#fff
     style Done fill:#0f3460,stroke:#16213e,color:#fff
+```
+
+```figure
+lora-params
 ```
 
 ## 构建它
@@ -505,8 +509,8 @@ model.save_pretrained("./lora-adapter")
 ## 上线它
 
 本课产出：
-- `outputs/prompt-lora-advisor.md` —— 帮助你决定 LoRA 秩、目标模块和超参数的提示
-- `outputs/skill-fine-tuning-guide.md` —— 教智能体何时及如何微调的技能
+- `outputs/prompt-lora-advisor.md` -- 帮助你决定 LoRA 秩、目标模块和超参数的提示
+- `outputs/skill-fine-tuning-guide.md` -- 教智能体何时及如何微调的技能
 
 ## 练习
 
@@ -537,11 +541,11 @@ model.save_pretrained("./lora-adapter")
 
 ## 扩展阅读
 
-- Hu 等人，《LoRA：大型语言模型的低秩适配》（2021）—— 引入低秩分解方法的原始论文，在 GPT-3 175B 上以低至 4 的秩测试
-- Dettmers 等人，《QLoRA：量化语言模型的高效微调》（2023）—— 引入 NF4、双重量化和分页优化器，使 65B 能在单张 48GB GPU 上微调
-- PEFT 库文档（huggingface.co/docs/peft）—— Hugging Face 生态系统中 LoRA、QLoRA 和其他参数高效方法的标准库
-- Yadav 等人，《TIES-Merging：合并模型时解决干扰》（2023）—— 在不损失质量的情况下组合多个 LoRA 适配器的技术
-- [Rafailov 等人，《直接偏好优化：你的语言模型实际上是奖励模型》（NeurIPS 2023）](https://arxiv.org/abs/2305.18290) —— DPO 推导；SFT 之后的偏好调优阶段，无需奖励模型。
-- [TRL 文档](https://huggingface.co/docs/trl/) —— `SFTTrainer`、`DPOTrainer`、`KTOTrainer` 以及与 PEFT/bitsandbytes/Unsloth 集成的官方参考。
-- [Unsloth 文档](https://docs.unsloth.ai/) —— 融合内核使微调吞吐量翻倍、显存减半；TRL 下的性能层。
-- [Axolotl 文档](https://axolotl-ai-cloud.github.io/axolotl/) —— YAML 配置的多 GPU SFT/DPO/QLoRA 训练器；配置即代码的替代方案。
+- Hu 等人，"LoRA: Low-Rank Adaptation of Large Language Models" (2021) -- 引入低秩分解方法的原始论文，在 GPT-3 175B 上以低至 4 的秩测试
+- Dettmers 等人，"QLoRA: Efficient Finetuning of Quantized Language Models" (2023) -- 引入 NF4、双重量化和分页优化器，使 65B 能在单张 48GB GPU 上微调
+- PEFT 库文档 (huggingface.co/docs/peft) -- Hugging Face 生态系统中 LoRA、QLoRA 和其他参数高效方法的标准库
+- Yadav 等人，"TIES-Merging: Resolving Interference When Merging Models" (2023) -- 在不损失质量的情况下组合多个 LoRA 适配器的技术
+- [Rafailov 等人，"Direct Preference Optimization: Your Language Model is Secretly a Reward Model" (NeurIPS 2023)](https://arxiv.org/abs/2305.18290) -- DPO 推导；SFT 之后的偏好调优阶段，无需奖励模型。
+- [TRL 文档](https://huggingface.co/docs/trl/) -- `SFTTrainer`、`DPOTrainer`、`KTOTrainer` 以及与 PEFT/bitsandbytes/Unsloth 集成的官方参考。
+- [Unsloth 文档](https://docs.unsloth.ai/) -- 融合内核使微调吞吐量翻倍、显存减半；TRL 下的性能层。
+- [Axolotl 文档](https://axolotl-ai-cloud.github.io/axolotl/) -- YAML 配置的多 GPU SFT/DPO/QLoRA 训练器；配置即代码的替代方案。
