@@ -57,7 +57,7 @@ loss = (loss_i2t + loss_t2i) / 2
 
 ### Temperature
 
-`tau` 控制 softmax 的锐度。低 tau → 尖锐分布，具有 hard negative mining 效果。高 tau → 柔和，所有样本都参与贡献。CLIP 学习 `log(1/tau)`，并进行裁剪以防止 collapse。SigLIP 2 固定初始 tau，改用可学习的 bias。
+`tau` 控制 softmax 的锐度。低 tau -> 尖锐分布，具有 hard negative mining 效果。高 tau -> 柔和，所有样本都参与贡献。CLIP 学习 `log(1/tau)`，并进行裁剪以防止 collapse。SigLIP 2 固定初始 tau，改用可学习的 bias。
 
 ### 为什么 sigmoid 扩展性更好（SigLIP）
 
@@ -105,6 +105,10 @@ ALIGN（Google，2021）：与 CLIP 相同的思路，18 亿对规模，90% 噪�
 
 CLIP 类模型的 ImageNet 零样本上限约为 76%（CLIP-G、OpenCLIP-G）。超越这一水平需要更大的数据（SigLIP 2 达到 80%+）或架构变更（有监督头、更多参数）。基准正在饱和；真正的价值在于下游 VLM 所消耗的嵌入空间。
 
+```figure
+multimodal-fusion
+```
+
 ## 动手实践
 
 `code/main.py` 实现了：
@@ -149,8 +153,8 @@ CLIP 类模型的 ImageNet 零样本上限约为 76%（CLIP-G、OpenCLIP-G）。
 
 ## 延伸阅读
 
-- [Radford et al. — Learning Transferable Visual Models From Natural Language Supervision (arXiv:2103.00020)](https://arxiv.org/abs/2103.00020) — CLIP 论文。
-- [Zhai et al. — Sigmoid Loss for Language Image Pre-Training (arXiv:2303.15343)](https://arxiv.org/abs/2303.15343) — SigLIP。
-- [Tschannen et al. — SigLIP 2 (arXiv:2502.14786)](https://arxiv.org/abs/2502.14786) — 多语言 + NaFlex。
-- [Jia et al. — ALIGN (arXiv:2102.05918)](https://arxiv.org/abs/2102.05918) — 用噪声网络数据扩展规模。
-- [Cherti et al. — Reproducible scaling laws for contrastive language-image learning (arXiv:2212.07143)](https://arxiv.org/abs/2212.07143) — OpenCLIP 扩展规律。
+- [Radford et al. -- Learning Transferable Visual Models From Natural Language Supervision (arXiv:2103.00020)](https://arxiv.org/abs/2103.00020) -- CLIP 论文。
+- [Zhai et al. -- Sigmoid Loss for Language Image Pre-Training (arXiv:2303.15343)](https://arxiv.org/abs/2303.15343) -- SigLIP。
+- [Tschannen et al. -- SigLIP 2 (arXiv:2502.14786)](https://arxiv.org/abs/2502.14786) -- 多语言 + NaFlex。
+- [Jia et al. -- ALIGN (arXiv:2102.05918)](https://arxiv.org/abs/2102.05918) -- 用噪声网络数据扩展规模。
+- [Cherti et al. -- Reproducible scaling laws for contrastive language-image learning (arXiv:2212.07143)](https://arxiv.org/abs/2212.07143) -- OpenCLIP 扩展规律。
