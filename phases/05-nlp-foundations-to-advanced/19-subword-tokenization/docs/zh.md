@@ -23,7 +23,7 @@
 
 **字节级 BPE。** 算法相同，但在原始字节（256 个基础词元）而非 Unicode 字符上操作。保证零 `[UNK]` 词元——任何字节序列都能编码。GPT-2 使用 50,257 个词元（256 字节 + 50,000 次合并 + 1 个特殊词元）。
 
-**Unigram。** 从一个庞大的词表开始。为每个词元分配一个一元概率。迭代地剪除移除后对语料库对数似然影响最小的词元。推理时具有概率性：可以采样分词结果（对通过子词正则化（Subword Regularization）进行数据增强很有用）。T5、mBART、ALBERT、XLNet、Gemma 使用此方法。
+**Unigram。** 从一个庞大的词表开始。为每个词元分配一个一元概率。迭代地剪除移除后对语料库对数似然影响最小的词元。推理时具有概率性：可以采样分词结果（对通过子词正则化进行数据增强很有用）。T5、mBART、ALBERT、XLNet、Gemma 使用此方法。
 
 **WordPiece。** 合并使训练语料库似然最大化（而非原始频率最高）的词对。BERT、DistilBERT、ELECTRA 使用此方法。
 
@@ -34,6 +34,10 @@
 - **训练新词表：** SentencePiece（多语言，无需预分词）或 HF Tokenizers。
 - **对 GPT 词表进行快速推理：** tiktoken（cl100k_base、o200k_base）。
 - **两者兼备：** HF Tokenizers——一个库，训练 + 服务一体化。
+
+```figure
+bpe-merge
+```
 
 ## 动手实现
 
@@ -111,7 +115,7 @@ print(len(enc.encode("Hello, world!")))   # 4
 
 ## 2026 年仍在出现的陷阱
 
-- **分词器漂移（Tokenizer Drift）。** 在词表 A 上训练，在词表 B 上部署。词元 ID 不同；模型输出垃圾。在 CI 中检查 `tokenizer.json` 的哈希值。
+- **分词器漂移（Tokenizer drift）。** 在词表 A 上训练，在词表 B 上部署。词元 ID 不同；模型输出垃圾。在 CI 中检查 `tokenizer.json` 的哈希值。
 - **空格歧义。** BPE 对 "hello" 和 " hello" 产生不同的词元。务必显式指定 `add_special_tokens` 和 `add_prefix_space`。
 - **多语言训练不足。** 以英语为主的语料库产生的词表将非拉丁文字分割成多 5-10 倍的词元。在 GPT-3.5 上，相同的提示在日语/阿拉伯语中的成本高 5-10 倍。o200k_base 部分解决了这个问题。
 - **表情符号拆分。** 单个表情符号可能占用 5 个词元。在预算上下文时检查表情符号处理。
@@ -170,8 +174,8 @@ Refuse to train a character-coverage <0.995 tokenizer on corpora with rare-scrip
 | Unigram | 概率分词器 | 从大型候选集使用对数似然进行剪枝；T5、Gemma 使用此方法。 |
 | SentencePiece | 处理空格的那个 | 在原始文本上训练 BPE/Unigram 的库；空格编码为 `▁`。 |
 | tiktoken | 快的那个 | OpenAI 的 Rust 后端 BPE 编码器，用于预构建词表。不训练。 |
-| 合并列表（Merge List） | 魔法数字 | 有序的 `(a, b) → ab` 合并列表；推理时按顺序应用。 |
-| 字符覆盖度（Character Coverage） | 多稀有才算太稀有？ | 训练语料库中分词器必须覆盖的字符比例；通常约 0.9995。 |
+| 合并列表（Merge list） | 魔法数字 | 有序的 `(a, b) → ab` 合并列表；推理时按顺序应用。 |
+| 字符覆盖度（Character coverage） | 多稀有才算太稀有？ | 训练语料库中分词器必须覆盖的字符比例；通常约 0.9995。 |
 
 ## 延伸阅读
 
