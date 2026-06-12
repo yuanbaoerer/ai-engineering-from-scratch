@@ -9,18 +9,18 @@
 
 ## 学习目标
 
-* 从零开始在 Python 中实现一个感知机，包括权重更新规则和阶跃激活函数。
-* 解释为什么单个感知机只能解决线性可分问题，并演示异或 (XOR) 失败的案例。
-* 通过组合或门 (OR)、与非门 (NAND) 和与门 (AND) 构建多层感知机来解决异或问题。
-* 训练一个带有 Sigmoid 激活函数和反向传播的双层网络，自动学习异或问题。
+- 从零开始在 Python 中实现一个感知机，包括权重更新规则和阶跃激活函数
+- 解释为什么单个感知机只能解决线性可分问题，并演示异或 (XOR) 失败的案例
+- 通过组合或门 (OR)、与非门 (NAND) 和与门 (AND) 构建多层感知机来解决异或问题
+- 训练一个带有 Sigmoid 激活函数和反向传播的双层网络，自动学习异或问题
 
 ## 问题引入
 
-你已经了解了向量和点积。你也知道矩阵可以将输入转换为输出。但是，机器是如何“学习”该使用哪种转换的呢？
+你已经了解了向量和点积。你也知道矩阵可以将输入转换为输出。但是，机器是如何*学习*该使用哪种转换的呢？
 
 感知机回答了这个问题。它是最简单的学习机器：接收一些输入，乘以权重，加上偏置，然后做出二元决策。接着进行调整。仅此而已。曾经构建的每一个神经网络，都是这种思想层层叠加的结果。
 
-理解感知机意味着理解代码中“学习”的真正含义：不断调整数字，直到输出与现实相符。
+理解感知机意味着理解代码中"学习"的真正含义：不断调整数字，直到输出与现实相符。
 
 ## 核心概念
 
@@ -36,7 +36,6 @@ graph LR
     bias["bias"] --> sum
     sum --> step["step(z)"]
     step --> out["output (0 or 1)"]
-
 ```
 
 阶跃函数是非常简单粗暴的：如果加权和加上偏置 >= 0，则输出 1。否则，输出 0。
@@ -44,7 +43,6 @@ graph LR
 ```
 step(z) = 1  if z >= 0
            0  if z < 0
-
 ```
 
 这是一个线性分类器。权重和偏置定义了一条直线（或更高维度中的超平面），将输入空间分割成两个区域。
@@ -56,7 +54,7 @@ step(z) = 1  if z >= 0
 ```
   x2
   ┤
-  │  类别 1         /
+  │  类别 1        /
   │    (0)          /
   │                /
   │               / w1·x1 + w2·x2 + b = 0
@@ -64,7 +62,6 @@ step(z) = 1  if z >= 0
   │             /     类别 2
   │            /        (1)
   ┼───────────/──────────── x1
-
 ```
 
 直线一侧的所有内容输出均为 0。另一侧的所有内容输出均为 1。训练的过程就是移动这条直线，直到它能正确地将类别分开。
@@ -73,7 +70,7 @@ step(z) = 1  if z >= 0
 
 感知机的学习规则很简单：
 
-```text
+```
 For each training example (x, y_true):
     y_pred = predict(x)
     error = y_true - y_pred
@@ -81,7 +78,6 @@ For each training example (x, y_true):
     For each weight:
         w_i = w_i + learning_rate * error * x_i
     bias = bias + learning_rate * error
-
 ```
 
 如果预测正确，误差（error）为 0，不发生任何改变。如果预测为 0 但实际应为 1，则权重增加。如果预测为 1 但实际应为 0，则权重减小。学习率（learning_rate）控制着每次调整的幅度。
@@ -91,19 +87,18 @@ For each training example (x, y_true):
 这里就是感知机失效的地方。看看这些逻辑门：
 
 ```
-与门 (AND):         或门 (OR):          异或门 (XOR):
+AND gate:           OR gate:            XOR gate:
 x1  x2  out         x1  x2  out         x1  x2  out
 0   0   0           0   0   0           0   0   0
 0   1   0           0   1   1           0   1   1
 1   0   0           1   0   1           1   0   1
 1   1   1           1   1   1           1   1   0
-
 ```
 
 与门 (AND) 和或门 (OR) 是线性可分的：你可以画一条直线把 0 和 1 分开。但异或门 (XOR) 不是。没有任何一条单一直线能将 [0,1] 和 [1,0] 从 [0,0] 和 [1,1] 中分离出来。
 
 ```
-与门 AND (可分离):       异或门 XOR (不可分离):
+AND (separable):        XOR (not separable):
 
   x2                      x2
   1 ┤  0     1            1 ┤  1     0
@@ -111,12 +106,15 @@ x1  x2  out         x1  x2  out         x1  x2  out
   0 ┤  0 / 0              0 ┤  0     1
     ┼──/──────── x1         ┼──────────── x1
        直线有效!             没有单一直线有效!
-
 ```
 
 这是一个根本性的限制。单个感知机只能解决线性可分的问题。Minsky 和 Papert 在 1969 年证明了这一点，这几乎让神经网络的研究停滞了整整十年。
 
 解决办法：将感知机堆叠成层。多层感知机可以通过将两个线性决策组合成一个非线性决策来解决异或问题。
+
+```figure
+perceptron-boundary
+```
 
 ## 动手构建
 
@@ -149,7 +147,6 @@ class Perceptron:
                 print(f"Converged at epoch {epoch + 1}")
                 return
         print(f"Did not converge after {epochs} epochs")
-
 ```
 
 ### 步骤 2：在逻辑门上进行训练
@@ -191,7 +188,6 @@ p_not = Perceptron(1)
 p_not.train(not_data)
 for inputs, _ in not_data:
     print(f"  {inputs} -> {p_not.predict(inputs)}")
-
 ```
 
 ### 步骤 3：观察异或问题的失败
@@ -211,7 +207,6 @@ for inputs, expected in xor_data:
     result = p_xor.predict(inputs)
     status = "OK" if result == expected else "WRONG"
     print(f"  {inputs} -> {result} (expected {expected}) {status}")
-
 ```
 
 它永远不会收敛。这是单个感知机无法学习异或的铁证。
@@ -229,7 +224,6 @@ graph LR
     OR --> AND["AND neuron"]
     NAND --> AND
     AND --> out["output"]
-
 ```
 
 ```python
@@ -256,7 +250,6 @@ print("\n=== XOR Gate (multi-layer network) ===")
 for inputs, expected in xor_data:
     result = xor_network(inputs[0], inputs[1])
     print(f"  {inputs} -> {result} (expected {expected})")
-
 ```
 
 所有的四种情况都正确。将感知机堆叠成层，创造出了任何单个感知机都无法产生的决策边界。
@@ -316,7 +309,6 @@ class TwoLayerNetwork:
                     for j in range(len(inputs)):
                         self.w_hidden[i][j] += self.lr * hidden_deltas[i] * inputs[j]
                     self.b_hidden[i] += self.lr * hidden_deltas[i]
-
 ```
 
 ```python
@@ -326,7 +318,6 @@ for inputs, expected in xor_data:
     result = net.forward(inputs)
     predicted = 1 if result >= 0.5 else 0
     print(f"  {inputs} -> {result:.4f} (rounded: {predicted}, expected {expected})")
-
 ```
 
 这里与步骤 4 有两个关键的区别。首先，Sigmoid 取代了阶跃函数——它是平滑的，因此存在梯度。其次，`train` 方法将误差从输出层反向传播到隐藏层，并根据每个权重对误差的贡献比例进行调整。这就是仅仅用 20 行代码实现的反向传播。
@@ -347,17 +338,16 @@ y = np.array([0, 0, 0, 1])
 clf = SkPerceptron(max_iter=100, tol=1e-3)
 clf.fit(X, y)
 print([clf.predict([x])[0] for x in X])
-
 ```
 
 仅仅五行代码。你之前写的 30 行 `Perceptron` 类所做的事情完全一样。sklearn 版本增加了收敛检查、多种损失函数和稀疏输入支持——但其核心循环是相同的：加权求和、阶跃函数、基于误差的权重更新。
 
 真正的差距体现在规模上。生产环境中的网络会有以下变化：
 
-* 阶跃函数变成了 Sigmoid、ReLU 或其他平滑的激活函数
-* 通过反向传播自动学习权重（第 03 课）
-* 网络层数变得更深：3 层、10 层、100 层以上
-* 相同的原理依然适用：每一层都根据前一层的输出创建新的特征
+- 阶跃函数变成了 Sigmoid、ReLU 或其他平滑的激活函数
+- 通过反向传播自动学习权重（第 03 课）
+- 网络层数变得更深：3 层、10 层、100 层以上
+- 相同的原理依然适用：每一层都根据前一层的输出创建新的特征
 
 单个感知机只能画直线。把它们堆叠起来，你就可以画出任何形状。
 
@@ -365,7 +355,7 @@ print([clf.predict([x])[0] for x in X])
 
 本课程产出：
 
-* `outputs/skill-perceptron.md` - 一项涵盖何时需要单层架构与多层架构的技能总结
+- `outputs/skill-perceptron.md` - 一项涵盖何时需要单层架构与多层架构的技能总结
 
 ## 练习
 
@@ -376,7 +366,7 @@ print([clf.predict([x])[0] for x in X])
 ## 核心术语
 
 | 术语 | 人们通常怎么说 | 它实际的含义 |
-| --- | --- | --- |
+|------|----------------|----------------------|
 | 感知机 (Perceptron) | "一个假神经元" | 线性分类器：输入和权重的点积加上偏置，并通过阶跃函数 |
 | 权重 (Weight) | "一个输入有多重要" | 衡量每个输入对最终决策贡献大小的乘数 |
 | 偏置 (Bias) | "阈值" | 移动决策边界的常数，允许感知机在零输入的情况下依然能够被激活 |
@@ -388,6 +378,6 @@ print([clf.predict([x])[0] for x in X])
 
 ## 扩展阅读
 
-* Frank Rosenblatt, "The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain" (1958) —— 开启了这一切的原始论文
-* Minsky & Papert, "Perceptrons" (1969) —— 证明单层网络无法解决异或问题，并导致感知机研究停滞十年的著作
-* Michael Nielsen, "Neural Networks and Deep Learning", 第 1 章 ([http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)) —— 免费的在线资源，关于感知机如何组成网络的最佳可视化解释
+- Frank Rosenblatt, "The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain" (1958) —— 开启了这一切的原始论文
+- Minsky & Papert, "Perceptrons" (1969) —— 证明单层网络无法解决异或问题，并导致感知机研究停滞十年的著作
+- Michael Nielsen, "Neural Networks and Deep Learning", 第 1 章 (http://neuralnetworksanddeeplearning.com/) —— 免费的在线资源，关于感知机如何组成网络的最佳可视化解释
