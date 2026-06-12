@@ -31,7 +31,7 @@
 
 **探索现在成了问题。** DP 通过枚举触达每个状态。MC 只能看到策略访问到的状态。如果 `π` 是确定性的，状态空间中的整片区域永远不会被采样，它们的价值估计会永远停留在零。按历史顺序，有三种修复方式：
 
-1. **探索起始（exploring starts）。** 从随机的 (s, a) 对开始每个回合。能保证覆盖；但实践中不现实（你不能把机器人“重置”到任意状态）。
+1. **探索起始（exploring starts）。** 从随机的 (s, a) 对开始每个回合。能保证覆盖；但实践中不现实（你不能把机器人"重置"到任意状态）。
 2. **ε-贪心（ε-greedy）。** 相对于当前 Q 采取贪心动作，但以概率 `ε` 选择一个随机动作。所有状态-动作对都会渐近地被采样到。
 3. **离策略 MC（off-policy MC）。** 在行为策略 `μ` 下收集数据，通过重要性采样（importance sampling）学习目标策略 `π`。方差很高，但它是通向 DQN 这类回放缓冲区方法的桥梁。
 
@@ -43,6 +43,10 @@
 4. 重复。
 
 在温和条件下（每个对被无限次访问，`α` 满足 Robbins-Monro 条件），以概率 1 收敛到 `Q*` 和 `π*`。
+
+```figure
+epsilon-greedy
+```
 
 ## 构建它
 
@@ -158,22 +162,22 @@ def mc_control(env, episodes, gamma=0.99, epsilon=0.1):
 ```markdown
 ---
 name: mc-evaluator
-description: Evaluate a policy via Monte Carlo rollouts and produce a convergence report with DP-comparison if available.
+description: 通过蒙特卡洛 rollout 评估策略，并生成收敛报告，如果可用则与 DP 进行比较。
 version: 1.0.0
 phase: 9
 lesson: 3
 tags: [rl, monte-carlo, evaluation]
 ---
 
-Given an environment (episodic, with reset+step API) and a policy, output:
+给定一个环境（回合制的，具有 reset+step API）和一个策略，输出：
 
-1. Method. First-visit vs every-visit MC. Reason.
-2. Episode budget. Target number, variance diagnostic, expected standard error.
-3. Exploration plan. ε schedule (if needed) or exploring starts.
-4. Gold-standard comparison. DP-optimal V* if tabular; otherwise a bound from a Q-learning / PPO baseline.
-5. Termination check. Max-step cap, timeouts, handling of non-terminating trajectories.
+1. 方法。首次访问 vs 每次访问 MC。理由。
+2. 回合预算。目标数量，方差诊断，预期标准误差。
+3. 探索计划。ε 调度（如果需要）或探索起始。
+4. 金标准比较。如果是表格型则用 DP 最优 V*；否则用 Q-learning / PPO 基线的一个界限。
+5. 终止检查。最大步数上限，超时处理，非终止轨迹的处理方式。
 
-Refuse to run MC on non-episodic tasks without a finite horizon cap. Refuse to report V^π estimates from fewer than 100 episodes per state for tabular tasks. Flag any policy with zero-variance actions as an exploration risk.
+拒绝在没有有限视野上限的非回合制任务上运行 MC。拒绝从每个状态少于 100 个回合的估计中报告 V^π（针对表格型任务）。将任何具有零方差动作的策略标记为探索风险。
 ```
 
 ## 练习
@@ -186,14 +190,14 @@ Refuse to run MC on non-episodic tasks without a finite horizon cap. Refuse to r
 
 | 术语 | 人们常说 | 实际含义 |
 |------|-----------------|-----------------------|
-| 蒙特卡洛 | “随机采样” | 通过对来自分布的 iid 样本求平均来估计期望。 |
-| 回报 `G_t` | “未来奖励” | 从步骤 `t` 到回合结束的折扣奖励和：`Σ_{k≥0} γ^k r_{t+k+1}`。 |
-| 首次访问 MC | “每个状态只计一次” | 一个回合中只有第一次访问会贡献到价值估计。 |
-| 每次访问 MC | “使用所有访问” | 每次访问都会贡献；略有偏，但样本效率更高。 |
-| ε-贪心 | “探索噪声” | 以概率 `1-ε` 选择贪心动作；以概率 `ε` 选择随机动作。 |
-| 重要性采样 | “纠正从错误分布采样的问题” | 用 `π(a\|s)/μ(a\|s)` 乘积对回报重新加权，以便从 `μ` 数据估计 `V^π`。 |
-| 同策略 | “从我自己的数据学习” | 目标策略 = 行为策略。原版 MC、PPO、SARSA。 |
-| 离策略 | “从别人的数据学习” | 目标策略 ≠ 行为策略。重要性采样 MC、Q-learning、DQN。 |
+| 蒙特卡洛 | "随机采样" | 通过对来自分布的 iid 样本求平均来估计期望。 |
+| 回报 `G_t` | "未来奖励" | 从步骤 `t` 到回合结束的折扣奖励和：`Σ_{k≥0} γ^k r_{t+k+1}`。 |
+| 首次访问 MC | "每个状态只计一次" | 一个回合中只有第一次访问会贡献到价值估计。 |
+| 每次访问 MC | "使用所有访问" | 每次访问都会贡献；略有偏，但样本效率更高。 |
+| ε-贪心 | "探索噪声" | 以概率 `1-ε` 选择贪心动作；以概率 `ε` 选择随机动作。 |
+| 重要性采样 | "纠正从错误分布采样的问题" | 用 `π(a\|s)/μ(a\|s)` 乘积对回报重新加权，以便从 `μ` 数据估计 `V^π`。 |
+| 同策略 | "从我自己的数据学习" | 目标策略 = 行为策略。原版 MC、PPO、SARSA。 |
+| 离策略 | "从别人的数据学习" | 目标策略 ≠ 行为策略。重要性采样 MC、Q-learning、DQN。 |
 
 ## 延伸阅读
 
