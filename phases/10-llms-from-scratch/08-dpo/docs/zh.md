@@ -20,7 +20,7 @@
 
 在实践中，PPO 训练 notoriously 不稳定。微小的超参数变化就会导致训练发散。奖励模型是人类偏好的不完美代理，而策略模型会找到利用其弱点的方法。KL 惩罚项有帮助，但它本身也需要调优——太低会导致奖励黑客攻击 (reward hacking)，太高则模型几乎学不到东西。
 
-这种复杂性就是为什么大多数开源模型在 InstructGPT 发表多年后在 RLHF 上仍举步维艰。三阶段流水线很脆弱。每个阶段都有自己的失败模式，错误会不断累积。
+这种复杂性就是为什么大多数开源模型在 InstructGPT 发表多年后仍在 RLHF 上举步维艰。三阶段流水线很脆弱。每个阶段都有自己的失败模式，错误会不断累积。
 
 2023 年 5 月，斯坦福大学的 Rafael Rafailov、Archit Sharma 及其同事发表了《Direct Preference Optimization: Your Language Model is Secretly a Reward Model》。核心洞察：你不需要单独的奖励模型。最优奖励函数在数学上由语言模型自身的词元概率决定。你可以完全跳过奖励模型，直接在偏好数据对上优化语言模型。
 
@@ -171,6 +171,10 @@ DPO 启发了一系列简化的对齐方法。
 **Llama 3 (Meta, 2024年4月)：** 在初始 RLHF 阶段后使用 DPO。这种组合表明 DPO 和 RLHF 可以互补——RLHF 用于广泛对齐，DPO 用于针对性微调。
 
 **Neural Magic / nm-chat (2024)：** 将 DPO 应用于多个开源模型，持续显示在对齐基准上比仅 SFT 基线有 5-15% 的提升。
+
+```figure
+dpo-loss
+```
 
 ## 动手构建
 
