@@ -197,7 +197,7 @@ graph LR
     CE --> R["Top 10 results"]
 ```
 
-重排序模型： Cohere Rerank 3.5（$2 每 1000 查询）、BGE-reranker-v2（免费、开源）、Jina Reranker v2（免费、开源）。
+重排序模型：Cohere Rerank 3.5（$2 每 1000 查询）、BGE-reranker-v2（免费、开源）、Jina Reranker v2（免费、开源）。
 
 ### Matryoshka 嵌入
 
@@ -209,11 +209,15 @@ OpenAI 的 text-embedding-3-small 和 text-embedding-3-large 通过 `dimensions`
 
 ### 二值量化
 
-1536 维嵌入存储为 float32 使用 6144 字节。乘以 1000 万文档：仅向量就需要 61 GB。
+1536 维嵌入存储为 float32 使用 6,144 字节。乘以 1000 万文档：仅向量就需要 61 GB。
 
-二值量化将每个浮点数转换为单个位：正值变为 1，负值变为 0。存储从 6144 字节减少到 192 字节——减少 32 倍。相似度使用汉明距离（计算不同位数）计算，CPU 可以在单条指令中完成。
+二值量化将每个浮点数转换为单个位：正值变为 1，负值变为 0。存储从 6,144 字节减少到 192 字节——减少 32 倍。相似度使用汉明距离（计算不同位数）计算，CPU 可以在单条指令中完成。
 
 Accuracy 损失在检索 recall 上约为 5-10%。常见模式：对数百万向量的第一遍搜索使用二值量化，然后用全精度向量对 top-1000 进行重新评分。这以 32 倍更少的内存获得 95%+ 的全精度 accuracy。
+
+```figure
+cosine-similarity
+```
 
 ## 构建它
 
@@ -390,29 +394,11 @@ class SemanticSearchEngine:
             {
                 "text": r["text"][:200],
                 "source": r["metadata"].get("source", "unknown"),
-                " < default - Name
-  Use: using " The
- </ Use
-  Using  First  The3
- information
-  Use " the  silence "  
- Use Baseirect base Item batch " < index ( this "  The,  type "  The
-
- <  List
- input import </ < write: ( Using     First  " task  
-  The-p " - input
- < task      The Using - "<br The
-   List
-
-</  Base permission task  <):
- Use start "6 "  The
-   The
-  User The this
-h " Using "items": { "type": "string" } } } }, "required": ["product", "price", "in_stock"] }, }], "messages": [{"role": "user", "content": "Extract: Sony WH-1000XM5, $348, in stock"}], ) ```
-
-Anthropic 通过工具使用实现结构化输出。模型发出带有匹配 input_schema 的结构化参数的工具调用。相同的结果，不同的 API 表面。
-
-Instructor 包装任何 LLM 客户端并添加自动重试和验证。如果第一次尝试验证失败，它会将错误作为上下文发送回模型并要求它修复输出。这适用于任何提供商，而不仅仅是 OpenAI。
+                "score": round(r["score"], 4)
+            }
+            for r in results
+        ]
+```
 
 ### 步骤 6：比较相似度指标
 
@@ -523,5 +509,5 @@ VectorIndex 类与任何这些一起使用。换掉嵌入函数，保留搜索�
 - Malkov & Yashunin, "Efficient and Robust Approximate Nearest Neighbor using Hierarchical Navigable Small World Graphs" (2018) -- HNSW 论文，大多数生产向量搜索背后的算法
 - OpenAI Embeddings Guide (platform.openai.com/docs/guides/embeddings) -- text-embedding-3 模型的实用参考，包括 Matryoshka 维度缩减
 - MTEB Leaderboard (huggingface.co/spaces/mteb/leaderboard) -- 实时基准测试，跨任务和语言比较所有嵌入模型
-- [Muennighoff et al., "MTEB: Massive Text Embedding Benchmark" (EACL 2023)](https://arxiv.org/abs/2210.07316) -- 定义 8 个任务类别的基准（分类、聚类、配对分类、重排序、检索、STS、摘要、双语挖掘），领导者板报告这些；在信任任何单一 MTEB 分数之前阅读。
-- [Sentence Transformers documentation](https://www.sbert.net/) -- bi-encoder vs cross-encoder、池化策略和 ingest-split-embed-store RAG 管道的规范参考，本课程实现了该管道
+- [Muennighoff et al., "MTEB: Massive Text Embedding Benchmark" (EACL 2023)](https://arxiv.org/abs/2210.07316) -- 定义 8 个任务类别的基准（分类、聚类、配对分类、重排序、检索、STS、摘要、双语挖掘），排行榜报告这些；在信任任何单一 MTEB 分数之前阅读。
+- [Sentence Transformers documentation](https://www.sbert.net/) -- bi-encoder vs cross-encoder、池化策略和 ingest-split-embed-store RAG 管道的规范参考，本课程实现了该管道。
