@@ -53,6 +53,12 @@ bytes_per_token_per_layer = 2 * d_head * dtype_size
 
 **GQA 是 KV 缓存的胜利。** 64 头的 MHA 将是 32 GB。MLA 压缩更多。
 
+拖动维度，观察缓存大小变化。推高序列长度或批次大小，看看它多快突破单 GPU：
+
+```figure
+kv-cache-sizer
+```
+
 ### Flash Attention——分块技巧
 
 标准注意力：
@@ -111,6 +117,10 @@ Flash 4 发布时仅支持前向传播。训练仍使用 Flash 3。Flash 4 的 G
 ### PagedAttention——KV 缓存作为虚拟内存
 
 vLLM 的头条特性。KV 缓存在 16 token 块中分配；页表将逻辑位置映射到物理块。让你在并行样本（束搜索、并行采样）间共享 KV，热交换前缀用于提示缓存，以及碎片整理内存。比朴素连续分配 4 倍吞吐量提升。
+
+```figure
+flash-attention-memory
+```
 
 ## 动手实现
 
