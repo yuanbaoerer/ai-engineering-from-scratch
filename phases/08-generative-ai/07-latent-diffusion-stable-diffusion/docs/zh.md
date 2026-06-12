@@ -1,6 +1,6 @@
 # 潜在扩散与 Stable Diffusion
 
-> 在 512×512 图像的像素空间里做扩散，计算量简直是“计算犯罪”。Rombach 等人（2022）注意到：生成一张图并不需要全部 78.6 万个维度——你只需要足够捕捉语义结构的表示，其余细节交给单独的解码器即可。把扩散过程放进 VAE 的潜在空间里运行。仅仅这个想法，就是 Stable Diffusion。
+> 在 512×512 图像的像素空间里做扩散，计算量简直是"计算犯罪"。Rombach 等人（2022）注意到：生成一张图并不需要全部 78.6 万个维度——你只需要足够捕捉语义结构的表示，其余细节交给单独的解码器即可。把扩散过程放进 VAE 的潜在空间里运行。仅仅这个想法，就是 Stable Diffusion。
 
 **类型：** 构建
 **语言：** Python
@@ -43,14 +43,18 @@
 
 趋势是：用 DiT 替换 U-Net（在潜在 patch 上运行的 Transformer），扩大文本编码器（T5 在提示词遵循度上优于 CLIP），增加潜变量通道数（4 → 16 带来更多细节余量）。
 
+```figure
+noise-schedule
+```
+
 ## 构建它
 
-`code/main.py` 把一个玩具版 1-D “VAE”（恒等编码器 + 解码器，仅用于演示；真实 VAE 会是卷积网络）叠在第 06 课的 DDPM 之上，并加入带无分类器引导（classifier-free guidance）的类别条件。它展示了同一个扩散损失无论作用在原始 1-D 值上，还是作用在编码值上，都同样有效——这是关键洞见。
+`code/main.py` 把一个玩具版 1-D "VAE"（恒等编码器 + 解码器，仅用于演示；真实 VAE 会是卷积网络）叠在第 06 课的 DDPM 之上，并加入带无分类器引导（classifier-free guidance）的类别条件。它展示了同一个扩散损失无论作用在原始 1-D 值上，还是作用在编码值上，都同样有效——这是关键洞见。
 
 ### 步骤 1：编码器/解码器
 
 ```python
-def encode(x):    return x * 0.5          # 玩具“压缩”到更小尺度
+def encode(x):    return x * 0.5          # 玩具"压缩"到更小尺度
 def decode(z):    return z * 2.0
 ```
 
@@ -115,18 +119,18 @@ h = h + CrossAttention(Q=h, K=text_embed, V=text_embed)
 
 | 术语 | 大家怎么说 | 实际含义 |
 |------|-----------------|-----------------------|
-| First stage | “VAE” | 训练好的编码器/解码器对；把 512² 压缩到 64²。 |
-| Second stage | “U-Net” | 作用在潜在空间上的扩散模型。 |
-| CFG | “引导尺度” | `(1+w)·ε_cond - w·ε_uncond`；调节条件强度。 |
-| Null token | “空提示词嵌入” | 用于 `ε_uncond` 的无条件嵌入。 |
-| Cross-attention | “文本进入模型的方式” | 每个 U-Net 块都把文本 token 当作 K 和 V 来注意。 |
-| DiT | “Diffusion Transformer” | 用潜在 patch 上的 Transformer 替换 U-Net；扩展性更好。 |
-| MMDiT | “Multi-modal DiT” | SD3 的架构：文本流和图像流使用联合注意力。 |
-| VAE scaling factor | “魔法数字” | 将潜变量除以约 5.4，使扩散在单位方差空间中运行。 |
+| First stage | "VAE" | 训练好的编码器/解码器对；把 512² 压缩到 64²。 |
+| Second stage | "U-Net" | 作用在潜在空间上的扩散模型。 |
+| CFG | "引导尺度" | `(1+w)·ε_cond - w·ε_uncond`；调节条件强度。 |
+| Null token | "空提示词嵌入" | 用于 `ε_uncond` 的无条件嵌入。 |
+| Cross-attention | "文本进入模型的方式" | 每个 U-Net 块都把文本 token 当作 K 和 V 来注意。 |
+| DiT | "Diffusion Transformer" | 用潜在 patch 上的 Transformer 替换 U-Net；扩展性更好。 |
+| MMDiT | "Multi-modal DiT" | SD3 的架构：文本流和图像流使用联合注意力。 |
+| VAE scaling factor | "魔法数字" | 将潜变量除以约 5.4，使扩散在单位方差空间中运行。 |
 
 ## 生产注记：在 8GB 消费级 GPU 上运行 Flux-12B
 
-参考 Flux 集成是典型的“我有一张消费级 GPU，能上线吗？”配方。诀窍与生产推理文献中列出的三旋钮配方相同，只是应用到扩散 DiT 上：
+参考 Flux 集成是典型的"我有一张消费级 GPU，能上线吗？"配方。诀窍与生产推理文献中列出的三旋钮配方相同，只是应用到扩散 DiT 上：
 
 1. **交错加载。** Flux 有三个网络永远不需要同时共存于显存中：T5-XXL 文本编码器（fp32 下约 10 GB）、CLIP-L（较小）、12B MMDiT，以及 VAE。先编码提示词，*删除* 编码器，加载 DiT，去噪，*删除* DiT，加载 VAE，解码。8GB 消费级 GPU 一次只能装下一个阶段。
 2. **通过 bitsandbytes 做 4-bit 量化。** 在 T5 编码器和 DiT 上都使用 `BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16)`。内存减少 8×，按照 Aritra 的基准（notebook 中有链接），文生图质量下降几乎不可感知。
