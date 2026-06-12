@@ -1,15 +1,15 @@
-# 命名实体识别（Named Entity Recognition / NER）
+# 命名实体识别
 
 > 把名字提取出来。听起来简单，直到你遇到模糊边界、嵌套实体和领域术语。
 
-**类型:** 构建
-**语言:** Python
-**前置知识:** Phase 5 · 02（词袋 + TF-IDF），Phase 5 · 03（词嵌入）
-**时间:** 约 75 分钟
+**类型：** 构建
+**语言：** Python
+**前置知识：** 阶段 5 · 02（词袋 + TF-IDF），阶段 5 · 03（词嵌入）
+**时间：** 约 75 分钟
 
 ## 问题
 
-"Apple sued Google over its iPhone search deal in the US." 五个实体：Apple（组织机构），Google（组织机构），iPhone（产品），search deal（也许是），US（地缘政治实体）。一个好的 NER 系统能提取所有实体并给出正确类型。一个差的系统会漏掉 iPhone，把苹果公司和苹果水果搞混，把 "US" 标注为人名。
+"Apple sued Google over its iPhone search deal in the US." 五个实体：Apple（ORG），Google（ORG），iPhone（PRODUCT），search deal（也许是），US（GPE）。一个好的 NER 系统能提取所有实体并给出正确类型。一个差的系统会漏掉 iPhone，把苹果公司和苹果水果搞混，把 "US" 标注为人名。
 
 NER 是每一条结构化提取管线背后的核心组件。简历解析、合规日志扫描、医疗记录匿名化、搜索查询理解、聊天机器人回复的依据定位、法律合同提取。你几乎看不到它，但你一直依赖它。
 
@@ -17,7 +17,7 @@ NER 是每一条结构化提取管线背后的核心组件。简历解析、合�
 
 ## 概念
 
-**BIO 标注**（或 BILOU）将实体提取转化为序列标注（Sequence Labeling）问题。为每个 token 标注 `B-TYPE`（实体开头）、`I-TYPE`（实体内部）或 `O`（不属于任何实体）。
+**BIO 标注**（或 BILOU）将实体提取转化为序列标注问题。为每个 token 标注 `B-TYPE`（实体开头）、`I-TYPE`（实体内部）或 `O`（不属于任何实体）。
 
 ```
 Apple    B-ORG
@@ -43,6 +43,10 @@ US       B-GPE
 - **CRF。** 条件随机场。类似 HMM 但是判别式的，因此你可以混合任意特征（词形、大小写、相邻词）。截至 2026 年，仍然是低资源部署场景下的经典生产主力。
 - **BiLSTM-CRF。** 神经网络特征取代手工特征。LSTM 双向读取句子，CRF 层在顶层强制标签序列的一致性。
 - **基于 Transformer。** 微调 BERT 并加上 token 分类头。精度最高。计算量最大。
+
+```figure
+ner-bio-tagging
+```
 
 ## 构建
 
