@@ -31,9 +31,9 @@ Dosovitskiy 等人（2020）提出了一个直率的问题：如果我们跳过 
 给定一个形状为 `(H, W, 3)` 的图像 `x` 和一个 patch size `P`，你将图像切割成一个 `(H/P) x (W/P)` 的互不重叠的 patch 网格。每个 patch 是一个 `P x P x 3` 的像素立方体。将每个立方体展平为一个 `3 P^2` 的向量。应用一个共享的线性投影 `W_E`，其形状为 `(3 P^2, D)`，将每个 patch 映射到模型的隐藏维度 `D`。
 
 对于 ViT-B/16 的标准配置：
-- 分辨率 224，patch size 16 → 网格 14x14 → 196 个 patch token。
+- 分辨率 224，patch size 16 -> 网格 14x14 -> 196 个 patch token。
 - 每个 patch 是 `16 x 16 x 3 = 768` 个像素值，投影到 `D = 768`。
-- 添加一个可学习的 `[CLS]` token → 序列长度 197。
+- 添加一个可学习的 `[CLS]` token -> 序列长度 197。
 
 Patch 投影在数学上等同于一个 2D 卷积，其 kernel size 为 `P`，stride 为 `P`，输出通道数为 `D`。生产代码实际上就是这样实现的——`nn.Conv2d(3, D, kernel_size=P, stride=P)`。"线性投影"的视角是概念性的；kernel 的视角是高效的。
 
@@ -49,7 +49,7 @@ Patch 本身没有固有的顺序——transformer 将它们视为一个集合�
 
 1. `[CLS]` token。在 patch 序列前添加一个可学习的向量。经过所有 transformer block 后，CLS token 的隐藏状态就是图像表示。继承自 BERT。原始 ViT、CLIP 使用。
 2. Mean pool。对 patch token 的输出隐藏状态取平均。SigLIP、DINOv2、大多数现代 VLM 使用。
-3. Register token。Darcet 等人（2023）观察到，没有显式 sink token 的 ViT 会发展出高范数的"伪影" patch，这些 patch 会劫持自注意力。添加 4–16 个可学习的 register token 可以吸收这种负载，并改善密集预测质量（分割、深度）。DINOv2 和 SigLIP 2 都配备了 register token。
+3. Register token。Darcet 等人（2023）观察到，没有显式 sink token 的 ViT 会发展出高范数的"伪影" patch，这些 patch 会劫持自注意力。添加 4-16 个可学习的 register token 可以吸收这种负载，并改善密集预测质量（分割、深度）。DINOv2 和 SigLIP 2 都配备了 register token。
 
 这个选择对下游任务很重要。CLS 对分类来说足够好。对于将 patch token 输入 LLM 的 VLM，你完全跳过池化——每个 patch 都变成一个 LLM 输入 token。Register token 在交接前被丢弃（它们是脚手架，不是内容）。
 
@@ -67,11 +67,11 @@ Patch 本身没有固有的顺序——transformer 将它们视为一个集合�
 ### 缩放定律
 
 ViT 缩放（Zhai 等人，2022）确立了 ViT 的质量在模型大小、数据大小和计算量上遵循可预测的规律。在固定计算量下：
-- 更大的模型 + 更多数据 → 更好的质量。
+- 更大的模型 + 更多数据 -> 更好的质量。
 - Patch size 是序列长度与保真度之间的杠杆。Patch 14（DINOv2/SigLIP SO400m 的典型值）每张图像产生更多 token；对 OCR 和密集任务更好，对速度更差。
 - 分辨率是另一个大杠杆。从 224 到 384 再到 512 几乎总是有帮助的，但 FLOPs 呈二次增长。
 
-ViT-g/14（10 亿参数，patch 14，分辨率 224 → 256 个 token）和 SigLIP SO400m/14（4 亿参数，patch 14）是 2026 年开放 VLM 的两个主力编码器。
+ViT-g/14（10 亿参数，patch 14，分辨率 224 -> 256 个 token）和 SigLIP SO400m/14（4 亿参数，patch 14）是 2026 年开放 VLM 的两个主力编码器。
 
 ### ViT 的参数量
 
@@ -93,12 +93,16 @@ total       ≈ 86M
 
 2026 年大多数开放 VLM 配备的编码器是原生分辨率（NaFlex）下的 SigLIP 2 SO400m/14。它具有：
 - 4 亿参数。
-- Patch size 14，默认分辨率 384 → 每张图像 729 个 patch token。
+- Patch size 14，默认分辨率 384 -> 每张图像 729 个 patch token。
 - 图像级任务使用 mean pool；所有 729 个 patch 流入 LLM 进行 VQA。
 - 4 个 register token，在交给 LLM 前丢弃。
 - 带有图像级缩放的 2D-RoPE，用于原生宽高比。
 
 该配置中的每一个决定都可以追溯到一篇你可以阅读的论文。
+
+```figure
+image-patch-tokens
+```
 
 ## 使用它
 
@@ -145,9 +149,9 @@ total       ≈ 86M
 
 ## 延伸阅读
 
-- [Dosovitskiy 等人 — An Image is Worth 16x16 Words (arXiv:2010.11929)](https://arxiv.org/abs/2010.11929) — 原始 ViT。
-- [He 等人 — Masked Autoencoders Are Scalable Vision Learners (arXiv:2111.06377)](https://arxiv.org/abs/2111.06377) — MAE，自监督预训练。
-- [Oquab 等人 — DINOv2 (arXiv:2304.07193)](https://arxiv.org/abs/2304.07193) — 大规模自蒸馏，无需标签。
-- [Darcet 等人 — Vision Transformers Need Registers (arXiv:2309.16588)](https://arxiv.org/abs/2309.16588) — register token 与伪影分析。
-- [Tschannen 等人 — SigLIP 2 (arXiv:2502.14786)](https://arxiv.org/abs/2502.14786) — 2026 年的默认视觉塔。
-- [Zhai 等人 — Scaling Vision Transformers (arXiv:2106.04560)](https://arxiv.org/abs/2106.04560) — 经验缩放定律。
+- [Dosovitskiy 等人 -- An Image is Worth 16x16 Words (arXiv:2010.11929)](https://arxiv.org/abs/2010.11929) -- 原始 ViT。
+- [He 等人 -- Masked Autoencoders Are Scalable Vision Learners (arXiv:2111.06377)](https://arxiv.org/abs/2111.06377) -- MAE，自监督预训练。
+- [Oquab 等人 -- DINOv2 (arXiv:2304.07193)](https://arxiv.org/abs/2304.07193) -- 大规模自蒸馏，无需标签。
+- [Darcet 等人 -- Vision Transformers Need Registers (arXiv:2309.16588)](https://arxiv.org/abs/2309.16588) -- register token 与伪影分析。
+- [Tschannen 等人 -- SigLIP 2 (arXiv:2502.14786)](https://arxiv.org/abs/2502.14786) -- 2026 年的默认视觉塔。
+- [Zhai 等人 -- Scaling Vision Transformers (arXiv:2106.04560)](https://arxiv.org/abs/2106.04560) -- 经验缩放定律。
