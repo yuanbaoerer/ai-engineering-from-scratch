@@ -243,6 +243,10 @@ Memory roof:  peak bandwidth * ops:byte ratio
 
 A100 上的交叉点大约在 运算字节比 = 156（312 TFLOPS / 2 TB/s）。低于 156，你受限于内存带宽。高于 156，你受限于计算能力。连续批处理通过每次迭代打包更多词元，将解码推向这个交叉点。
 
+```figure
+context-window-slide
+```
+
 ## 动手构建
 
 ### 步骤 1：从零实现 KV 缓存
