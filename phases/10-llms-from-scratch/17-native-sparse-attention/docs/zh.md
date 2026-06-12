@@ -82,6 +82,10 @@ NSA 的内核是为现代 GPU 内存层次结构设计的。内核按 GQA 组加
 
 MoBA (Moonshot, arXiv:2502.13189) 是同期发表的工作，采用了类似的"三合一优于单一"思路，将 MoE 原理应用于注意力块。NSA 和 MoBA 是 2026 年长上下文预训练需要了解的两种架构。
 
+```figure
+sliding-window-attention
+```
+
 ## 动手构建
 
 `code/main.py` 在短合成序列上实现了三个分支，并展示了：
