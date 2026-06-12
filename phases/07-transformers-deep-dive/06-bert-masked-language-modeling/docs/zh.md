@@ -29,7 +29,7 @@ BERT (Devlin et al. 2018) 提出：如果我们取一个 Transformer 编码器�
 
 ```
 输入:  the [MASK] brown fox jumps [MASK] the lazy dog
-目标: the  quick brown fox jumps  over  the lazy dog
+目标: the quick brown fox jumps over the lazy dog
 ```
 
 训练模型预测掩码位置的原始 token。因为编码器是双向的，预测位置 1 的 `[MASK]` 可以使用位置 2+ 的 `brown fox jumps`。这是 GPT 做不到的。
@@ -72,6 +72,10 @@ BERT (Devlin et al. 2018) 提出：如果我们取一个 Transformer 编码器�
 | NER / token 标注 | 每位置输出，原生双向 |
 | 零样本蕴含 (NLI) | 编码器顶部的分类头 |
 | RAG 重排序器 | 交叉编码器评分，比 LLM 重排序器快 10 倍 |
+
+```figure
+transformer-residual
+```
 
 ## 动手实现
 
