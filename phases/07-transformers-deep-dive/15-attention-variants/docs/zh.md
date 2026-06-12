@@ -82,6 +82,10 @@ DiffAttn = (A1 - λ · A2) V
 | 原生稀疏 (DeepSeek-V3.2) | O(N · 活跃比例) | O(N) | 0.05 ppl 以内 | DeepSeek-V3.2, 2025 |
 | 差分 | O(2·N²) | O(2N) | -5 到 -10% ppl | DIFF Transformer, 2026 早期模型 |
 
+```figure
+gqa-kv-sharing
+```
+
 ## 动手实现
 
 参见 `code/main.py`。我们实现因果掩码比较器，在玩具序列上并排展示完整、SWA、局部+步幅和差分注意力。
