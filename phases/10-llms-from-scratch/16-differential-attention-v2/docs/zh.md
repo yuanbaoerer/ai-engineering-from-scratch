@@ -95,6 +95,10 @@ V2 还移除了 V1 用于稳定减法的逐头 RMSNorm。在 70B 级别的预训
 | FlashAttention | V2 可以 (V1 不行) |
 | 投机解码 | 是 (注意力改动对投机解码循环不可见) |
 
+```figure
+differential-attention
+```
+
 ## 动手实现
 
 `code/main.py` 用纯 Python 实现了差分注意力。一个具有已知信号加噪声结构的玩具查询让你可以直接测量噪声消除比率。
