@@ -120,9 +120,9 @@ Phase 17/18 → Phase 19
 ## 当前学习进度
 
 <!-- learning-path:current:start -->
-- 当前 Phase: 11-llm-engineering
-- 当前 Lesson: 05-context-engineering
-- 最近笔记: [2026-06-16-context-engineering.md](phases/11-llm-engineering/05-context-engineering/learning-notes/2026-06-16-context-engineering.md)
+- 当前 Phase: 05-nlp-foundations-to-advanced
+- 当前 Lesson: 23-chunking-strategies-rag
+- 最近笔记: [2026-06-16-chunking-strategies.md](phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag/learning-notes/2026-06-16-chunking-strategies.md)
 - 更新时间: 2026-06-16
 <!-- learning-path:current:end -->
 
@@ -135,6 +135,8 @@ Phase 17/18 → Phase 19
 | 2026-06-12 | 17-infrastructure-and-production | 04-vllm-serving-internals | [笔记](phases/17-infrastructure-and-production/04-vllm-serving-internals/learning-notes/2026-06-12-vllm-serving-internals.md) |
 | 2026-06-16 | 11-llm-engineering | 04-embeddings | [笔记](phases/11-llm-engineering/04-embeddings/learning-notes/2026-06-16-embeddings-overview.md) |
 | 2026-06-16 | 11-llm-engineering | 05-context-engineering | [笔记](phases/11-llm-engineering/05-context-engineering/learning-notes/2026-06-16-context-engineering.md) |
+| 2026-06-16 | 11-llm-engineering | 06-rag | [笔记](phases/11-llm-engineering/06-rag/learning-notes/2026-06-16-rag-pipeline.md) |
+| 2026-06-16 | 05-nlp-foundations-to-advanced | 23-chunking-strategies-rag | [笔记](phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag/learning-notes/2026-06-16-chunking-strategies.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -144,6 +146,8 @@ Phase 17/18 → Phase 19
 - 2026-06-12 `phases/17-infrastructure-and-production/04-vllm-serving-internals`: 投机解码与 chunked prefill 的互斥权衡、Mamba 架构替代 Transformer 的前景
 - 2026-06-16 `phases/11-llm-engineering/04-embeddings`: Bi-Encoder vs Cross-Encoder 的架构差异、Matryoshka 与量化的区别
 - 2026-06-16 `phases/11-llm-engineering/05-context-engineering`: 重排序的两层含义（相关性重排 vs 位置重排）、BM25 算法原理、技术选择需匹配数据特征
+- 2026-06-16 `phases/11-llm-engineering/06-rag`: 三种向量相似度计算的选择逻辑、分块大小对检索质量的影响
+- 2026-06-16 `phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag`: 语义分块阈值调参、重叠的收益评估、上下文悬崖效应
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -153,4 +157,6 @@ Phase 17/18 → Phase 19
 - 2026-06-12 保存 `phases/17-infrastructure-and-production/04-vllm-serving-internals` 学习笔记：[笔记](phases/17-infrastructure-and-production/04-vllm-serving-internals/learning-notes/2026-06-12-vllm-serving-internals.md)
 - 2026-06-16 保存 `phases/11-llm-engineering/04-embeddings` 学习笔记：[笔记](phases/11-llm-engineering/04-embeddings/learning-notes/2026-06-16-embeddings-overview.md)
 - 2026-06-16 保存 `phases/11-llm-engineering/05-context-engineering` 学习笔记：[笔记](phases/11-llm-engineering/05-context-engineering/learning-notes/2026-06-16-context-engineering.md)
+- 2026-06-16 保存 `phases/11-llm-engineering/06-rag` 学习笔记：[笔记](phases/11-llm-engineering/06-rag/learning-notes/2026-06-16-rag-pipeline.md)
+- 2026-06-16 保存 `phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag` 学习笔记：[笔记](phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag/learning-notes/2026-06-16-chunking-strategies.md)
 <!-- learning-path:log:end -->
