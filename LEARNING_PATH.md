@@ -120,10 +120,10 @@ Phase 17/18 → Phase 19
 ## 当前学习进度
 
 <!-- learning-path:current:start -->
-- 当前 Phase: 17-infrastructure-and-production
-- 当前 Lesson: 04-vllm-serving-internals
-- 最近笔记: [2026-06-12-vllm-serving-internals.md](phases/17-infrastructure-and-production/04-vllm-serving-internals/learning-notes/2026-06-12-vllm-serving-internals.md)
-- 更新时间: 2026-06-12
+- 当前 Phase: 11-llm-engineering
+- 当前 Lesson: 04-embeddings
+- 最近笔记: [2026-06-16-embeddings-overview.md](phases/11-llm-engineering/04-embeddings/learning-notes/2026-06-16-embeddings-overview.md)
+- 更新时间: 2026-06-16
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -133,6 +133,7 @@ Phase 17/18 → Phase 19
 |------|-------|--------|------|
 | 2026-06-12 | 17-infrastructure-and-production | 01-managed-llm-platforms | [笔记](phases/17-infrastructure-and-production/01-managed-llm-platforms/learning-notes/2026-06-12-managed-platforms.md) |
 | 2026-06-12 | 17-infrastructure-and-production | 04-vllm-serving-internals | [笔记](phases/17-infrastructure-and-production/04-vllm-serving-internals/learning-notes/2026-06-12-vllm-serving-internals.md) |
+| 2026-06-16 | 11-llm-engineering | 04-embeddings | [笔记](phases/11-llm-engineering/04-embeddings/learning-notes/2026-06-16-embeddings-overview.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -140,6 +141,7 @@ Phase 17/18 → Phase 19
 <!-- learning-path:review:start -->
 - 2026-06-12 `phases/17-infrastructure-and-production/01-managed-llm-platforms`: PTU 盈亏平衡点计算、双提供商策略的成本与收益权衡
 - 2026-06-12 `phases/17-infrastructure-and-production/04-vllm-serving-internals`: 投机解码与 chunked prefill 的互斥权衡、Mamba 架构替代 Transformer 的前景
+- 2026-06-16 `phases/11-llm-engineering/04-embeddings`: Bi-Encoder vs Cross-Encoder 的架构差异、Matryoshka 与量化的区别
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -147,4 +149,5 @@ Phase 17/18 → Phase 19
 <!-- learning-path:log:start -->
 - 2026-06-12 保存 `phases/17-infrastructure-and-production/01-managed-llm-platforms` 学习笔记：[笔记](phases/17-infrastructure-and-production/01-managed-llm-platforms/learning-notes/2026-06-12-managed-platforms.md)
 - 2026-06-12 保存 `phases/17-infrastructure-and-production/04-vllm-serving-internals` 学习笔记：[笔记](phases/17-infrastructure-and-production/04-vllm-serving-internals/learning-notes/2026-06-12-vllm-serving-internals.md)
+- 2026-06-16 保存 `phases/11-llm-engineering/04-embeddings` 学习笔记：[笔记](phases/11-llm-engineering/04-embeddings/learning-notes/2026-06-16-embeddings-overview.md)
 <!-- learning-path:log:end -->

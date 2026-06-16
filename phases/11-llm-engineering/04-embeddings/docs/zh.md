@@ -59,21 +59,22 @@ Word2Vec 生成 300 维向量。每个词获得一个向量，无论上下文如
 
 **指令调优嵌入**：最新方法。像 E5 和 GTE 这样的模型接受任务前缀（"search_query:"、"search_document:"），告诉模型生成什么类型的嵌入。这让一个模型可以服务多个任务。
 
+
 ```mermaid
 graph LR
     subgraph "2013: Word2Vec"
-        W1["king"] --> V1["[0.2, -0.1, ...]"]
-        W2["queen"] --> V2["[0.3, -0.2, ...]"]
+        W1["king"] --> V1("0.2, -0.1, ...")
+        W2["queen"] --> V2("0.3, -0.2, ...")
     end
 
     subgraph "2019: Sentence-BERT"
-        S1["How do I reset my password?"] --> E1["[0.04, 0.12, ...]"]
-        S2["I need to change my password"] --> E2["[0.05, 0.11, ...]"]
+        S1["How do I reset my password?"] --> E1("0.04, 0.12, ...")
+        S2["I need to change my password"] --> E2("0.05, 0.11, ...")
     end
 
     subgraph "2024: Instruction-Tuned"
-        I1["search_query: password reset"] --> T1["[0.08, 0.09, ...]"]
-        I2["search_document: To reset your password, click..."] --> T2["[0.07, 0.10, ...]"]
+        I1["search_query: password reset"] --> T1("0.08, 0.09, ...")
+        I2["search_document: To reset your password, click..."] --> T2("0.07, 0.10, ...")
     end
 ```
 
@@ -140,13 +141,13 @@ HNSW 以小的精度损失（通常 95-99% recall）换取巨大的速度提升�
 
 ```mermaid
 graph TD
-    subgraph "HNSW Layers"
-        L2["Layer 2 (sparse)"] -->|"long jumps"| L1["Layer 1 (medium)"]
-        L1 -->|"shorter jumps"| L0["Layer 0 (dense, all vectors)"]
+    subgraph g1 ["HNSW Layers"]
+        L2["Layer 2 (sparse)"] -- "long jumps" --> L1["Layer 1 (medium)"]
+        L1 -- "shorter jumps" --> L0["Layer 0 (dense, all vectors)"]
     end
 
-    Q["Query vector"] -->|"enter at top"| L2
-    L0 -->|"nearest neighbors"| R["Top-k results"]
+    Q["Query vector"] -- "enter at top" --> L2
+    L0 -- "nearest neighbors" --> R["Top-k results"]
 ```
 
 生产选项：
