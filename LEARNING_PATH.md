@@ -120,10 +120,10 @@ Phase 17/18 → Phase 19
 ## 当前学习进度
 
 <!-- learning-path:current:start -->
-- 当前 Phase: 05-nlp-foundations-to-advanced
-- 当前 Lesson: 23-chunking-strategies-rag
-- 最近笔记: [2026-06-16-chunking-strategies.md](phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag/learning-notes/2026-06-16-chunking-strategies.md)
-- 更新时间: 2026-06-16
+- 当前 Phase: 11-llm-engineering
+- 当前 Lesson: 07-advanced-rag
+- 最近笔记: [2026-06-17-advanced-rag.md](phases/11-llm-engineering/07-advanced-rag/learning-notes/2026-06-17-advanced-rag.md)
+- 更新时间: 2026-06-17
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -137,6 +137,7 @@ Phase 17/18 → Phase 19
 | 2026-06-16 | 11-llm-engineering | 05-context-engineering | [笔记](phases/11-llm-engineering/05-context-engineering/learning-notes/2026-06-16-context-engineering.md) |
 | 2026-06-16 | 11-llm-engineering | 06-rag | [笔记](phases/11-llm-engineering/06-rag/learning-notes/2026-06-16-rag-pipeline.md) |
 | 2026-06-16 | 05-nlp-foundations-to-advanced | 23-chunking-strategies-rag | [笔记](phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag/learning-notes/2026-06-16-chunking-strategies.md) |
+| 2026-06-17 | 11-llm-engineering | 07-advanced-rag | [笔记](phases/11-llm-engineering/07-advanced-rag/learning-notes/2026-06-17-advanced-rag.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -148,6 +149,7 @@ Phase 17/18 → Phase 19
 - 2026-06-16 `phases/11-llm-engineering/05-context-engineering`: 重排序的两层含义（相关性重排 vs 位置重排）、BM25 算法原理、技术选择需匹配数据特征
 - 2026-06-16 `phases/11-llm-engineering/06-rag`: 三种向量相似度计算的选择逻辑、分块大小对检索质量的影响
 - 2026-06-16 `phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag`: 语义分块阈值调参、重叠的收益评估、上下文悬崖效应
+- 2026-06-17 `phases/11-llm-engineering/07-advanced-rag`: 父-子分块存储翻倍的规模权衡、ColBERT 后期交互在精度/延迟曲线的定位、多跳问题与 GraphRAG/Self-RAG 的边界
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -159,4 +161,6 @@ Phase 17/18 → Phase 19
 - 2026-06-16 保存 `phases/11-llm-engineering/05-context-engineering` 学习笔记：[笔记](phases/11-llm-engineering/05-context-engineering/learning-notes/2026-06-16-context-engineering.md)
 - 2026-06-16 保存 `phases/11-llm-engineering/06-rag` 学习笔记：[笔记](phases/11-llm-engineering/06-rag/learning-notes/2026-06-16-rag-pipeline.md)
 - 2026-06-16 保存 `phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag` 学习笔记：[笔记](phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag/learning-notes/2026-06-16-chunking-strategies.md)
+- 2026-06-17 补充 `phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag` 深化笔记：late chunking 原理（位置归属≠向量内容、向量不"说人话"）、其在 RAG 链路定位（改善中间检索/召回率）、上下文悬崖（③生成环节 2.5k 悬崖）、语义分块阈值调参与重叠收益两大翻车点深挖
+- 2026-06-17 保存 `phases/11-llm-engineering/07-advanced-rag` 学习笔记：[笔记](phases/11-llm-engineering/07-advanced-rag/learning-notes/2026-06-17-advanced-rag.md)
 <!-- learning-path:log:end -->
