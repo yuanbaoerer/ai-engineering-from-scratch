@@ -120,10 +120,10 @@ Phase 17/18 → Phase 19
 ## 当前学习进度
 
 <!-- learning-path:current:start -->
-- 当前 Phase: 11-llm-engineering
-- 当前 Lesson: 07-advanced-rag
-- 最近笔记: [2026-06-17-advanced-rag.md](phases/11-llm-engineering/07-advanced-rag/learning-notes/2026-06-17-advanced-rag.md)
-- 更新时间: 2026-06-17
+- 当前 Phase: 14-agent-engineering
+- 当前 Lesson: 01-the-agent-loop
+- 最近笔记: [2026-06-22-agent-loop.md](phases/14-agent-engineering/01-the-agent-loop/learning-notes/2026-06-22-agent-loop.md)
+- 更新时间: 2026-06-22
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -138,6 +138,7 @@ Phase 17/18 → Phase 19
 | 2026-06-16 | 11-llm-engineering | 06-rag | [笔记](phases/11-llm-engineering/06-rag/learning-notes/2026-06-16-rag-pipeline.md) |
 | 2026-06-16 | 05-nlp-foundations-to-advanced | 23-chunking-strategies-rag | [笔记](phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag/learning-notes/2026-06-16-chunking-strategies.md) |
 | 2026-06-17 | 11-llm-engineering | 07-advanced-rag | [笔记](phases/11-llm-engineering/07-advanced-rag/learning-notes/2026-06-17-advanced-rag.md) |
+| 2026-06-22 | 14-agent-engineering | 01-the-agent-loop | [笔记](phases/14-agent-engineering/01-the-agent-loop/learning-notes/2026-06-22-agent-loop.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -150,6 +151,7 @@ Phase 17/18 → Phase 19
 - 2026-06-16 `phases/11-llm-engineering/06-rag`: 三种向量相似度计算的选择逻辑、分块大小对检索质量的影响
 - 2026-06-16 `phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag`: 语义分块阈值调参、重叠的收益评估、上下文悬崖效应
 - 2026-06-17 `phases/11-llm-engineering/07-advanced-rag`: 父-子分块存储翻倍的规模权衡、ColBERT 后期交互在精度/延迟曲线的定位、多跳问题与 GraphRAG/Self-RAG 的边界
+- 2026-06-22 `phases/14-agent-engineering/01-the-agent-loop`: 2026 年三个陷阱（trust boundary、cascading failure、loop explosion）不是 ReAct 本身的问题而是部署系统性风险；所有框架在 ReAct 基础上叠加功能而非替换循环
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -163,4 +165,5 @@ Phase 17/18 → Phase 19
 - 2026-06-16 保存 `phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag` 学习笔记：[笔记](phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag/learning-notes/2026-06-16-chunking-strategies.md)
 - 2026-06-17 补充 `phases/05-nlp-foundations-to-advanced/23-chunking-strategies-rag` 深化笔记：late chunking 原理（位置归属≠向量内容、向量不"说人话"）、其在 RAG 链路定位（改善中间检索/召回率）、上下文悬崖（③生成环节 2.5k 悬崖）、语义分块阈值调参与重叠收益两大翻车点深挖
 - 2026-06-17 保存 `phases/11-llm-engineering/07-advanced-rag` 学习笔记：[笔记](phases/11-llm-engineering/07-advanced-rag/learning-notes/2026-06-17-advanced-rag.md)
+- 2026-06-22 保存 `phases/14-agent-engineering/01-the-agent-loop` 学习笔记：[笔记](phases/14-agent-engineering/01-the-agent-loop/learning-notes/2026-06-22-agent-loop.md)
 <!-- learning-path:log:end -->
