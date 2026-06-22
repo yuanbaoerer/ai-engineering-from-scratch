@@ -1,21 +1,21 @@
-"""ReAct agent loop — stdlib only, sync.
+"""ReAct agent loop — stdlib only, async.
 
-Five ingredients: message buffer, tool registry, stop condition, turn budget,
-trace record.  Provider-specific schemas (Anthropic / OpenAI) are never mixed.
+Same architecture as main.py (sync) but tool dispatch is async.
 Reference: Yao et al. "ReAct" (ICLR 2023, arXiv:2210.03629).
 """
 
 from __future__ import annotations
 
+import asyncio
 import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable
+from typing import Any, Callable, Awaitable
 
 
 # ---------------------------------------------------------------------------
-# Provider schemas — never mix Anthropic and OpenAI message shapes
+# Provider schemas — same as sync, never mix Anthropic and OpenAI
 # ---------------------------------------------------------------------------
 
 class Provider(str, Enum):
@@ -25,7 +25,6 @@ class Provider(str, Enum):
 
 @dataclass
 class AnthropicToolUse:
-    """Anthropic tool_use block inside assistant content."""
     id: str
     name: str
     input: dict[str, Any]
@@ -33,7 +32,6 @@ class AnthropicToolUse:
 
 @dataclass
 class AnthropicToolResult:
-    """Anthropic tool_result block returned to the model."""
     tool_use_id: str
     content: str
     is_error: bool = False
@@ -41,16 +39,14 @@ class AnthropicToolResult:
 
 @dataclass
 class OpenAIToolCall:
-    """OpenAI function-calling tool_call inside assistant message."""
     id: str
-    type: str  # always "function"
-    function: dict[str, Any]  # {"name": ..., "arguments": ...}
+    type: str
+    function: dict[str, Any]
 
 
 @dataclass
 class OpenAIToolResult:
-    """OpenAI tool role message carrying function output."""
-    role: str  # always "tool"
+    role: str
     tool_call_id: str
     content: str
 
@@ -70,7 +66,6 @@ class Role(str, Enum):
 class Message:
     role: Role
     content: str = ""
-    # Provider-specific payloads — exactly one is set, or neither (user/final)
     tool_calls: list[AnthropicToolUse] | list[OpenAIToolCall] | None = None
     tool_results: list[AnthropicToolResult] | list[OpenAIToolResult] | None = None
 
@@ -83,7 +78,6 @@ class MessageBuffer:
         self.messages.append(msg)
 
     def as_prompt(self, provider: Provider) -> list[dict[str, Any]]:
-        """Serialize to the provider's expected JSON shape."""
         out: list[dict[str, Any]] = []
         for m in self.messages:
             if provider == Provider.ANTHROPIC:
@@ -105,13 +99,10 @@ def _to_anthropic(msg: Message) -> list[dict[str, Any]]:
         if msg.tool_calls:
             for tc in msg.tool_calls:
                 blocks.append({
-                    "type": "tool_use",
-                    "id": tc.id,
-                    "name": tc.name,
-                    "input": tc.input,
+                    "type": "tool_use", "id": tc.id,
+                    "name": tc.name, "input": tc.input,
                 })
         return [{"role": "assistant", "content": blocks}]
-    # role == TOOL
     results: list[dict[str, Any]] = []
     if msg.tool_results:
         for tr in msg.tool_results:
@@ -136,73 +127,56 @@ def _to_openai(msg: Message) -> list[dict[str, Any]]:
         entry: dict[str, Any] = {"role": "assistant", "content": msg.content}
         if msg.tool_calls:
             entry["tool_calls"] = [
-                {"id": tc.id, "type": "function",
-                 "function": tc.function}
+                {"id": tc.id, "type": "function", "function": tc.function}
                 for tc in msg.tool_calls
             ]
         return [entry]
-    # role == TOOL
     results: list[dict[str, Any]] = []
     if msg.tool_results:
         for tr in msg.tool_results:
             results.append({
-                "role": "tool",
-                "tool_call_id": tr.tool_call_id,
+                "role": "tool", "tool_call_id": tr.tool_call_id,
                 "content": tr.content,
             })
     return results
 
 
 # ---------------------------------------------------------------------------
-# Tool registry — input validation, typed result, errors → observation strings
+# Tool registry — async dispatch, input validation
 # ---------------------------------------------------------------------------
 
 @dataclass
 class ToolDef:
     name: str
-    fn: Callable[..., str]
-    param_types: dict[str, type] | None = None  # optional validation
+    fn: Callable[..., Any]  # sync or async callable
+    param_types: dict[str, type] | None = None
 
 
 class ToolRegistry:
     def __init__(self) -> None:
         self._tools: dict[str, ToolDef] = {}
 
-    def register(self, name: str, fn: Callable[..., str],
+    def register(self, name: str, fn: Callable[..., Any],
                  param_types: dict[str, type] | None = None) -> None:
         self._tools[name] = ToolDef(name=name, fn=fn, param_types=param_types)
 
     def names(self) -> list[str]:
         return sorted(self._tools)
 
-    def schema_for_provider(self, provider: Provider) -> list[dict[str, Any]]:
-        """Return tool definitions in the provider's expected format."""
-        if provider == Provider.ANTHROPIC:
-            return [
-                {"name": td.name, "description": td.fn.__doc__ or td.name,
-                 "input_schema": {"type": "object", "properties": {}}}
-                for td in self._tools.values()
-            ]
-        return [
-            {"type": "function",
-             "function": {"name": td.name,
-                          "description": td.fn.__doc__ or td.name,
-                          "parameters": {"type": "object", "properties": {}}}}
-            for td in self._tools.values()
-        ]
-
-    def dispatch(self, name: str, args: dict[str, Any]) -> str:
+    async def dispatch(self, name: str, args: dict[str, Any]) -> str:
         td = self._tools.get(name)
         if td is None:
             return f"error: unknown tool {name!r}"
-        # Input validation
         if td.param_types:
             for k, expected in td.param_types.items():
                 if k in args and not isinstance(args[k], expected):
                     return (f"error: {k} should be {expected.__name__}, "
                             f"got {type(args[k]).__name__}")
         try:
-            return td.fn(**args)
+            result = td.fn(**args)
+            if asyncio.iscoroutine(result):
+                return await result
+            return result
         except TypeError as e:
             return f"error: bad args for {name}: {e}"
         except Exception as e:
@@ -210,7 +184,7 @@ class ToolRegistry:
 
 
 # ---------------------------------------------------------------------------
-# Trace record — logs every thought, action, observation, stop reason
+# Trace record
 # ---------------------------------------------------------------------------
 
 class StopReason(str, Enum):
@@ -242,11 +216,10 @@ class TraceEntry:
 
 
 # ---------------------------------------------------------------------------
-# OpenTelemetry GenAI spans (optional — no-op when SDK absent)
+# OpenTelemetry GenAI spans (optional)
 # ---------------------------------------------------------------------------
 
 def _try_otel_span(name: str, attributes: dict[str, Any] | None = None):
-    """Return a context manager for an OTel span, or a no-op if unavailable."""
     try:
         from opentelemetry import trace
         tracer = trace.get_tracer("agent-loop")
@@ -257,17 +230,15 @@ def _try_otel_span(name: str, attributes: dict[str, Any] | None = None):
 
 
 # ---------------------------------------------------------------------------
-# Toy LLM — scripted policy for deterministic offline testing
+# Toy LLM — scripted async policy
 # ---------------------------------------------------------------------------
 
 class ToyLLM:
-    """Scripted ReAct policy. Returns one assistant turn per call."""
-
     def __init__(self, script: list[dict[str, Any]]) -> None:
         self.script = script
         self.cursor = 0
 
-    def respond(self, history: MessageBuffer) -> dict[str, Any]:
+    async def respond(self, history: MessageBuffer) -> dict[str, Any]:
         if self.cursor >= len(self.script):
             return {"kind": "finish", "content": "no more actions"}
         entry = self.script[self.cursor]
@@ -276,14 +247,13 @@ class ToyLLM:
 
 
 # ---------------------------------------------------------------------------
-# Agent loop — the core
+# Agent loop — async
 # ---------------------------------------------------------------------------
 
-# Turn budget presets (Anthropic computer-use announcement: dozens to hundreds)
 TURN_BUDGETS = {
-    "short": 10,       # simple Q&A, quick tool chain
-    "computer_use": 200,  # multi-step GUI / browser
-    "deep_research": 400,  # long-horizon research
+    "short": 10,
+    "computer_use": 200,
+    "deep_research": 400,
 }
 
 
@@ -293,21 +263,20 @@ class AgentLoop:
     tools: ToolRegistry
     provider: Provider = Provider.ANTHROPIC
     max_turns: int = TURN_BUDGETS["short"]
-    max_total_tokens: int | None = None  # optional token budget
-    guardrail_check: Callable[[str], bool] | None = None  # returns True to trip
+    max_total_tokens: int | None = None
+    guardrail_check: Callable[[str], bool] | None = None
     history: MessageBuffer = field(default_factory=MessageBuffer)
     trace: list[TraceEntry] = field(default_factory=list)
     _total_tokens: int = 0
 
-    def run(self, user_message: str) -> str:
+    async def run(self, user_message: str) -> str:
         self.history.append(Message(role=Role.USER, content=user_message))
         stop_reason = StopReason.MAX_TURNS
 
         with _try_otel_span("invoke_agent", {"user_message": user_message}):
             for step in range(self.max_turns):
-                reply = self.llm.respond(self.history)
+                reply = await self.llm.respond(self.history)
 
-                # --- Stop condition: explicit finish ---
                 if reply["kind"] == "finish":
                     stop_reason = StopReason.FINISH
                     self._record_trace(step, reply.get("thought", ""),
@@ -320,7 +289,6 @@ class AgentLoop:
                 action_name = reply["action"]
                 action_args = reply.get("args", {})
 
-                # --- Guardrail check ---
                 if self.guardrail_check and self.guardrail_check(action_name):
                     stop_reason = StopReason.GUARDRAIL
                     obs = "guardrail blocked action"
@@ -331,7 +299,6 @@ class AgentLoop:
                                 content=f"stopped by guardrail on {action_name}"))
                     return obs
 
-                # --- Token budget check ---
                 if (self.max_total_tokens is not None
                         and self._total_tokens >= self.max_total_tokens):
                     stop_reason = StopReason.MAX_TOKENS
@@ -341,25 +308,22 @@ class AgentLoop:
                         Message(role=Role.FINAL, content="token budget exceeded"))
                     return "token budget exceeded"
 
-                # --- Execute tool call ---
                 with _try_otel_span("tool_call", {"tool": action_name}):
-                    observation = self.tools.dispatch(action_name, action_args)
+                    observation = await self.tools.dispatch(
+                        action_name, action_args)
 
                 self._record_trace(step, thought, action_name,
                                    action_args, observation)
 
-                # --- Append assistant + tool turns ---
                 self._append_assistant_turn(thought, action_name, action_args)
                 self._append_tool_turn(action_name, observation)
 
-                # --- Stop condition: no tool calls (empty action) ---
                 if not action_name:
                     stop_reason = StopReason.NO_TOOL_CALLS
                     self.history.append(
                         Message(role=Role.FINAL, content=thought or "done"))
                     return thought or "done"
 
-            # Loop exhausted
             self.history.append(
                 Message(role=Role.FINAL, content="budget exhausted"))
             return "budget exhausted"
@@ -378,8 +342,7 @@ class AgentLoop:
         if self.provider == Provider.ANTHROPIC:
             tc = AnthropicToolUse(
                 id=f"toolu_{uuid.uuid4().hex[:8]}",
-                name=action_name,
-                input=action_args,
+                name=action_name, input=action_args,
             )
             self.history.append(Message(
                 role=Role.ASSISTANT, content=thought, tool_calls=[tc]))
@@ -395,7 +358,6 @@ class AgentLoop:
 
     def _append_tool_turn(self, action_name: str, observation: str) -> None:
         if self.provider == Provider.ANTHROPIC:
-            # Find the tool_use_id from the last assistant message
             tool_use_id = ""
             for m in reversed(self.history.messages):
                 if m.tool_calls and isinstance(m.tool_calls[0], AnthropicToolUse):
@@ -421,7 +383,7 @@ class AgentLoop:
 # ---------------------------------------------------------------------------
 
 def calculator(expr: str) -> str:
-    """Evaluate a simple arithmetic expression (digits, +, -, *, /, ., parentheses)."""
+    """Evaluate a simple arithmetic expression."""
     allowed = set("0123456789+-*/(). ")
     if not set(expr).issubset(allowed):
         return "error: illegal character in expr"
@@ -435,12 +397,14 @@ class KVStore:
     def __init__(self) -> None:
         self._store: dict[str, str] = {}
 
-    def get(self, key: str) -> str:
-        """Get value by key from the store."""
+    async def get(self, key: str) -> str:
+        """Async get value by key."""
+        await asyncio.sleep(0)  # yield to event loop
         return self._store.get(key, f"missing:{key}")
 
-    def set(self, key: str, value: str) -> str:
-        """Set a key-value pair in the store."""
+    async def set(self, key: str, value: str) -> str:
+        """Async set key-value pair."""
+        await asyncio.sleep(0)
         self._store[key] = value
         return f"stored {key}"
 
@@ -478,24 +442,23 @@ def pretty_trace(trace: list[TraceEntry]) -> None:
         print(entry)
 
 
-def main() -> None:
+async def main() -> None:
     print("=" * 70)
-    print("REACT AGENT LOOP (SYNC) — Phase 14, Lesson 01")
+    print("REACT AGENT LOOP (ASYNC) — Phase 14, Lesson 01")
     print("=" * 70)
 
     for provider in (Provider.ANTHROPIC, Provider.OPENAI):
         print(f"\n--- Provider: {provider.value} ---")
         agent = build_demo_agent(provider=provider)
-        final = agent.run("What is 120 plus 15% tax, stored in kv?")
+        final = await agent.run("What is 120 plus 15% tax, stored in kv?")
         print()
         pretty_trace(agent.trace)
         print()
         print(f"final answer:  {final}")
         print(f"turns used:    {sum(1 for t in agent.trace if t.action)}")
-        print(f"stop reason:   {agent.trace[-1].thought if agent.trace else 'N/A'}")
         print(f"tools:         {agent.tools.names()}")
         print(f"provider msgs: {len(agent.history.as_prompt(provider))}")
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
