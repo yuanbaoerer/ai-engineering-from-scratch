@@ -121,9 +121,9 @@ Phase 17/18 → Phase 19
 
 <!-- learning-path:current:start -->
 - 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 01-the-agent-loop
-- 最近笔记: [2026-06-22-agent-loop.md](phases/14-agent-engineering/01-the-agent-loop/learning-notes/2026-06-22-agent-loop.md)
-- 更新时间: 2026-06-22
+- 当前 Lesson: 03-reflexion-verbal-rl
+- 最近笔记: [2026-06-24-reflexion-memory-decay.md](phases/14-agent-engineering/03-reflexion-verbal-rl/learning-notes/2026-06-24-reflexion-memory-decay.md)
+- 更新时间: 2026-06-24
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -140,6 +140,8 @@ Phase 17/18 → Phase 19
 | 2026-06-17 | 11-llm-engineering | 07-advanced-rag | [笔记](phases/11-llm-engineering/07-advanced-rag/learning-notes/2026-06-17-advanced-rag.md) |
 | 2026-06-22 | 09-reinforcement-learning | 01-mdps-states-actions-rewards | [笔记](phases/09-reinforcement-learning/01-mdps-states-actions-rewards/learning-notes/2026-06-22-mdp-and-rl-basics.md) |
 | 2026-06-22 | 14-agent-engineering | 01-the-agent-loop | [笔记](phases/14-agent-engineering/01-the-agent-loop/learning-notes/2026-06-22-agent-loop.md) |
+| 2026-06-23 | 14-agent-engineering | 02-rewoo-plan-and-execute | [笔记](phases/14-agent-engineering/02-rewoo-plan-and-execute/learning-notes/2026-06-23-rewoo-plan-and-execute.md) |
+| 2026-06-24 | 14-agent-engineering | 03-reflexion-verbal-rl | [笔记](phases/14-agent-engineering/03-reflexion-verbal-rl/learning-notes/2026-06-24-reflexion-memory-decay.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -154,6 +156,8 @@ Phase 17/18 → Phase 19
 - 2026-06-17 `phases/11-llm-engineering/07-advanced-rag`: 父-子分块存储翻倍的规模权衡、ColBERT 后期交互在精度/延迟曲线的定位、多跳问题与 GraphRAG/Self-RAG 的边界
 - 2026-06-22 `phases/09-reinforcement-learning/01-mdps-states-actions-rewards`: MDP 五元组形式化、贝尔曼方程递归分解、RL 算法四大类别与 LLM 领域方法
 - 2026-06-22 `phases/14-agent-engineering/01-the-agent-loop`: 2026 年三个陷阱（trust boundary、cascading failure、loop explosion）不是 ReAct 本身的问题而是部署系统性风险；所有框架在 ReAct 基础上叠加功能而非替换循环
+- 2026-06-23 `phases/14-agent-engineering/02-rewoo-plan-and-execute`: ReWOO 三种角色分工（Planner/Worker/Solver）与 Token 效率优势、DAG 计划结构与拓扑排序执行、Claude Plan 模式与 ReWOO 的架构级/流程级分工区别
+- 2026-06-24 `phases/14-agent-engineering/03-reflexion-verbal-rl`: 记忆腐烂的六种缓解策略（TTL/压缩/频率淘汰/验证过滤/分层/睡眠清理）、CLAUDE.md 膨胀的处理方式、元数据给知识打标签的作用
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -169,4 +173,6 @@ Phase 17/18 → Phase 19
 - 2026-06-17 保存 `phases/11-llm-engineering/07-advanced-rag` 学习笔记：[笔记](phases/11-llm-engineering/07-advanced-rag/learning-notes/2026-06-17-advanced-rag.md)
 - 2026-06-22 保存 `phases/09-reinforcement-learning/01-mdps-states-actions-rewards` 学习笔记：[笔记](phases/09-reinforcement-learning/01-mdps-states-actions-rewards/learning-notes/2026-06-22-mdp-and-rl-basics.md)
 - 2026-06-22 保存 `phases/14-agent-engineering/01-the-agent-loop` 学习笔记：[笔记](phases/14-agent-engineering/01-the-agent-loop/learning-notes/2026-06-22-agent-loop.md)
+- 2026-06-23 保存 `phases/14-agent-engineering/02-rewoo-plan-and-execute` 学习笔记：[笔记](phases/14-agent-engineering/02-rewoo-plan-and-execute/learning-notes/2026-06-23-rewoo-plan-and-execute.md)
+- 2026-06-24 保存 `phases/14-agent-engineering/03-reflexion-verbal-rl` 学习笔记：[笔记](phases/14-agent-engineering/03-reflexion-verbal-rl/learning-notes/2026-06-24-reflexion-memory-decay.md)
 <!-- learning-path:log:end -->
