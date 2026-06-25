@@ -120,9 +120,9 @@ Phase 17/18 → Phase 19
 ## 当前学习进度
 
 <!-- learning-path:current:start -->
-- 当前 Phase: 19-capstone-projects
-- 当前 Lesson: 07-end-to-end-fine-tuning-pipeline
-- 最近笔记: [2026-06-25-finetuning-pipeline-scaffold.md](phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline/learning-notes/2026-06-25-finetuning-pipeline-scaffold.md)
+- 当前 Phase: 11-llm-engineering
+- 当前 Lesson: 10-evaluation
+- 最近笔记: [2026-06-25-llm-evaluation.md](phases/11-llm-engineering/10-evaluation/learning-notes/2026-06-25-llm-evaluation.md)
 - 更新时间: 2026-06-25
 <!-- learning-path:current:end -->
 
@@ -143,6 +143,7 @@ Phase 17/18 → Phase 19
 | 2026-06-23 | 14-agent-engineering | 02-rewoo-plan-and-execute | [笔记](phases/14-agent-engineering/02-rewoo-plan-and-execute/learning-notes/2026-06-23-rewoo-plan-and-execute.md) |
 | 2026-06-24 | 14-agent-engineering | 03-reflexion-verbal-rl | [笔记](phases/14-agent-engineering/03-reflexion-verbal-rl/learning-notes/2026-06-24-reflexion-memory-decay.md) |
 | 2026-06-25 | 19-capstone-projects | 07-end-to-end-fine-tuning-pipeline | [笔记](phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline/learning-notes/2026-06-25-finetuning-pipeline-scaffold.md) |
+| 2026-06-25 | 11-llm-engineering | 10-evaluation | [笔记](phases/11-llm-engineering/10-evaluation/learning-notes/2026-06-25-llm-evaluation.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -161,6 +162,7 @@ Phase 17/18 → Phase 19
 - 2026-06-24 `phases/14-agent-engineering/03-reflexion-verbal-rl`: 记忆腐烂的六种缓解策略（TTL/压缩/频率淘汰/验证过滤/分层/睡眠清理）、CLAUDE.md 膨胀的处理方式、元数据给知识打标签的作用
 - 2026-06-24 `phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline`: Artifact 内容哈希依赖链、DPO vs GRPO 适用场景、三种量化格式的大小与特性对比、EAGLE-3 推测解码接受率含义
 - 2026-06-25 `phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline`: uv 全局缓存+硬链接复用机制(相同 inode 验证、缓存命中前提=包版本+Python版本+平台三者一致)、脚手架 vs 真实流水线区别、运行输出四段读法
+- 2026-06-25 `phases/11-llm-engineering/10-evaluation`: 三种评估方法的组合分工（自动指标筛选→LLM-as-Judge主力评分→人类季度校准）、锚定量表减少30-40%评委方差、200条测试用例是部署决策最低门槛
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -180,4 +182,5 @@ Phase 17/18 → Phase 19
 - 2026-06-24 保存 `phases/14-agent-engineering/03-reflexion-verbal-rl` 学习笔记：[笔记](phases/14-agent-engineering/03-reflexion-verbal-rl/learning-notes/2026-06-24-reflexion-memory-decay.md)
 - 2026-06-24 保存 `phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline` 学习笔记：[笔记](phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline/learning-notes/2026-06-24-fine-tuning-pipeline.md)
 - 2026-06-25 保存 `phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline` 学习笔记：[笔记](phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline/learning-notes/2026-06-25-finetuning-pipeline-scaffold.md)
+- 2026-06-25 保存 `phases/11-llm-engineering/10-evaluation` 学习笔记：[笔记](phases/11-llm-engineering/10-evaluation/learning-notes/2026-06-25-llm-evaluation.md)
 <!-- learning-path:log:end -->
