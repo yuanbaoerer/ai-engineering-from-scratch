@@ -121,9 +121,9 @@ Phase 17/18 → Phase 19
 
 <!-- learning-path:current:start -->
 - 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 04-tree-of-thoughts-lats
-- 最近笔记: [2026-06-27-tot-lats.md](phases/14-agent-engineering/04-tree-of-thoughts-lats/learning-notes/2026-06-27-tot-lats.md)
-- 更新时间: 2026-06-27
+- 当前 Lesson: 31-agent-workbench-why-models-fail
+- 最近笔记: [2026-06-28-workbench-why-models-fail.md](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md)
+- 更新时间: 2026-06-28
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -145,6 +145,7 @@ Phase 17/18 → Phase 19
 | 2026-06-25 | 19-capstone-projects | 07-end-to-end-fine-tuning-pipeline | [笔记](phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline/learning-notes/2026-06-25-finetuning-pipeline-scaffold.md) |
 | 2026-06-25 | 11-llm-engineering | 10-evaluation | [笔记](phases/11-llm-engineering/10-evaluation/learning-notes/2026-06-25-llm-evaluation.md) |
 | 2026-06-27 | 14-agent-engineering | 04-tree-of-thoughts-lats | [笔记](phases/14-agent-engineering/04-tree-of-thoughts-lats/learning-notes/2026-06-27-tot-lats.md) |
+| 2026-06-28 | 14-agent-engineering | 31-agent-workbench-why-models-fail | [笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -165,6 +166,7 @@ Phase 17/18 → Phase 19
 - 2026-06-25 `phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline`: uv 全局缓存+硬链接复用机制(相同 inode 验证、缓存命中前提=包版本+Python版本+平台三者一致)、脚手架 vs 真实流水线区别、运行输出四段读法
 - 2026-06-25 `phases/11-llm-engineering/10-evaluation`: 三种评估方法的组合分工（自动指标筛选→LLM-as-Judge主力评分→人类季度校准）、锚定量表减少30-40%评委方差、200条测试用例是部署决策最低门槛
 - 2026-06-27 `phases/14-agent-engineering/04-tree-of-thoughts-lats`: 噪声评估器让搜索更差（搜索放大评估器判断、不创造正确性）、token预算<5×单轨迹成本须回退ReAct+Reflexion、练习2噪声实验待做（信噪比定义与噪声加在哪）
+- 2026-06-28 `phases/14-agent-engineering/31-agent-workbench-why-models-fail`: Verification hook 只保证已有测试通过，新功能测试需靠 Scope+验收条件强制；harness 术语可翻译回 8 个分布式系统原语
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -186,4 +188,5 @@ Phase 17/18 → Phase 19
 - 2026-06-25 保存 `phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline` 学习笔记：[笔记](phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline/learning-notes/2026-06-25-finetuning-pipeline-scaffold.md)
 - 2026-06-25 保存 `phases/11-llm-engineering/10-evaluation` 学习笔记：[笔记](phases/11-llm-engineering/10-evaluation/learning-notes/2026-06-25-llm-evaluation.md)
 - 2026-06-27 保存 `phases/14-agent-engineering/04-tree-of-thoughts-lats` 学习笔记：[笔记](phases/14-agent-engineering/04-tree-of-thoughts-lats/learning-notes/2026-06-27-tot-lats.md)
+- 2026-06-28 保存 `phases/14-agent-engineering/31-agent-workbench-why-models-fail` 学习笔记：[笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md)
 <!-- learning-path:log:end -->
