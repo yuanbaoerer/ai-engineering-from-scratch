@@ -121,8 +121,8 @@ Phase 17/18 → Phase 19
 
 <!-- learning-path:current:start -->
 - 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 31-agent-workbench-why-models-fail
-- 最近笔记: [2026-06-28-workbench-why-models-fail.md](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md)
+- 当前 Lesson: 32-minimal-agent-workbench
+- 最近笔记: [2026-06-28-minimal-agent-workbench.md](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md)
 - 更新时间: 2026-06-28
 <!-- learning-path:current:end -->
 
@@ -146,6 +146,7 @@ Phase 17/18 → Phase 19
 | 2026-06-25 | 11-llm-engineering | 10-evaluation | [笔记](phases/11-llm-engineering/10-evaluation/learning-notes/2026-06-25-llm-evaluation.md) |
 | 2026-06-27 | 14-agent-engineering | 04-tree-of-thoughts-lats | [笔记](phases/14-agent-engineering/04-tree-of-thoughts-lats/learning-notes/2026-06-27-tot-lats.md) |
 | 2026-06-28 | 14-agent-engineering | 31-agent-workbench-why-models-fail | [笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md) |
+| 2026-06-28 | 14-agent-engineering | 32-minimal-agent-workbench | [笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -167,6 +168,7 @@ Phase 17/18 → Phase 19
 - 2026-06-25 `phases/11-llm-engineering/10-evaluation`: 三种评估方法的组合分工（自动指标筛选→LLM-as-Judge主力评分→人类季度校准）、锚定量表减少30-40%评委方差、200条测试用例是部署决策最低门槛
 - 2026-06-27 `phases/14-agent-engineering/04-tree-of-thoughts-lats`: 噪声评估器让搜索更差（搜索放大评估器判断、不创造正确性）、token预算<5×单轨迹成本须回退ReAct+Reflexion、练习2噪声实验待做（信噪比定义与噪声加在哪）
 - 2026-06-28 `phases/14-agent-engineering/31-agent-workbench-why-models-fail`: Verification hook 只保证已有测试通过，新功能测试需靠 Scope+验收条件强制；harness 术语可翻译回 8 个分布式系统原语
+- 2026-06-28 `phases/14-agent-engineering/32-minimal-agent-workbench`: 任务粒度拆到多细才够（15-30min 经验值）、hooks 90-95% 可靠性的生产冗余方案、多 agent 并发下 task board 冲突解决
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -189,4 +191,5 @@ Phase 17/18 → Phase 19
 - 2026-06-25 保存 `phases/11-llm-engineering/10-evaluation` 学习笔记：[笔记](phases/11-llm-engineering/10-evaluation/learning-notes/2026-06-25-llm-evaluation.md)
 - 2026-06-27 保存 `phases/14-agent-engineering/04-tree-of-thoughts-lats` 学习笔记：[笔记](phases/14-agent-engineering/04-tree-of-thoughts-lats/learning-notes/2026-06-27-tot-lats.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/31-agent-workbench-why-models-fail` 学习笔记：[笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md)
+- 2026-06-28 保存 `phases/14-agent-engineering/32-minimal-agent-workbench` 学习笔记：[笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md)
 <!-- learning-path:log:end -->
