@@ -121,8 +121,8 @@ Phase 17/18 → Phase 19
 
 <!-- learning-path:current:start -->
 - 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 33-instructions-as-executable-constraints
-- 最近笔记: [2026-06-28-instructions-as-executable-constraints.md](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md)
+- 当前 Lesson: 34-repo-memory-and-state
+- 最近笔记: [2026-06-28-repo-memory-and-state.md](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md)
 - 更新时间: 2026-06-28
 <!-- learning-path:current:end -->
 
@@ -148,6 +148,7 @@ Phase 17/18 → Phase 19
 | 2026-06-28 | 14-agent-engineering | 31-agent-workbench-why-models-fail | [笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md) |
 | 2026-06-28 | 14-agent-engineering | 32-minimal-agent-workbench | [笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md) |
 | 2026-06-28 | 14-agent-engineering | 33-instructions-as-executable-constraints | [笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md) |
+| 2026-06-28 | 14-agent-engineering | 34-repo-memory-and-state | [笔记](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -171,6 +172,7 @@ Phase 17/18 → Phase 19
 - 2026-06-28 `phases/14-agent-engineering/31-agent-workbench-why-models-fail`: Verification hook 只保证已有测试通过，新功能测试需靠 Scope+验收条件强制；harness 术语可翻译回 8 个分布式系统原语
 - 2026-06-28 `phases/14-agent-engineering/32-minimal-agent-workbench`: 任务粒度拆到多细才够（15-30min 经验值）、hooks 90-95% 可靠性的生产冗余方案、多 agent 并发下 task board 冲突解决
 - 2026-06-28 `phases/14-agent-engineering/33-instructions-as-executable-constraints`: 规则从事故中长出来而非提前规划、没有 check 的规则直接删掉、规则 expiry 防止膨胀
+- 2026-06-28 `phases/14-agent-engineering/34-repo-memory-and-state`: StateManager.update 未实现（只有 load/commit）、幂等键落地代码未写（仅伪代码）、练习3迁移脚本/练习4 SQLite 后端/事件溯源恢复代码/并发写竞争实验均未实操——掌握不熟练
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -195,4 +197,5 @@ Phase 17/18 → Phase 19
 - 2026-06-28 保存 `phases/14-agent-engineering/31-agent-workbench-why-models-fail` 学习笔记：[笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/32-minimal-agent-workbench` 学习笔记：[笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/33-instructions-as-executable-constraints` 学习笔记：[笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md)
+- 2026-06-28 保存 `phases/14-agent-engineering/34-repo-memory-and-state` 学习笔记：[笔记](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md)
 <!-- learning-path:log:end -->
