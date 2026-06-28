@@ -121,8 +121,8 @@ Phase 17/18 → Phase 19
 
 <!-- learning-path:current:start -->
 - 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 32-minimal-agent-workbench
-- 最近笔记: [2026-06-28-minimal-agent-workbench.md](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md)
+- 当前 Lesson: 33-instructions-as-executable-constraints
+- 最近笔记: [2026-06-28-instructions-as-executable-constraints.md](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md)
 - 更新时间: 2026-06-28
 <!-- learning-path:current:end -->
 
@@ -147,6 +147,7 @@ Phase 17/18 → Phase 19
 | 2026-06-27 | 14-agent-engineering | 04-tree-of-thoughts-lats | [笔记](phases/14-agent-engineering/04-tree-of-thoughts-lats/learning-notes/2026-06-27-tot-lats.md) |
 | 2026-06-28 | 14-agent-engineering | 31-agent-workbench-why-models-fail | [笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md) |
 | 2026-06-28 | 14-agent-engineering | 32-minimal-agent-workbench | [笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md) |
+| 2026-06-28 | 14-agent-engineering | 33-instructions-as-executable-constraints | [笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -169,6 +170,7 @@ Phase 17/18 → Phase 19
 - 2026-06-27 `phases/14-agent-engineering/04-tree-of-thoughts-lats`: 噪声评估器让搜索更差（搜索放大评估器判断、不创造正确性）、token预算<5×单轨迹成本须回退ReAct+Reflexion、练习2噪声实验待做（信噪比定义与噪声加在哪）
 - 2026-06-28 `phases/14-agent-engineering/31-agent-workbench-why-models-fail`: Verification hook 只保证已有测试通过，新功能测试需靠 Scope+验收条件强制；harness 术语可翻译回 8 个分布式系统原语
 - 2026-06-28 `phases/14-agent-engineering/32-minimal-agent-workbench`: 任务粒度拆到多细才够（15-30min 经验值）、hooks 90-95% 可靠性的生产冗余方案、多 agent 并发下 task board 冲突解决
+- 2026-06-28 `phases/14-agent-engineering/33-instructions-as-executable-constraints`: 规则从事故中长出来而非提前规划、没有 check 的规则直接删掉、规则 expiry 防止膨胀
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -192,4 +194,5 @@ Phase 17/18 → Phase 19
 - 2026-06-27 保存 `phases/14-agent-engineering/04-tree-of-thoughts-lats` 学习笔记：[笔记](phases/14-agent-engineering/04-tree-of-thoughts-lats/learning-notes/2026-06-27-tot-lats.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/31-agent-workbench-why-models-fail` 学习笔记：[笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/32-minimal-agent-workbench` 学习笔记：[笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md)
+- 2026-06-28 保存 `phases/14-agent-engineering/33-instructions-as-executable-constraints` 学习笔记：[笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md)
 <!-- learning-path:log:end -->
