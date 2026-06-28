@@ -2,14 +2,14 @@
 
 ## 当前位置
 - 当前周次：Week 1
-- 当前天次：Day 1
-- 下次继续：Day 2
+- 当前天次：Day 2
+- 下次继续：Day 3
 
 ## 进度表
 
 | Day | 课程路径 | 状态 | 完成时间 | 备注 |
 |-----|----------|------|----------|------|
-| 1 | phases/14-agent-engineering/31-agent-workbench-why-models-fail | 进行中 |  |  |
+| 1 | phases/14-agent-engineering/31-agent-workbench-why-models-fail | 已完成 | 2026-06-28 15:46 | 七层 workbench 表面概念基线建立，demo 对比成功 |
 | 2 | phases/14-agent-engineering/41-workbench-for-real-repos | 未开始 |  |  |
 | 3 | phases/19-capstone-projects/20-agent-harness-loop-contract | 未开始 |  |  |
 | 4 | phases/19-capstone-projects/21-tool-registry-schema-validation | 未开始 |  |  |
