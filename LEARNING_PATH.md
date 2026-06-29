@@ -121,9 +121,9 @@ Phase 17/18 → Phase 19
 
 <!-- learning-path:current:start -->
 - 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 34-repo-memory-and-state
-- 最近笔记: [2026-06-28-repo-memory-and-state.md](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md)
-- 更新时间: 2026-06-28
+- 当前 Lesson: 35-initialization-scripts
+- 最近笔记: [2026-06-29-initialization-scripts.md](phases/14-agent-engineering/35-initialization-scripts/learning-notes/2026-06-29-initialization-scripts.md)
+- 更新时间: 2026-06-29
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -149,6 +149,8 @@ Phase 17/18 → Phase 19
 | 2026-06-28 | 14-agent-engineering | 32-minimal-agent-workbench | [笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md) |
 | 2026-06-28 | 14-agent-engineering | 33-instructions-as-executable-constraints | [笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md) |
 | 2026-06-28 | 14-agent-engineering | 34-repo-memory-and-state | [笔记](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md) |
+| 2026-06-29 | 14-agent-engineering | Phase 14 复习 | [复习笔记](phases/14-agent-engineering/learning-notes/2026-06-29-phase14-review.md) |
+| 2026-06-29 | 14-agent-engineering | 35-initialization-scripts | [笔记](phases/14-agent-engineering/35-initialization-scripts/learning-notes/2026-06-29-initialization-scripts.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -173,6 +175,7 @@ Phase 17/18 → Phase 19
 - 2026-06-28 `phases/14-agent-engineering/32-minimal-agent-workbench`: 任务粒度拆到多细才够（15-30min 经验值）、hooks 90-95% 可靠性的生产冗余方案、多 agent 并发下 task board 冲突解决
 - 2026-06-28 `phases/14-agent-engineering/33-instructions-as-executable-constraints`: 规则从事故中长出来而非提前规划、没有 check 的规则直接删掉、规则 expiry 防止膨胀
 - 2026-06-28 `phases/14-agent-engineering/34-repo-memory-and-state`: StateManager.update 未实现（只有 load/commit）、幂等键落地代码未写（仅伪代码）、练习3迁移脚本/练习4 SQLite 后端/事件溯源恢复代码/并发写竞争实验均未实操——掌握不熟练
+- 2026-06-29 `phases/14-agent-engineering/35-initialization-scripts`: init 脚本与 Phase 33/34/38/40 的联动关系、本课程缺 tests 目录可自己补写
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -198,4 +201,6 @@ Phase 17/18 → Phase 19
 - 2026-06-28 保存 `phases/14-agent-engineering/32-minimal-agent-workbench` 学习笔记：[笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/33-instructions-as-executable-constraints` 学习笔记：[笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/34-repo-memory-and-state` 学习笔记：[笔记](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md)
+- 2026-06-29 Phase 14 复习（8 课快速问答，得分 23/24）：[复习笔记](phases/14-agent-engineering/learning-notes/2026-06-29-phase14-review.md)
+- 2026-06-29 保存 `phases/14-agent-engineering/35-initialization-scripts` 学习笔记：[笔记](phases/14-agent-engineering/35-initialization-scripts/learning-notes/2026-06-29-initialization-scripts.md)
 <!-- learning-path:log:end -->
