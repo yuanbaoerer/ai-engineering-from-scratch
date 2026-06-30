@@ -25,14 +25,26 @@ OVERRIDES_PATH = HERE / "overrides.jsonl"
 COVERAGE_FLOOR_DEFAULT = 0.80
 COVERAGE_REGRESSION_DELTA = 0.01
 
-# Audit secret used to sign override entries. In production read from a secrets
-# manager. Fail closed: only fall back to a demo secret when VERIFY_DEMO_MODE=1
-# is set explicitly, and shout about it so it cannot land in CI by accident.
+# 审计密钥用于签名覆盖条目。
+# 在生产环境中，应从密钥管理器读取。
+# 失败关闭：仅当明确设置VERIFY_DEMO_MODE=1时才回退到演示密钥，
+# 并大声警告，以免意外进入CI。
 _OVERRIDE_SECRET_ENV = "VERIFY_OVERRIDE_SECRET"
 _DEMO_MODE_ENV = "VERIFY_DEMO_MODE"
 
 
 def _load_override_secret() -> str:
+    """加载覆盖签名密钥。
+
+    根据文档，覆盖需要签名以确保审计线索。
+    这个函数从环境变量加载密钥，如果没有设置则使用演示密钥。
+
+    Returns:
+        覆盖签名密钥
+
+    Raises:
+        RuntimeError: 如果没有设置必要的环境变量
+    """
     secret = os.environ.get(_OVERRIDE_SECRET_ENV)
     if secret:
         return secret
@@ -51,6 +63,17 @@ def _load_override_secret() -> str:
 
 @dataclass
 class Finding:
+    """验证关卡发现的数据结构。
+
+    每个Finding代表验证过程中发现的一个问题或检查结果。
+    根据文档，severity为"block"的发现会阻止passed: true，
+    而"warn"级别的发现只会被标注到判定中。
+
+    Attributes:
+        code: 发现代码，用于唯一标识发现类型，如"acceptance.missing"
+        severity: 严重级别，可以是"block"（阻止）或"warn"（警告）
+        detail: 详细描述，解释发现的具体内容
+    """
     code: str
     severity: str
     detail: str
@@ -58,6 +81,24 @@ class Finding:
 
 @dataclass
 class Artifacts:
+    """验证关卡的输入产物集合。
+
+    根据文档，验证关卡读取代理已产生的产物并做出判断。
+    Artifacts包含了所有必要的输入数据，对应文档中提到的：
+    - scope_report.json: 范围契约报告
+    - rule_report.json: 规则报告
+    - feedback_record.jsonl: 反馈日志
+    - coverage_report.json: 覆盖率报告（可选）
+
+    Attributes:
+        task_id: 任务唯一标识符
+        acceptance_commands: 验收命令列表，这些命令必须运行且退出码为零
+        feedback: 反馈记录列表，包含命令执行结果
+        scope_report: 范围报告，包含forbidden_writes和off_scope_writes
+        rule_report: 规则报告列表，包含规则是否通过
+        coverage_report: 覆盖率报告，包含当前和之前的覆盖率
+        head_commit: 当前HEAD提交哈希，用于覆盖审计
+    """
     task_id: str
     acceptance_commands: list[str]
     feedback: list[dict[str, object]]
@@ -69,6 +110,19 @@ class Artifacts:
 
 @dataclass
 class VerdictReport:
+    """验证关卡的判定报告。
+
+    根据文档，验证关卡每次任务关闭时生成一份verification_report.json，
+    写入outputs/verification/<task_id>.json。CI使用相同的路径。
+
+    Attributes:
+        task_id: 任务唯一标识符
+        passed: 是否通过验证，为true当且仅当没有block级别的发现
+        strict: 是否启用严格模式，将warn提升为block
+        findings: 发现列表，包含所有检查结果
+        coverage: 覆盖率信息
+        head_commit: 当前HEAD提交哈希
+    """
     task_id: str
     passed: bool
     strict: bool
@@ -78,6 +132,22 @@ class VerdictReport:
 
 
 def _acceptance_findings(art: Artifacts) -> list[Finding]:
+    """检查验收命令的执行情况。
+
+    根据文档，验收命令是"退出码为零即为'完成'的shell命令"。
+    这个函数检查两个关键点：
+    1. 所有验收命令是否都已运行
+    2. 所有验收命令的退出码是否为零
+
+    这两个检查都是block级别的，因为文档指出：
+    "所有验收命令都已运行"和"所有验收命令退出码为零"都是block级别的检查。
+
+    Args:
+        art: 包含任务产物的Artifacts对象
+
+    Returns:
+        Finding列表，包含所有验收相关的发现
+    """
     findings: list[Finding] = []
     commands_run = [str(rec.get("command")) for rec in art.feedback]
     accept_set = set(art.acceptance_commands)
@@ -96,6 +166,21 @@ def _acceptance_findings(art: Artifacts) -> list[Finding]:
 
 
 def _scope_findings(art: Artifacts) -> list[Finding]:
+    """检查范围报告中的写入操作。
+
+    根据文档，范围检查有两个关键点：
+    1. 范围检查没有禁止的写入 - 这是block级别
+    2. 范围检查没有越界的写入 - 这是block或warn级别
+
+    forbidden_writes是绝对禁止的写入，如修改关键配置文件。
+    off_scope_writes是越界写入，可能被允许但需要警告。
+
+    Args:
+        art: 包含任务产物的Artifacts对象
+
+    Returns:
+        Finding列表，包含所有范围相关的发现
+    """
     findings: list[Finding] = []
     if art.scope_report.get("forbidden_writes"):
         findings.append(Finding("scope.forbidden", "block",
@@ -107,15 +192,38 @@ def _scope_findings(art: Artifacts) -> list[Finding]:
 
 
 def _rule_findings(art: Artifacts) -> list[Finding]:
+    """检查规则报告中的失败规则。
+
+    根据文档，所有block级别的规则都必须通过。
+    规则报告中的每个规则都有一个"passed"字段，指示规则是否通过。
+    如果规则未通过，则产生一个block级别的发现。
+
+    Args:
+        art: 包含任务产物的Artifacts对象
+
+    Returns:
+        Finding列表，包含所有规则失败相关的发现
+    """
     return [Finding("rule.failed", "block", f"rule failed: {row.get('slug')}")
             for row in art.rule_report if not row.get("passed")]
 
 
 def _coverage_findings(art: Artifacts, floor: float) -> list[Finding]:
-    """Anthropic Hybrid Norm: pair verifiable rewards (tests + coverage) with rubric judging.
+    """检查覆盖率报告。
 
-    Floor failure is a block. Regression versus the previous merge by more than
-    COVERAGE_REGRESSION_DELTA is a block; smaller drops are warnings.
+    根据文档，覆盖率下限是一等检查：
+    1. 覆盖率必须达到最低要求（默认80%）
+    2. 覆盖率不能比上次合并的覆盖率下降超过1个百分点
+
+    这体现了Anthropic Hybrid Norm：将可验证的奖励（测试+覆盖率）与标准评分配对。
+    覆盖率检查是确定性的，而LLM判断属于审阅端。
+
+    Args:
+        art: 包含任务产物的Artifacts对象
+        floor: 覆盖率下限，默认0.80
+
+    Returns:
+        Finding列表，包含所有覆盖率相关的发现
     """
     findings: list[Finding] = []
     if not art.coverage_report:
@@ -142,6 +250,22 @@ def verify(
     strict: bool = False,
     coverage_floor: float = COVERAGE_FLOOR_DEFAULT,
 ) -> VerdictReport:
+    """验证关卡的主函数。
+
+    这是验证关卡的核心函数，实现了文档中描述的确定性验证过程。
+    它将所有检查结果合并为一个判定结果。
+
+    根据文档，验证关卡是"工作台产物上的确定性函数"，
+    不能使用LLM判断。LLM判断属于审阅端。
+
+    Args:
+        art: 包含任务产物的Artifacts对象
+        strict: 是否启用严格模式，将warn提升为block
+        coverage_floor: 覆盖率下限，默认0.80
+
+    Returns:
+        VerdictReport对象，包含验证结果
+    """
     findings = (
         _acceptance_findings(art)
         + _scope_findings(art)
@@ -164,6 +288,17 @@ def verify(
 
 
 def _sign(payload: dict[str, object]) -> str:
+    """为覆盖条目生成HMAC签名。
+
+    根据文档，覆盖是签名变更，而不是代理决定。
+    每个覆盖都需要签名，以确保审计线索。
+
+    Args:
+        payload: 要签名的载荷字典
+
+    Returns:
+        签名字符串（前32个十六进制字符）
+    """
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     return hmac.new(_load_override_secret().encode(), canonical, hashlib.sha256).hexdigest()[:32]
 
@@ -171,7 +306,28 @@ def _sign(payload: dict[str, object]) -> str:
 def record_override(
     task_id: str, finding_code: str, reason: str, user_id: str, head_commit: str
 ) -> dict[str, object]:
-    """Append a signed override entry. Refuses without all five fields populated."""
+    """记录一个签名的覆盖条目。
+
+    根据文档，覆盖需要：
+    1. 所有五个字段都必须填写：task_id, finding_code, reason, user_id, head_commit
+    2. 覆盖条目会被签名，以确保审计线索
+    3. 覆盖记录在overrides.jsonl文件中
+
+    这体现了文档中"签名覆盖日志，而非Slack线程"的原则。
+
+    Args:
+        task_id: 任务ID
+        finding_code: 发现代码
+        reason: 覆盖原因
+        user_id: 覆盖用户ID
+        head_commit: 当前HEAD提交哈希
+
+    Returns:
+        包含签名的覆盖条目字典
+
+    Raises:
+        ValueError: 如果缺少任何必需字段
+    """
     if not all([task_id, finding_code, reason, user_id, head_commit]):
         raise ValueError("override requires task_id, finding_code, reason, user_id, head_commit")
     payload = {
@@ -189,12 +345,37 @@ def record_override(
 
 
 def verify_signature(entry: dict[str, object]) -> bool:
+    """验证覆盖条目的签名。
+
+    根据文档，运行时拒绝任何缺少签名的覆盖；
+    审计线索由git追踪。
+
+    Args:
+        entry: 覆盖条目字典
+
+    Returns:
+        签名是否有效
+    """
     expected = entry.get("signature")
     payload = {k: v for k, v in entry.items() if k != "signature"}
     return hmac.compare_digest(_sign(payload), str(expected))
 
 
 def main() -> None:
+    """演示验证关卡的工作流程。
+
+    这个函数演示了三个场景：
+    1. T-001: 干净通过 - 所有检查都通过
+    2. T-002: 范围蔓延 - 有范围违规和规则失败
+    3. T-003: 缺少验收 - 没有运行验收命令
+
+    这些场景对应文档中描述的典型失败模式：
+    - "看起来不错"但没有实际测试
+    - "测试通过了"但没有运行记录
+    - "验收标准已满足"但被宽泛解读
+
+    还演示了签名覆盖的过程，展示如何通过签名覆盖来绕过警告级别的发现。
+    """
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true", help="promote every warn to block")
     ap.add_argument("--floor", type=float, default=COVERAGE_FLOOR_DEFAULT)
