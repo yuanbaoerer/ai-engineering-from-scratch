@@ -121,9 +121,9 @@ Phase 17/18 → Phase 19
 
 <!-- learning-path:current:start -->
 - 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 37-runtime-feedback-loops
-- 最近笔记: [2026-06-30-runtime-feedback-loops.md](phases/14-agent-engineering/37-runtime-feedback-loops/learning-notes/2026-06-30-runtime-feedback-loops.md)
-- 更新时间: 2026-06-30
+- 当前 Lesson: 42-agent-workbench-capstone
+- 最近笔记: [2026-07-01-workbench-system.md](phases/14-agent-engineering/42-agent-workbench-capstone/learning-notes/2026-07-01-workbench-system.md)
+- 更新时间: 2026-07-01
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -153,6 +153,7 @@ Phase 17/18 → Phase 19
 | 2026-06-29 | 14-agent-engineering | 35-initialization-scripts | [笔记](phases/14-agent-engineering/35-initialization-scripts/learning-notes/2026-06-29-initialization-scripts.md) |
 | 2026-06-30 | 14-agent-engineering | 36-scope-contracts | [笔记](phases/14-agent-engineering/36-scope-contracts/learning-notes/2026-06-30-scope-contracts.md) |
 | 2026-06-30 | 14-agent-engineering | 37-runtime-feedback-loops | [笔记](phases/14-agent-engineering/37-runtime-feedback-loops/learning-notes/2026-06-30-runtime-feedback-loops.md) |
+| 2026-07-01 | 14-agent-engineering | 42-agent-workbench-capstone | [笔记](phases/14-agent-engineering/42-agent-workbench-capstone/learning-notes/2026-07-01-workbench-system.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -179,6 +180,7 @@ Phase 17/18 → Phase 19
 - 2026-06-28 `phases/14-agent-engineering/34-repo-memory-and-state`: StateManager.update 未实现（只有 load/commit）、幂等键落地代码未写（仅伪代码）、练习3迁移脚本/练习4 SQLite 后端/事件溯源恢复代码/并发写竞争实验均未实操——掌握不熟练
 - 2026-06-29 `phases/14-agent-engineering/35-initialization-scripts`: init 脚本与 Phase 33/34/38/40 的联动关系、本课程缺 tests 目录可自己补写
 - 2026-06-30 `phases/14-agent-engineering/37-runtime-feedback-loops`: exit_code null 硬拒绝机制、写入时脱敏的必要性（攻击者拿到磁盘文件）、parent_command_id 追踪重试链
+- 2026-07-01 `phases/14-agent-engineering/42-agent-workbench-capstone`: 如何判断工具/ skill 是否该从项目删除、7 个表面中哪些对小项目必须、多 agent 产品下统一 pack 的维护策略
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -208,4 +210,5 @@ Phase 17/18 → Phase 19
 - 2026-06-29 保存 `phases/14-agent-engineering/35-initialization-scripts` 学习笔记：[笔记](phases/14-agent-engineering/35-initialization-scripts/learning-notes/2026-06-29-initialization-scripts.md)
 - 2026-06-30 保存 `phases/14-agent-engineering/36-scope-contracts` 学习笔记：[笔记](phases/14-agent-engineering/36-scope-contracts/learning-notes/2026-06-30-scope-contracts.md)
 - 2026-06-30 保存 `phases/14-agent-engineering/37-runtime-feedback-loops` 学习笔记：[笔记](phases/14-agent-engineering/37-runtime-feedback-loops/learning-notes/2026-06-30-runtime-feedback-loops.md)
+- 2026-07-01 保存 `phases/14-agent-engineering/42-agent-workbench-capstone` 学习笔记（合并 40/41/42 三课内容）：[笔记](phases/14-agent-engineering/42-agent-workbench-capstone/learning-notes/2026-07-01-workbench-system.md)
 <!-- learning-path:log:end -->
