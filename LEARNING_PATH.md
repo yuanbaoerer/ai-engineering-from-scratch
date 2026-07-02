@@ -120,10 +120,10 @@ Phase 17/18 → Phase 19
 ## 当前学习进度
 
 <!-- learning-path:current:start -->
-- 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 42-agent-workbench-capstone
-- 最近笔记: [2026-07-01-workbench-system.md](phases/14-agent-engineering/42-agent-workbench-capstone/learning-notes/2026-07-01-workbench-system.md)
-- 更新时间: 2026-07-01
+- 当前 Phase: 15-autonomous-systems
+- 当前 Lesson: 04-darwin-godel-machine
+- 最近笔记: [2026-07-03-darwin-godel-machine.md](phases/15-autonomous-systems/04-darwin-godel-machine/learning-notes/2026-07-03-darwin-godel-machine.md)
+- 更新时间: 2026-07-03
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -154,6 +154,9 @@ Phase 17/18 → Phase 19
 | 2026-06-30 | 14-agent-engineering | 36-scope-contracts | [笔记](phases/14-agent-engineering/36-scope-contracts/learning-notes/2026-06-30-scope-contracts.md) |
 | 2026-06-30 | 14-agent-engineering | 37-runtime-feedback-loops | [笔记](phases/14-agent-engineering/37-runtime-feedback-loops/learning-notes/2026-06-30-runtime-feedback-loops.md) |
 | 2026-07-01 | 14-agent-engineering | 42-agent-workbench-capstone | [笔记](phases/14-agent-engineering/42-agent-workbench-capstone/learning-notes/2026-07-01-workbench-system.md) |
+| 2026-07-03 | 15-autonomous-systems | 01-long-horizon-agents | [笔记](phases/15-autonomous-systems/01-long-horizon-agents/learning-notes/2026-07-03-long-horizon-agents.md) |
+| 2026-07-03 | 15-autonomous-systems | 03-alphaevolve-evolutionary-coding | [笔记](phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding/learning-notes/2026-07-03-evolutionary-algorithm.md) |
+| 2026-07-03 | 15-autonomous-systems | 04-darwin-godel-machine | [笔记](phases/15-autonomous-systems/04-darwin-godel-machine/learning-notes/2026-07-03-darwin-godel-machine.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -181,6 +184,9 @@ Phase 17/18 → Phase 19
 - 2026-06-29 `phases/14-agent-engineering/35-initialization-scripts`: init 脚本与 Phase 33/34/38/40 的联动关系、本课程缺 tests 目录可自己补写
 - 2026-06-30 `phases/14-agent-engineering/37-runtime-feedback-loops`: exit_code null 硬拒绝机制、写入时脱敏的必要性（攻击者拿到磁盘文件）、parent_command_id 追踪重试链
 - 2026-07-01 `phases/14-agent-engineering/42-agent-workbench-capstone`: 如何判断工具/ skill 是否该从项目删除、7 个表面中哪些对小项目必须、多 agent 产品下统一 pack 的维护策略
+- 2026-07-03 `phases/15-autonomous-systems/01-long-horizon-agents`: 单步可靠性的指数衰减（99%×70步≈50%）、eval-context gaming 的 20-40% 部署折扣、Horizon Reality Check 决策框架（headroom ratio < 4x 警告 / < 2x 拒绝）
+- 2026-07-03 `phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding`: MAP-elites 网格和岛屿模型的具体实现方式、奖励黑客（reward hacking）机制、矩阵乘法评估器为何"特别容易正确"
+- 2026-07-03 `phases/15-autonomous-systems/04-darwin-godel-machine`: 形式化证明为什么在实践中不可能、Godel 不完备性结果具体指什么、脚手架具体指什么、评估器防火墙如何实现、跨模型泛化的原因
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -211,4 +217,7 @@ Phase 17/18 → Phase 19
 - 2026-06-30 保存 `phases/14-agent-engineering/36-scope-contracts` 学习笔记：[笔记](phases/14-agent-engineering/36-scope-contracts/learning-notes/2026-06-30-scope-contracts.md)
 - 2026-06-30 保存 `phases/14-agent-engineering/37-runtime-feedback-loops` 学习笔记：[笔记](phases/14-agent-engineering/37-runtime-feedback-loops/learning-notes/2026-06-30-runtime-feedback-loops.md)
 - 2026-07-01 保存 `phases/14-agent-engineering/42-agent-workbench-capstone` 学习笔记（合并 40/41/42 三课内容）：[笔记](phases/14-agent-engineering/42-agent-workbench-capstone/learning-notes/2026-07-01-workbench-system.md)
+- 2026-07-03 保存 `phases/15-autonomous-systems/01-long-horizon-agents` 学习笔记：[笔记](phases/15-autonomous-systems/01-long-horizon-agents/learning-notes/2026-07-03-long-horizon-agents.md)
+- 2026-07-03 保存 `phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding` 学习笔记（标记看不懂部分）：[笔记](phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding/learning-notes/2026-07-03-evolutionary-algorithm.md)
+- 2026-07-03 保存 `phases/15-autonomous-systems/04-darwin-godel-machine` 学习笔记（标记看不懂部分）：[笔记](phases/15-autonomous-systems/04-darwin-godel-machine/learning-notes/2026-07-03-darwin-godel-machine.md)
 <!-- learning-path:log:end -->
