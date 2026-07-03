@@ -120,10 +120,10 @@ Phase 17/18 → Phase 19
 ## 当前学习进度
 
 <!-- learning-path:current:start -->
-- 当前 Phase: 15-autonomous-systems
-- 当前 Lesson: 04-darwin-godel-machine
-- 最近笔记: [2026-07-03-darwin-godel-machine.md](phases/15-autonomous-systems/04-darwin-godel-machine/learning-notes/2026-07-03-darwin-godel-machine.md)
-- 更新时间: 2026-07-03
+- 当前 Phase: 14-agent-engineering
+- 当前 Lesson: 31-agent-workbench-why-models-fail
+- 最近笔记: [2026-07-04-loops-md-nine-rules.md](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-07-04-loops-md-nine-rules.md)
+- 更新时间: 2026-07-04
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -145,7 +145,7 @@ Phase 17/18 → Phase 19
 | 2026-06-25 | 19-capstone-projects | 07-end-to-end-fine-tuning-pipeline | [笔记](phases/19-capstone-projects/07-end-to-end-fine-tuning-pipeline/learning-notes/2026-06-25-finetuning-pipeline-scaffold.md) |
 | 2026-06-25 | 11-llm-engineering | 10-evaluation | [笔记](phases/11-llm-engineering/10-evaluation/learning-notes/2026-06-25-llm-evaluation.md) |
 | 2026-06-27 | 14-agent-engineering | 04-tree-of-thoughts-lats | [笔记](phases/14-agent-engineering/04-tree-of-thoughts-lats/learning-notes/2026-06-27-tot-lats.md) |
-| 2026-06-28 | 14-agent-engineering | 31-agent-workbench-why-models-fail | [笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-06-28-workbench-why-models-fail.md) |
+| 2026-07-04 | 14-agent-engineering | 31-agent-workbench-why-models-fail | [笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-07-04-loops-md-nine-rules.md) |
 | 2026-06-28 | 14-agent-engineering | 32-minimal-agent-workbench | [笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md) |
 | 2026-06-28 | 14-agent-engineering | 33-instructions-as-executable-constraints | [笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md) |
 | 2026-06-28 | 14-agent-engineering | 34-repo-memory-and-state | [笔记](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md) |
@@ -220,4 +220,5 @@ Phase 17/18 → Phase 19
 - 2026-07-03 保存 `phases/15-autonomous-systems/01-long-horizon-agents` 学习笔记：[笔记](phases/15-autonomous-systems/01-long-horizon-agents/learning-notes/2026-07-03-long-horizon-agents.md)
 - 2026-07-03 保存 `phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding` 学习笔记（标记看不懂部分）：[笔记](phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding/learning-notes/2026-07-03-evolutionary-algorithm.md)
 - 2026-07-03 保存 `phases/15-autonomous-systems/04-darwin-godel-machine` 学习笔记（标记看不懂部分）：[笔记](phases/15-autonomous-systems/04-darwin-godel-machine/learning-notes/2026-07-03-darwin-godel-machine.md)
+- 2026-07-04 保存 `phases/14-agent-engineering/31-agent-workbench-why-models-fail` LOOPS.md 九条规则学习笔记：[笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-07-04-loops-md-nine-rules.md)
 <!-- learning-path:log:end -->
