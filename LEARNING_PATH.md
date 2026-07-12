@@ -121,9 +121,9 @@ Phase 17/18 → Phase 19
 
 <!-- learning-path:current:start -->
 - 当前 Phase: 14-agent-engineering
-- 当前 Lesson: 31-agent-workbench-why-models-fail
-- 最近笔记: [2026-07-04-loops-md-nine-rules.md](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-07-04-loops-md-nine-rules.md)
-- 更新时间: 2026-07-04
+- 当前 Lesson: 18-agno-and-mastra-runtimes
+- 最近笔记: [2026-07-12-agno-mastra-runtimes.md](phases/14-agent-engineering/18-agno-and-mastra-runtimes/learning-notes/2026-07-12-agno-mastra-runtimes.md)
+- 更新时间: 2026-07-12
 <!-- learning-path:current:end -->
 
 ## 已学习 Lessons
@@ -157,6 +157,7 @@ Phase 17/18 → Phase 19
 | 2026-07-03 | 15-autonomous-systems | 01-long-horizon-agents | [笔记](phases/15-autonomous-systems/01-long-horizon-agents/learning-notes/2026-07-03-long-horizon-agents.md) |
 | 2026-07-03 | 15-autonomous-systems | 03-alphaevolve-evolutionary-coding | [笔记](phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding/learning-notes/2026-07-03-evolutionary-algorithm.md) |
 | 2026-07-03 | 15-autonomous-systems | 04-darwin-godel-machine | [笔记](phases/15-autonomous-systems/04-darwin-godel-machine/learning-notes/2026-07-03-darwin-godel-machine.md) |
+| 2026-07-12 | 14-agent-engineering | 18-agno-and-mastra-runtimes | [笔记](phases/14-agent-engineering/18-agno-and-mastra-runtimes/learning-notes/2026-07-12-agno-mastra-runtimes.md) |
 <!-- learning-path:completed:end -->
 
 ## 待复习 / 待消化
@@ -187,6 +188,7 @@ Phase 17/18 → Phase 19
 - 2026-07-03 `phases/15-autonomous-systems/01-long-horizon-agents`: 单步可靠性的指数衰减（99%×70步≈50%）、eval-context gaming 的 20-40% 部署折扣、Horizon Reality Check 决策框架（headroom ratio < 4x 警告 / < 2x 拒绝）
 - 2026-07-03 `phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding`: MAP-elites 网格和岛屿模型的具体实现方式、奖励黑客（reward hacking）机制、矩阵乘法评估器为何"特别容易正确"
 - 2026-07-03 `phases/15-autonomous-systems/04-darwin-godel-machine`: 形式化证明为什么在实践中不可能、Godel 不完备性结果具体指什么、脚手架具体指什么、评估器防火墙如何实现、跨模型泛化的原因
+- 2026-07-12 `phases/14-agent-engineering/18-agno-and-mastra-runtimes`: Agno 2μs 实例化在真实 LLM 调用面前的实际意义、Mastra ee/ 许可证对开源 fork 的限制、CrewAI→Agno 迁移断裂点
 <!-- learning-path:review:end -->
 
 ## 学习日志
@@ -221,4 +223,5 @@ Phase 17/18 → Phase 19
 - 2026-07-03 保存 `phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding` 学习笔记（标记看不懂部分）：[笔记](phases/15-autonomous-systems/03-alphaevolve-evolutionary-coding/learning-notes/2026-07-03-evolutionary-algorithm.md)
 - 2026-07-03 保存 `phases/15-autonomous-systems/04-darwin-godel-machine` 学习笔记（标记看不懂部分）：[笔记](phases/15-autonomous-systems/04-darwin-godel-machine/learning-notes/2026-07-03-darwin-godel-machine.md)
 - 2026-07-04 保存 `phases/14-agent-engineering/31-agent-workbench-why-models-fail` LOOPS.md 九条规则学习笔记：[笔记](phases/14-agent-engineering/31-agent-workbench-why-models-fail/learning-notes/2026-07-04-loops-md-nine-rules.md)
+- 2026-07-12 保存 `phases/14-agent-engineering/18-agno-and-mastra-runtimes` 学习笔记：[笔记](phases/14-agent-engineering/18-agno-and-mastra-runtimes/learning-notes/2026-07-12-agno-mastra-runtimes.md)
 <!-- learning-path:log:end -->
