@@ -149,7 +149,7 @@ Phase 17/18 → Phase 19
 | 2026-06-28 | 14-agent-engineering | 32-minimal-agent-workbench | [笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md) |
 | 2026-06-28 | 14-agent-engineering | 33-instructions-as-executable-constraints | [笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md) |
 | 2026-06-28 | 14-agent-engineering | 34-repo-memory-and-state | [笔记](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md) |
-| 2026-06-29 | 14-agent-engineering | Phase 14 复习 | [复习笔记](phases/14-agent-engineering/learning-notes/2026-06-29-phase14-review.md) |
+| 2026-06-29 | 14-agent-engineering | Phase 14 复习 | [复习笔记](learning-notes/14-agent-engineering/2026-06-29-phase14-review.md) |
 | 2026-06-29 | 14-agent-engineering | 35-initialization-scripts | [笔记](phases/14-agent-engineering/35-initialization-scripts/learning-notes/2026-06-29-initialization-scripts.md) |
 | 2026-06-30 | 14-agent-engineering | 36-scope-contracts | [笔记](phases/14-agent-engineering/36-scope-contracts/learning-notes/2026-06-30-scope-contracts.md) |
 | 2026-06-30 | 14-agent-engineering | 37-runtime-feedback-loops | [笔记](phases/14-agent-engineering/37-runtime-feedback-loops/learning-notes/2026-06-30-runtime-feedback-loops.md) |
@@ -214,7 +214,7 @@ Phase 17/18 → Phase 19
 - 2026-06-28 保存 `phases/14-agent-engineering/32-minimal-agent-workbench` 学习笔记：[笔记](phases/14-agent-engineering/32-minimal-agent-workbench/learning-notes/2026-06-28-minimal-agent-workbench.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/33-instructions-as-executable-constraints` 学习笔记：[笔记](phases/14-agent-engineering/33-instructions-as-executable-constraints/learning-notes/2026-06-28-instructions-as-executable-constraints.md)
 - 2026-06-28 保存 `phases/14-agent-engineering/34-repo-memory-and-state` 学习笔记：[笔记](phases/14-agent-engineering/34-repo-memory-and-state/learning-notes/2026-06-28-repo-memory-and-state.md)
-- 2026-06-29 Phase 14 复习（8 课快速问答，得分 23/24）：[复习笔记](phases/14-agent-engineering/learning-notes/2026-06-29-phase14-review.md)
+- 2026-06-29 Phase 14 复习（8 课快速问答，得分 23/24）：[复习笔记](learning-notes/14-agent-engineering/2026-06-29-phase14-review.md)
 - 2026-06-29 保存 `phases/14-agent-engineering/35-initialization-scripts` 学习笔记：[笔记](phases/14-agent-engineering/35-initialization-scripts/learning-notes/2026-06-29-initialization-scripts.md)
 - 2026-06-30 保存 `phases/14-agent-engineering/36-scope-contracts` 学习笔记：[笔记](phases/14-agent-engineering/36-scope-contracts/learning-notes/2026-06-30-scope-contracts.md)
 - 2026-06-30 保存 `phases/14-agent-engineering/37-runtime-feedback-loops` 学习笔记：[笔记](phases/14-agent-engineering/37-runtime-feedback-loops/learning-notes/2026-06-30-runtime-feedback-loops.md)

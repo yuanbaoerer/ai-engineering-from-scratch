@@ -246,7 +246,7 @@ mkdir -p phases/<phase>/<lesson>/learning-notes
 
 ## 笔记格式参考
 
-参照 `phases/07-transformers-deep-dive/learning-notes/2026-06-01-attention-and-training.md` 的格式：
+参照 `learning-notes/07-transformers-deep-dive/2026-06-01-attention-and-training.md` 的格式：
 
 ```markdown
 # Transformer 核心概念学习笔记
