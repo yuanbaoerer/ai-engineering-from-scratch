@@ -13,6 +13,7 @@ Function Calling & Tool Use — 从零构建的 LLM 工具调用演示。
 
 import json
 import math
+import re
 import time
 
 
@@ -328,6 +329,14 @@ def simulate_model_decision(user_message, tools, conversation_history):
 
     # 匹配数学计算 — 提取表达式中的运算符部分
     if any(word in msg for word in ["calculate", "compute", "math", "what is", "how much"]):
+        for run in re.findall(r"[0-9.+\-*/()\s]{3,}", msg):
+            expr = run.strip()
+            if not any(c.isdigit() for c in expr):
+                continue
+            if not any(c in expr for c in "+-*/"):
+                continue
+            if "error" not in calculator(expr):
+                return [{"name": "calculator", "arguments": {"expression": expr}}]
         for token in msg.split():
             if any(c in token for c in "+-*/"):
                 return [{"name": "calculator", "arguments": {"expression": token}}]
